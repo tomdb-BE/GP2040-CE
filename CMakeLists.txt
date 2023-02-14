@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 include(CMakePrintHelpers)
 
-
+set(GP2040_BOARDCONFIG PicoStartLed)
 
 
 # initialize the SDK based on PICO_SDK_PATH
