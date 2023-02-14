@@ -186,15 +186,15 @@ protected:
 #define StartLEDName "STARTLED"
 
 // Start LED Addon
-class StartLEDAddon : public GPAddon
+class StartLedsAddon : public GPAddon
 {
 public:
 	virtual bool available();  // GPAddon
 	virtual void setup();
 	virtual void process();
 	virtual std::string name() { return StartLEDName; }
-	StartLEDAddon() : type(STARTLED_TYPE) { }
-	StartLEDAddon(StartLEDType type) : type(type) { }
+	StartLedsAddon() : type(STARTLED_TYPE) { }
+	StartLedsAddontartLEDAddon(StartLEDType type) : type(type) { }
 	void SetAnimationStart(StartLEDStateMask buttonState, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed = STARTLED_SPEED_OFF);
 	void SetAnimationCoin(StartLEDStateMask buttonState, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed = STARTLED_SPEED_OFF);
 

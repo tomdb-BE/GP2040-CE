@@ -98,11 +98,11 @@ void StartLEDs::animate(StartLEDAnimationState animationState)
 			this->ledLevels[i] = this->maxLevel - (this->currentLedState[i] ? (this->brightness * this->brightness) : 0);
 }
 
-bool StartLEDAddon::available() {
+bool StartLedsAddon::available() {
 	return STARTLED_TYPE != STARTLED_TYPE_NONE;
 }
 
-void StartLEDAddon::setup() {
+void StartLedsAddon::setup() {
 	switch (STARTLED_TYPE)
 	{
 		case STARTLED_TYPE_PWM:
@@ -121,7 +121,7 @@ void StartLEDAddon::setup() {
 	this->nextButtonCheckTime = make_timeout_time_ms(STARTLED_DELAY_START);
 }
 
-void StartLEDAddon::process()
+void StartLedsAddon::process()
 {
 
 	if (!time_reached(this->nextButtonCheckTime)) return;
@@ -174,14 +174,14 @@ void StartLEDAddon::process()
 	this->ledsCoin->animate(this->animationStateCoin);
 }
 
-void StartLEDAddon::SetAnimationStart(StartLEDStateMask buttonStateMask, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed)
+void StartLStartLedsAddonDAddon::SetAnimationStart(StartLEDStateMask buttonStateMask, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed)
 {
 	this->animationStateStart.state = (this->animationStateStart.state | buttonStateMask);
 	this->animationStateStart.animation = animationType;
 	this->animationStateStart.speed = animationSpeed;
 }
 
-void StartLEDAddon::SetAnimationCoin(StartLEDStateMask buttonStateMask, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed)
+void StartLedsAddon::SetAnimationCoin(StartLEDStateMask buttonStateMask, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed)
 {
 	this->animationStateCoin.state = (this->animationStateCoin.state | buttonStateMask);
 	this->animationStateCoin.animation = animationType;

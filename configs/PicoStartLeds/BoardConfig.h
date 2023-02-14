@@ -28,8 +28,8 @@
 #define PIN_BUTTON_B4   8           // B4 / Y / X / Triangle / 4 / P2
 #define PIN_BUTTON_R1   10          // R1 / RB / R / R1 / 6 / P3
 #define PIN_BUTTON_L1   7           // L1 / LB / L / L1 / 5 / P4
-#define PIN_BUTTON_S1   26          // S1 / Back / Minus / Select / 9 / Coin
-#define PIN_BUTTON_S2   20          // S2 / Start / Plus / Start / 10 / Start
+#define PIN_BUTTON_S1   20          // S1 / Back / Minus / Select / 9 / Coin
+#define PIN_BUTTON_S2   26          // S2 / Start / Plus / Start / 10 / Start
 #define PIN_BUTTON_L3   4           // L3 / LS / LS / L3 / 11 / LS
 #define PIN_BUTTON_R3   5           // R3 / RS / RS / R3 / 12 / RS
 #define PIN_BUTTON_A1   14          // A1 / Guide / Home / PS / 13 / ~
@@ -123,9 +123,9 @@
 // 2 - `STARTLED_TYPE_PWM` - This will enable the Player LEDs ( it is recommended to run through 3V3(OUT) with a resistor)
 
 #define STARTLED_TYPE STARTLED_TYPE_PWM
-#define STARTLED_START1_PIN 28
+#define STARTLED_START1_PIN 21
 #define STARTLED_COIN1_PIN 17
-#define STARTLED_START2_PIN 21
+#define STARTLED_START2_PIN 22
 #define STARTLED_COIN2_PIN 18
 #define STARTLED_START3_PIN -1
 #define STARTLED_COIN3_PIN -1
