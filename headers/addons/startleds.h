@@ -19,117 +19,122 @@
 #define COIN1_BUTTON_MASK GAMEPAD_MASK_S1
 #endif
 
-#define STARTLED_COUNT 4
-#define STARTLED_DELAY_START 1000
+#define STARTLEDS_COUNT 4
+#define STARTLEDS_DELAY_START 1000
 
-#define STARTLED_MAX_START_BRIGHTNESS 0xFF
-#define STARTLED_MAX_START_LEVEL 0xFFFF
-#define STARTLED_MAX_COIN_BRIGHTNESS 0xFF
-#define STARTLED_MAX_COIN_LEVEL 0xFFFF
-#define STARTLED_INIT_START_STATE 0
-#define STARTLED_INIT_COIN_STATE 1
+#define STARTLEDS_MAX_START_BRIGHTNESS 0xFF
+#define STARTLEDS_MAX_START_LEVEL 0xFFFF
+#define STARTLEDS_MAX_COIN_BRIGHTNESS 0xFF
+#define STARTLEDS_MAX_COIN_LEVEL 0xFFFF
+#define STARTLEDS_MAX_MARQUEE_BRIGHTNESS 0xFF
+#define STARTLEDS_MAX_MARQUEE_LEVEL 0xFFFF
+#define STARTLEDS_INIT_START_STATE 0
+#define STARTLEDS_INIT_COIN_STATE 1
 
-#ifndef STARTLED_START1_PIN
-#define STARTLED_START1_PIN -1
+#ifndef STARTLEDS_START_PIN1
+#define STARTLEDS_START_PIN1 -1
 #endif
-#ifndef STARTLED_START2_PIN
-#define STARTLED_START2_PIN -1
+#ifndef STARTLEDS_START_PIN2
+#define STARTLEDS_START_PIN2 -1
 #endif
-#ifndef STARTLED_START3_PIN
-#define STARTLED_START3_PIN -1
+#ifndef STARTLEDS_START_PIN3
+#define STARTLEDS_START_PIN3 -1
 #endif
-#ifndef STARTLED_START4_PIN
-#define STARTLED_START4_PIN -1
+#ifndef STARTLEDS_START_PIN4
+#define STARTLEDS_START_PIN4 -1
 #endif
-#ifndef STARTLED_COIN1_PIN
-#define STARTLED_COIN1_PIN -1
+#ifndef STARTLEDS_COIN_PIN1
+#define STARTLEDS_COIN_PIN1 -1
 #endif
-#ifndef STARTLED_COIN2_PIN
-#define STARTLED_COIN2_PIN -1
+#ifndef STARTLEDS_COIN_PIN2
+#define STARTLEDS_COIN_PIN2 -1
 #endif
-#ifndef STARTLED_COIN3_PIN
-#define STARTLED_COIN3_PIN -1
+#ifndef STARTLEDS_COIN_PIN3
+#define STARTLEDS_COIN_PIN3 -1
 #endif
-#ifndef STARTLED_COIN4_PIN
-#define STARTLED_COIN4_PIN -1
+#ifndef STARTLEDS_COIN_PIN4
+#define STARTLEDS_COIN_PIN4 -1
+#endif
+#ifndef STARTLEDS_MARQUEE_PIN
+#define STARTLEDS_MARQUEE_PIN -1
 #endif
 
-#define STARTLED_MASK_ALL ((1U << STARTLED_START1_PIN) | (1U << STARTLED_START2_PIN) | (1U << STARTLED_START3_PIN) | (1U << STARTLED_START4_PIN) | (1U << STARTLED_COIN1_PIN) | (1U << STARTLED_COIN2_PIN) | (1U << STARTLED_COIN3_PIN) | (1U << STARTLED_COIN4_PIN))
+#define STARTLEDS_MASK_ALL ((1U << STARTLEDS_START_PIN1) | (1U << STARTLEDS_START_PIN2) | (1U << STARTLEDS_START_PIN3) | (1U << STARTLEDS_START_PIN4) | (1U << STARTLEDS_COIN_PIN1) | (1U << STARTLEDS_COIN_PIN2) | (1U << STARTLEDS_COIN_PIN3) | (1U << STARTLEDS_COIN_PIN4))
 
-const int STARTLED_START_PINS[] = {STARTLED_START1_PIN, STARTLED_START2_PIN, STARTLED_START3_PIN, STARTLED_START4_PIN};
-const int STARTLED_COIN_PINS[] = {STARTLED_COIN1_PIN, STARTLED_COIN2_PIN, STARTLED_COIN3_PIN, STARTLED_COIN4_PIN};
-
-typedef enum
-{
-	STARTLED_TYPE_NONE = -1,
-	STARTLED_TYPE_PWM = 0,	
-} StartLEDType;
-
-typedef enum
-{
-	STARTLED_STATE_LED1 = (1 << 0),
-	STARTLED_STATE_LED2 = (1 << 1),
-	STARTLED_STATE_LED3 = (1 << 2),
-	STARTLED_STATE_LED4 = (1 << 3),
-} StartLEDStateMask;
+const int STARTLEDS_START_PINS[] = {STARTLEDS_START_PIN1, STARTLEDS_START_PIN2, STARTLEDS_START_PIN3, STARTLEDS_START_PIN4};
+const int STARTLEDS_COIN_PINS[] = {STARTLEDS_COIN_PIN1, STARTLEDS_COIN_PIN2, STARTLEDS_COIN_PIN3, STARTLEDS_COIN_PIN4};
 
 typedef enum
 {
-	STARTLED_ANIM_NONE,
-	STARTLED_ANIM_OFF,
-	STARTLED_ANIM_SOLID,
-	STARTLED_ANIM_BLINK,
-	STARTLED_ANIM_FADE,
-} StartLEDAnimationType;
+	STARTLEDS_TYPE_NONE = -1,
+	STARTLEDS_TYPE_PWM = 0,	
+} StartLedsType;
 
-const StartLEDAnimationType STARTLED_ANIMATION_TYPES[] =
+typedef enum
 {
-	STARTLED_ANIM_NONE,
-	STARTLED_ANIM_OFF,
-	STARTLED_ANIM_SOLID,
-	STARTLED_ANIM_BLINK,
-	STARTLED_ANIM_FADE,
+	STARTLEDS_STATE_LED1 = (1 << 0),
+	STARTLEDS_STATE_LED2 = (1 << 1),
+	STARTLEDS_STATE_LED3 = (1 << 2),
+	STARTLEDS_STATE_LED4 = (1 << 3),
+} StartLedsStateMask;
+
+typedef enum
+{
+	STARTLEDS_ANIM_NONE,
+	STARTLEDS_ANIM_OFF,
+	STARTLEDS_ANIM_SOLID,
+	STARTLEDS_ANIM_BLINK,
+	STARTLEDS_ANIM_FADE,
+} StartLedsAnimationType;
+
+const StartLedsAnimationType STARTLEDS_ANIMATION_TYPES[] =
+{
+	STARTLEDS_ANIM_NONE,
+	STARTLEDS_ANIM_OFF,
+	STARTLEDS_ANIM_SOLID,
+	STARTLEDS_ANIM_BLINK,
+	STARTLEDS_ANIM_FADE,
 };
 
 typedef enum
 {
-	STARTLED_SPEED_OFF       = 0,
-	STARTLED_SPEED_LUDICROUS = 20,
-	STARTLED_SPEED_FASTER    = 100,
-	STARTLED_SPEED_FAST      = 250,
-	STARTLED_SPEED_NORMAL    = 500,
-	STARTLED_SPEED_SLOW      = 1000,
-} StartLEDAnimationSpeed;
+	STARTLEDS_SPEED_OFF       = 0,
+	STARTLEDS_SPEED_LUDICROUS = 20,
+	STARTLEDS_SPEED_FASTER    = 100,
+	STARTLEDS_SPEED_FAST      = 250,
+	STARTLEDS_SPEED_NORMAL    = 500,
+	STARTLEDS_SPEED_SLOW      = 1000,
+} StartLedsAnimationSpeed;
 
-const StartLEDAnimationSpeed STARTLED_ANIMATION_SPEEDS[] =
+const StartLedsAnimationSpeed STARTLEDS_ANIMATION_SPEEDS[] =
 {
-	STARTLED_SPEED_OFF,
-	STARTLED_SPEED_LUDICROUS,
-	STARTLED_SPEED_FASTER,
-	STARTLED_SPEED_FAST,
-	STARTLED_SPEED_NORMAL,
-	STARTLED_SPEED_SLOW,
+	STARTLEDS_SPEED_OFF,
+	STARTLEDS_SPEED_LUDICROUS,
+	STARTLEDS_SPEED_FASTER,
+	STARTLEDS_SPEED_FAST,
+	STARTLEDS_SPEED_NORMAL,
+	STARTLEDS_SPEED_SLOW,
 };
 
-struct StartLEDAnimationState
+struct StartLedsAnimationState
 {
 	uint8_t state = 0;
-	StartLEDAnimationType animation;
-	StartLEDAnimationSpeed speed;
+	StartLedsAnimationType animation;
+	StartLedsAnimationSpeed speed;
 };
 
-class StartLEDs
+class StartLeds
 {
 public:
 	void setup(const int * pins, bool istate, uint64_t mBrightness, uint64_t mLevel);
 	void display();
-	void animate(StartLEDAnimationState animationState);	
+	void animate(StartLedsAnimationState animationState);	
 
 protected:
 	void parseState(uint8_t state)
 	{
 		memcpy(this->lastLedState, this->currentLedState, sizeof(this->currentLedState));
-		for (int i = 0; i < STARTLED_COUNT; i++)
+		for (int i = 0; i < STARTLEDS_COUNT; i++)
 			this->currentLedState[i] = (state & (1 << i)) == (1 << i);
 	}
 
@@ -142,9 +147,9 @@ protected:
 		this->fadeIn = false;
 	}
 
-	inline void handleBlink(StartLEDAnimationSpeed speed)
+	inline void handleBlink(StartLedsAnimationSpeed speed)
 	{
-		for (int i = 0; i < STARTLED_COUNT; i++)
+		for (int i = 0; i < STARTLEDS_COUNT; i++)
 		{
 			if (this->lastLedState[i])
 				this->currentLedState[i] = false;
@@ -167,15 +172,15 @@ protected:
 				this->fadeIn= true;
 		}
 
-		this->nextAnimationTime = make_timeout_time_ms(STARTLED_SPEED_LUDICROUS);
+		this->nextAnimationTime = make_timeout_time_ms(STARTLEDS_SPEED_LUDICROUS);
 	}
 	
 	const int * ledPins;	
 	absolute_time_t nextAnimationTime;	
-	StartLEDAnimationType selectedAnimation = STARTLED_ANIM_NONE;
-	uint16_t ledLevels[STARTLED_COUNT];
-	bool lastLedState[STARTLED_COUNT] = { };
-	bool currentLedState[STARTLED_COUNT] = { };
+	StartLedsAnimationType selectedAnimation = STARTLEDS_ANIM_NONE;
+	uint16_t ledLevels[STARTLEDS_COUNT];
+	bool lastLedState[STARTLEDS_COUNT] = { };
+	bool currentLedState[STARTLEDS_COUNT] = { };
 	uint64_t brightness;
 	uint64_t maxBrightness;
 	uint64_t maxLevel;
@@ -183,7 +188,7 @@ protected:
 	bool initialState = false;
 };
 
-#define StartLEDName "STARTLED"
+#define StartLedsName "STARTLEDS"
 
 // Start LED Addon
 class StartLedsAddon : public GPAddon
@@ -191,21 +196,23 @@ class StartLedsAddon : public GPAddon
 public:
 	virtual bool available();  // GPAddon
 	virtual void setup();
+	virtual void preprocess() {}
 	virtual void process();
-	virtual std::string name() { return StartLEDName; }
-	StartLedsAddon() : type(STARTLED_TYPE) { }
-	StartLedsAddontartLEDAddon(StartLEDType type) : type(type) { }
-	void SetAnimationStart(StartLEDStateMask buttonState, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed = STARTLED_SPEED_OFF);
-	void SetAnimationCoin(StartLEDStateMask buttonState, StartLEDAnimationType animationType, StartLEDAnimationSpeed animationSpeed = STARTLED_SPEED_OFF);
+	virtual std::string name() { return StartLedsName; }
+	StartLedsAddon() : type(STARTLEDS_TYPE) { }
+	void SetAnimationStart(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
+	void SetAnimationCoin(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
 
 protected:
-	StartLEDs * ledsStart = nullptr;
-	StartLEDs * ledsCoin = nullptr;
-	StartLEDAnimationState animationStateStart;
-	StartLEDAnimationState animationStateCoin;
-	StartLEDType type;
-	bool lastStartPressed[STARTLED_COUNT];
-	bool lastCoinPressed[STARTLED_COUNT];
+	StartLeds * ledsStart = nullptr;
+	StartLeds * ledsCoin = nullptr;
+	StartLeds * ledsMarquee = nullptr;
+	StartLedsAnimationState animationStateStart;
+	StartLedsAnimationState animationStateCoin;
+	StartLedsAnimationState animationStateMarquee;
+	StartLedsType type;
+	bool lastStartPressed[STARTLEDS_COUNT];
+	bool lastCoinPressed[STARTLEDS_COUNT];
 	uint8_t creditCount = 0;
 	absolute_time_t nextButtonCheckTime;
 };

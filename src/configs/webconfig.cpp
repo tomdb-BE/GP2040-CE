@@ -489,6 +489,16 @@ std::string setAddonOptions()
 	addonOptions.JSliderInputEnabled = doc["JSliderInputEnabled"];
 	addonOptions.ReverseInputEnabled = doc["ReverseInputEnabled"];
 	addonOptions.TurboInputEnabled = doc["TurboInputEnabled"];
+	addonOptions.startLedsAddonEnabled  =  doc["startLedsAddonEnabled"];
+	addonOptions.startLedsStartPin1		=  doc["startLedsStartPin1"] == -1 ? 0xFF : doc["startLedsStartPin1"];
+	addonOptions.startLedsStartPin2		=  doc["startLedsStartPin2"] == -1 ? 0xFF : doc["startLedsStartPin2"];
+	addonOptions.startLedsStartPin3		=  doc["startLedsStartPin3"] == -1 ? 0xFF : doc["startLedsStartPin3"];
+	addonOptions.startLedsStartPin4		=  doc["startLedsStartPin4"] == -1 ? 0xFF : doc["startLedsStartPin4"];
+	addonOptions.startLedsCoinPin1		=  doc["startLedsCoinPin1"] == -1 ? 0xFF : doc["startLedsCoinPin1"];
+	addonOptions.startLedsCoinPin2		=  doc["startLedsCoinPin2"] == -1 ? 0xFF : doc["startLedsCoinPin2"];
+	addonOptions.startLedsCoinPin3		=  doc["startLedsCoinPin3"] == -1 ? 0xFF : doc["startLedsCoinPin3"];
+	addonOptions.startLedsCoinPin4		=  doc["startLedsCoinPin4"] == -1 ? 0xFF : doc["startLedsCoinPin4"];
+	addonOptions.startLedsMarqueePin	=  doc["startLedsMarqueePin"] == -1 ? 0xFF : doc["dualDirRistartLedsMarqueePinghtPin"];
 
 	Storage::getInstance().setAddonOptions(addonOptions);
 
@@ -536,6 +546,16 @@ std::string getAddonOptions()
 	doc["JSliderInputEnabled"] = addonOptions.JSliderInputEnabled;
 	doc["ReverseInputEnabled"] = addonOptions.ReverseInputEnabled;
 	doc["TurboInputEnabled"] = addonOptions.TurboInputEnabled;
+	doc["startLedsAddonEnabled"] = addonOptions.TurboInputEnabled;
+	doc["startLedsStartPin1"] = addonOptions.startLedsStartPin1 == 0xFF ? -1 : addonOptions.startLedsStartPin1;
+	doc["startLedsStartPin2"] = addonOptions.startLedsStartPin2 == 0xFF ? -1 : addonOptions.startLedsStartPin2;
+	doc["startLedsStartPin3"] = addonOptions.startLedsStartPin3 == 0xFF ? -1 : addonOptions.startLedsStartPin3;
+	doc["startLedsStartPin4"] = addonOptions.startLedsStartPin4 == 0xFF ? -1 : addonOptions.startLedsStartPin4;
+	doc["startLedsCoinPin1"] = addonOptions.startLedsCoinPin1 == 0xFF ? -1 : addonOptions.startLedsCoinPin1;
+	doc["startLedsCoinPin2"] = addonOptions.startLedsCoinPin2 == 0xFF ? -1 : addonOptions.startLedsCoinPin2;
+	doc["startLedsCoinPin3"] = addonOptions.startLedsCoinPin3 == 0xFF ? -1 : addonOptions.startLedsCoinPin3;
+	doc["startLedsCoinPin4"] = addonOptions.startLedsCoinPin4 == 0xFF ? -1 : addonOptions.startLedsCoinPin4;
+	doc["startLedsMarqueePin"] = addonOptions.startLedsMarqueePin == 0xFF ? -1 : addonOptions.startLedsMarqueePin;
 
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
 	auto usedPins = doc.createNestedArray("usedPins");

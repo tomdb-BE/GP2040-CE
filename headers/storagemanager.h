@@ -104,6 +104,16 @@ struct AddonOptions {
 	uint8_t ReverseInputEnabled;
 	uint8_t TurboInputEnabled;
 	uint32_t checksum;
+	uint8_t startLedsAddonEnabled;
+	uint8_t	startLedsStartPin1;
+	uint8_t	startLedsStartPin2;
+	uint8_t	startLedsStartPin3;
+	uint8_t	startLedsStartPin4;
+	uint8_t	startLedsCoinPin1;
+	uint8_t	startLedsCoinPin2;
+	uint8_t	startLedsCoinPin3;
+	uint8_t	startLedsCoinPin4;
+	uint8_t	startLedsMarqueePin;
 };
 
 struct SplashImage {

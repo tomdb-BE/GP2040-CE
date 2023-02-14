@@ -10,6 +10,7 @@
 #include "addons/pleds.h"
 #include "addons/board_led.h"
 #include "addons/buzzerspeaker.h"
+#include "addons/startleds.h"
 
 #include <iterator>
 

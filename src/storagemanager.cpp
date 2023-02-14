@@ -161,6 +161,16 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.JSliderInputEnabled    = JSLIDER_ENABLED;
 	addonOptions.ReverseInputEnabled    = REVERSE_ENABLED;
 	addonOptions.TurboInputEnabled      = TURBO_ENABLED;
+	addonOptions.startLedsAddonEnabled  = STARTLEDS_ENABLED;
+	addonOptions.startLedsStartPin1		= STARTLEDS_START_PIN1;
+	addonOptions.startLedsStartPin2		= STARTLEDS_START_PIN2;
+	addonOptions.startLedsStartPin3		= STARTLEDS_START_PIN3;
+	addonOptions.startLedsStartPin4		= STARTLEDS_START_PIN4;
+	addonOptions.startLedsCoinPin1		= STARTLEDS_COIN_PIN1;
+	addonOptions.startLedsCoinPin2		= STARTLEDS_COIN_PIN1;
+	addonOptions.startLedsCoinPin3		= STARTLEDS_COIN_PIN3;
+	addonOptions.startLedsCoinPin4		= STARTLEDS_COIN_PIN4;
+	addonOptions.startLedsMarqueePin	= STARTLEDS_MARQUEE_PIN;
 	setAddonOptions(addonOptions);
 }
 
