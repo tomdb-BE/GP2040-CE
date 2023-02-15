@@ -6,7 +6,7 @@
 #ifndef _Z680_H_
 #define _Z680_H_
 
-#ifndefZ680_ENABLED
+#ifndef Z680_ENABLED
 #define Z680_ENABLED 0
 #endif
 #ifndef Z680_POWER_PIN

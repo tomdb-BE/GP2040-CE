@@ -129,13 +129,10 @@ void StartLedsAddon::setup() {
 	this->animationStateStart.animation = STARTLEDS_ANIM_OFF;
 	this->animationStateCoin.animation = STARTLEDS_ANIM_SOLID;
 	this->animationStateMarquee.animation = STARTLEDS_ANIM_SOLID;
-	this->nextButtonCheckTime = make_timeout_time_ms(STARTLEDS_DELAY_START);
 }
 
 void StartLedsAddon::process()
 {
-
-	if (!time_reached(this->nextButtonCheckTime)) return;
 
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
@@ -148,6 +145,8 @@ void StartLedsAddon::process()
 		this->ledsStart->display();
 	if (this->ledsCoin != nullptr)
 		this->ledsCoin->display();
+	if (this->ledsMarquee != nullptr)
+		this->ledsMarquee->display();		
 
 	if (coin1Pressed) {	
 		this->lastCoinPressed[0] = true;
@@ -185,6 +184,7 @@ void StartLedsAddon::process()
 	this->ledsCoin->animate(this->animationStateCoin);
 	this->ledsCoin->animate(this->animationStateMarquee);
 }
+
 
 void StartLedsAddon::SetAnimationStart(StartLedsStateMask buttonStateMask, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed)
 {

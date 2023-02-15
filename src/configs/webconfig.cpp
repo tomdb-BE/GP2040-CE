@@ -572,14 +572,14 @@ std::string getAddonOptions()
 	doc["startLedsCoinBrightness"] = addonOptions.startLedsCoinBrightness == 0xFF ? 100 : addonOptions.startLedsCoinBrightness;
 	doc["startLedsMarqueeBrightness"] = addonOptions.startLedsMarqueeBrightness == 0xFF ? 100 : addonOptions.startLedsMarqueeBrightness;
 	doc["pcControlAddonEnabled"] = addonOptions.pcControlAddonEnabled;
-	doc["pcControlPowerPin"] == addonOptions.pcControlPowerPin == 0xFF ? -1 : addonOptions.pcControlPowerPin;
-	doc["pcControlPowerSwitchPin"] == addonOptions.pcControlPowerSwitchPin == 0xFF ? -1 : addonOptions.pcControlPowerSwitchPin;
+	doc["pcControlPowerPin"] = addonOptions.pcControlPowerPin == 0xFF ? -1 : addonOptions.pcControlPowerPin;
+	doc["pcControlPowerSwitchPin"] = addonOptions.pcControlPowerSwitchPin == 0xFF ? -1 : addonOptions.pcControlPowerSwitchPin;
 	doc["z680AddonEnabled"] = addonOptions.z680AddonEnabled;
-	doc["z680PowerPin"] == addonOptions.z680PowerPin == 0xFF ? -1 : addonOptions.z680PowerPin;
-	doc["z680PowerStatePin"] == addonOptions.z680PowerStatePin == 0xFF ? -1 : addonOptions.z680PowerStatePin;
-	doc["z680VolumeUpPin"] == addonOptions.z680VolumeUpPin == 0xFF ? -1 : addonOptions.z680VolumeUpPin;
-	doc["z680VolumeDownPin"] == addonOptions.z680VolumeDownPin == 0xFF ? -1 : addonOptions.z680VolumeDownPin;
-	doc["z680MutePin"] == addonOptions.z680MutePin == 0xFF ? -1 : addonOptions.z680MutePin;
+	doc["z680PowerPin"] = addonOptions.z680PowerPin == 0xFF ? -1 : addonOptions.z680PowerPin;
+	doc["z680PowerStatePin"] = addonOptions.z680PowerStatePin == 0xFF ? -1 : addonOptions.z680PowerStatePin;
+	doc["z680VolumeUpPin"] = addonOptions.z680VolumeUpPin == 0xFF ? -1 : addonOptions.z680VolumeUpPin;
+	doc["z680VolumeDownPin"] = addonOptions.z680VolumeDownPin == 0xFF ? -1 : addonOptions.z680VolumeDownPin;
+	doc["z680MutePin"] = addonOptions.z680MutePin == 0xFF ? -1 : addonOptions.z680MutePin;
 	
 
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
