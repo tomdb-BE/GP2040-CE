@@ -78,15 +78,11 @@ void StartLeds::animate(StartLedsAnimationState animationState)
 			break;
 
 		case STARTLEDS_ANIM_OFF:
-			for (int i = 0; i < STARTLEDS_COUNT; i++)
-				this->currentLedState[i] = 1;	
-			this->brightness = this->maxBrightness;
+			this->brightness = 0;
 			break;
 
-		case STARTLEDS_ANIM_SOLID:
-			for (int i = 0; i < STARTLEDS_COUNT; i++)
-				this->currentLedState[i] = 1;		
-			this->brightness = 0;
+		case STARTLEDS_ANIM_SOLID:	
+			this->brightness = this->maxBrightness;
 			break;						
 
 		default:
@@ -95,7 +91,7 @@ void StartLeds::animate(StartLedsAnimationState animationState)
 
 	for (int i = 0; i < STARTLEDS_COUNT; i++)
 		if (this->ledPins[i] > -1)
-			this->ledLevels[i] = this->maxLevel - (this->currentLedState[i] ? (this->brightness * this->brightness) : 0);
+			this->ledLevels[i] = this->currentLedState[i] ? (this->brightness * this->brightness) : 0;
 }
 
 bool StartLedsAddon::available() {
@@ -108,27 +104,27 @@ void StartLedsAddon::setup() {
 	const int startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2, options.startLedsStartPin3, options.startLedsStartPin4};
 	const int coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2, options.startLedsCoinPin3, options.startLedsCoinPin4};
 	const int marqueePins[] = {options.startLedsMarqueePin, -1, -1, -1};
-	uint8_t startBrightness = options.startLedsStartBrightness / 100 * 255;
-	uint16_t startLevel = startBrightness * 256;
-	uint8_t coinBrightness = options.startLedsCoinBrightness / 100 * 255;
-	uint16_t coinLevel = coinBrightness * 256;		
-	uint8_t marqueeBrightness = options.startLedsMarqueeBrightness / 100 * 255;
-	uint16_t marqueeLevel = marqueeBrightness * 256;
+	uint8_t startBrightness = (float)options.startLedsStartBrightness / 100 * 255;
+	uint16_t startLevel = startBrightness * startBrightness;
+	uint8_t coinBrightness = (float)options.startLedsCoinBrightness / 100 * 255;
+	uint16_t coinLevel = coinBrightness * coinBrightness;		
+	uint8_t marqueeBrightness = (float)options.startLedsMarqueeBrightness / 100 * 255;
+	uint16_t marqueeLevel = marqueeBrightness * marqueeBrightness;
 
 	this->ledsStart = new StartLeds();
 	this->ledsCoin = new StartLeds();
 	this->ledsMarquee = new StartLeds();
 
 	if (ledsStart != nullptr)
-		this->ledsStart->setup(startPins, false, startBrightness, startLevel);	
+		this->ledsStart->setup(startPins, true, startBrightness, startLevel);	
 	if (ledsCoin != nullptr)
 		this->ledsCoin->setup(coinPins, true, coinBrightness, coinLevel);
 	if (marqueePins != nullptr)
 		this->ledsMarquee->setup(marqueePins, true, marqueeBrightness, marqueeLevel);
 	
-	this->animationStateStart.animation = STARTLEDS_ANIM_OFF;
-	this->animationStateCoin.animation = STARTLEDS_ANIM_SOLID;
-	this->animationStateMarquee.animation = STARTLEDS_ANIM_SOLID;
+	this->SetAnimationStart(STARTLEDS_STATE_ALL_OFF, STARTLEDS_ANIM_OFF);
+	this->SetAnimationCoin(STARTLEDS_STATE_ALL_ON, STARTLEDS_ANIM_SOLID);
+	this->SetAnimationMarquee(STARTLEDS_STATE_LED1, STARTLEDS_ANIM_SOLID);
 }
 
 void StartLedsAddon::process()
@@ -137,9 +133,7 @@ void StartLedsAddon::process()
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
 	uint16_t start1Pressed = gamepad->state.buttons & START1_BUTTON_MASK;
-	uint16_t coin1Pressed = gamepad->state.buttons & COIN1_BUTTON_MASK;
-
-	this->SetAnimationStart(STARTLEDS_STATE_LED2, STARTLEDS_ANIM_BLINK, STARTLEDS_SPEED_FAST);
+	uint16_t coin1Pressed = gamepad->state.buttons & COIN1_BUTTON_MASK;	
 
 	if (this->ledsStart != nullptr)
 		this->ledsStart->display();
@@ -182,7 +176,7 @@ void StartLedsAddon::process()
 
 	this->ledsStart->animate(this->animationStateStart);
 	this->ledsCoin->animate(this->animationStateCoin);
-	this->ledsCoin->animate(this->animationStateMarquee);
+	this->ledsMarquee->animate(this->animationStateMarquee);
 }
 
 
@@ -198,5 +192,12 @@ void StartLedsAddon::SetAnimationCoin(StartLedsStateMask buttonStateMask, StartL
 	this->animationStateCoin.state = (this->animationStateCoin.state | buttonStateMask);
 	this->animationStateCoin.animation = animationType;
 	this->animationStateCoin.speed = animationSpeed;
+}
+
+void StartLedsAddon::SetAnimationMarquee(StartLedsStateMask buttonStateMask, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed)
+{
+	this->animationStateMarquee.state = (this->animationStateMarquee.state | buttonStateMask);
+	this->animationStateMarquee.animation = animationType;
+	this->animationStateMarquee.speed = animationSpeed;
 }
 

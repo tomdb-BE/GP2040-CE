@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: Copyright (c) 2022 Tom De Backer
  */
 
+#include "gpaddon.h"
+
 #ifndef _PCCONTROL_H_
 #define _PCCONTROL_H_
 
@@ -16,12 +18,10 @@
 #define PCCONTROL_SWITCH_PIN -1
 #endif
 
-#include "gpaddon.h"
-
 #define PcControlName "PcControl"
 
 // Start PC Control Addon
-class PcControl : public GPAddon
+class PcControlAddon : public GPAddon
 {
 public:
 	virtual bool available();
@@ -30,8 +30,9 @@ public:
 	virtual void process();
 	virtual std::string name() { return PcControlName; }
 protected:
+	bool switchEnabled = false;
     uint8_t pinPower;
-    uint8_t pinSwitch;
+    uint8_t pinSwitch;	
 };
 
 #endif

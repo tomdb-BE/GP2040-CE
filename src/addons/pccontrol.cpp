@@ -1,7 +1,7 @@
 #include "addons/pccontrol.h"
 #include "storagemanager.h"
 
-bool PcControl::available() {
+bool PcControlAddon::available() {
 	AddonOptions options = Storage::getInstance().getAddonOptions();
     this->pinPower = options.pcControlPowerPin;
     this->pinSwitch = options.pcControlPowerSwitchPin;
@@ -9,17 +9,20 @@ bool PcControl::available() {
         this->pinPower != (uint8_t)-1);
 }
 
-void PcControl::setup()
+void PcControlAddon::setup()
 {
-    // Setup pins
+    // Setup pins    
     gpio_init(this->pinPower);
     gpio_set_dir(this->pinPower, GPIO_OUT); // Set as OUTPUT
-    gpio_init(this->pinSwitch);
-    gpio_set_dir(this->pinSwitch, GPIO_IN); // Set as INPUT
-    gpio_pull_up(this->pinSwitch);          // Set as PULLUP
+    if (this->pinSwitch != (uint8_t)-1) {
+        this->switchEnabled = true;
+        gpio_init(this->pinSwitch);
+        gpio_set_dir(this->pinSwitch, GPIO_IN); // Set as INPUT
+        gpio_pull_up(this->pinSwitch);          // Set as PULLUP
+    }
 }
 
-void PcControl::process()
+void PcControlAddon::process()
 {
     bool temp = false;
 }

@@ -80,6 +80,8 @@ typedef enum
 	STARTLEDS_STATE_LED2 = (1 << 1),
 	STARTLEDS_STATE_LED3 = (1 << 2),
 	STARTLEDS_STATE_LED4 = (1 << 3),
+	STARTLEDS_STATE_ALL_ON  = 0xF,
+	STARTLEDS_STATE_ALL_OFF = 0,
 } StartLedsStateMask;
 
 typedef enum
@@ -144,10 +146,10 @@ protected:
 
 	inline void reset()
 	{
-		memset(this->lastLedState, this->initialState, sizeof(this->lastLedState));
-		memset(this->currentLedState, this->initialState, sizeof(this->currentLedState));
+		memset(this->lastLedState, 0, sizeof(this->lastLedState));
+		memset(this->currentLedState, 0, sizeof(this->currentLedState));
 		this->nextAnimationTime = get_absolute_time();
-		this->brightness = this->maxBrightness;
+		this->brightness = 0;
 		this->fadeIn = false;
 	}
 
@@ -164,15 +166,17 @@ protected:
 	inline void handleFade()
 	{
 		if (this->fadeIn)
-		{
-			this->brightness += 5;
-			if (this->brightness == this->maxBrightness)
+		{			
+			if (this->brightness <= this->maxBrightness - 5)
+				this->brightness += 5;
+			else
 				this->fadeIn = false;
 		}
 		else
-		{
-			this->brightness -= 5;
-			if (this->brightness == 0)
+		{			
+			if (this->brightness >= 5)
+				this->brightness -= 5;				
+			else
 				this->fadeIn= true;
 		}
 
@@ -180,7 +184,7 @@ protected:
 	}
 	
 	const int * ledPins;	
-	absolute_time_t nextAnimationTime;	
+	absolute_time_t nextAnimationTime = get_absolute_time();
 	StartLedsAnimationType selectedAnimation = STARTLEDS_ANIM_NONE;
 	uint16_t ledLevels[STARTLEDS_COUNT];
 	bool lastLedState[STARTLEDS_COUNT] = { };
@@ -202,9 +206,10 @@ public:
 	virtual void setup();
 	virtual void preprocess() {}
 	virtual void process();
-	virtual std::string name() { return StartLedsName; }	
+	virtual std::string name() { return StartLedsName; }
 	void SetAnimationStart(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
 	void SetAnimationCoin(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
+	void SetAnimationMarquee(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
 
 protected:
 	StartLeds * ledsStart = nullptr;
@@ -212,8 +217,7 @@ protected:
 	StartLeds * ledsMarquee = nullptr;
 	StartLedsAnimationState animationStateStart;
 	StartLedsAnimationState animationStateCoin;
-	StartLedsAnimationState animationStateMarquee;
-	StartLedsType type;
+	StartLedsAnimationState animationStateMarquee;	
 	bool lastStartPressed[STARTLEDS_COUNT];
 	bool lastCoinPressed[STARTLEDS_COUNT];
 	uint8_t creditCount = 0;
