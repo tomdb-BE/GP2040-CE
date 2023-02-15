@@ -498,7 +498,19 @@ std::string setAddonOptions()
 	addonOptions.startLedsCoinPin2		=  doc["startLedsCoinPin2"] == -1 ? 0xFF : doc["startLedsCoinPin2"];
 	addonOptions.startLedsCoinPin3		=  doc["startLedsCoinPin3"] == -1 ? 0xFF : doc["startLedsCoinPin3"];
 	addonOptions.startLedsCoinPin4		=  doc["startLedsCoinPin4"] == -1 ? 0xFF : doc["startLedsCoinPin4"];
-	addonOptions.startLedsMarqueePin	=  doc["startLedsMarqueePin"] == -1 ? 0xFF : doc["dualDirRistartLedsMarqueePinghtPin"];
+	addonOptions.startLedsMarqueePin	=  doc["startLedsMarqueePin"] == -1 ? 0xFF : doc["startLedsMarqueePin"];
+	addonOptions.startLedsStartBrightness	=  doc["startLedsStartBrightness"];
+	addonOptions.startLedsCoinBrightness	=  doc["startLedsCoinBrightness"];
+	addonOptions.startLedsMarqueeBrightness	=  doc["startLedsMarqueeBrightness"];
+	addonOptions.pcControlAddonEnabled   =  doc["pcControlAddonEnabled"];
+	addonOptions.pcControlPowerPin	     =  doc["pcControlPowerPin"] == -1 ? 0xFF : doc["pcControlPowerPin"];
+	addonOptions.pcControlPowerSwitchPin =  doc["pcControlPowerSwitchPin"] == -1 ? 0xFF : doc["pcControlPowerSwitchPin"];
+	addonOptions.z680AddonEnabled  =  doc["z680AddonEnabled"];
+	addonOptions.z680PowerPin	   =  doc["z680PowerPin"] == -1 ? 0xFF : doc["z680PowerPin"];
+	addonOptions.z680PowerStatePin =  doc["z680PowerStatePin"] == -1 ? 0xFF : doc["z680PowerStatePin"];
+	addonOptions.z680VolumeUpPin   =  doc["z680VolumeUpPin"] == -1 ? 0xFF : doc["z680VolumeUpPin"];
+	addonOptions.z680VolumeDownPin =  doc["z680VolumeDownPin"] == -1 ? 0xFF : doc["z680VolumeDownPin"];
+	addonOptions.z680MutePin       = doc["z680MutePin"] == -1 ? 0xFF : doc["z680MutePin"];
 
 	Storage::getInstance().setAddonOptions(addonOptions);
 
@@ -546,7 +558,7 @@ std::string getAddonOptions()
 	doc["JSliderInputEnabled"] = addonOptions.JSliderInputEnabled;
 	doc["ReverseInputEnabled"] = addonOptions.ReverseInputEnabled;
 	doc["TurboInputEnabled"] = addonOptions.TurboInputEnabled;
-	doc["startLedsAddonEnabled"] = addonOptions.TurboInputEnabled;
+	doc["startLedsAddonEnabled"] = addonOptions.startLedsAddonEnabled;
 	doc["startLedsStartPin1"] = addonOptions.startLedsStartPin1 == 0xFF ? -1 : addonOptions.startLedsStartPin1;
 	doc["startLedsStartPin2"] = addonOptions.startLedsStartPin2 == 0xFF ? -1 : addonOptions.startLedsStartPin2;
 	doc["startLedsStartPin3"] = addonOptions.startLedsStartPin3 == 0xFF ? -1 : addonOptions.startLedsStartPin3;
@@ -556,6 +568,19 @@ std::string getAddonOptions()
 	doc["startLedsCoinPin3"] = addonOptions.startLedsCoinPin3 == 0xFF ? -1 : addonOptions.startLedsCoinPin3;
 	doc["startLedsCoinPin4"] = addonOptions.startLedsCoinPin4 == 0xFF ? -1 : addonOptions.startLedsCoinPin4;
 	doc["startLedsMarqueePin"] = addonOptions.startLedsMarqueePin == 0xFF ? -1 : addonOptions.startLedsMarqueePin;
+	doc["startLedsStartBrightness"] = addonOptions.startLedsStartBrightness == 0xFF ? 100 : addonOptions.startLedsStartBrightness;
+	doc["startLedsCoinBrightness"] = addonOptions.startLedsCoinBrightness == 0xFF ? 100 : addonOptions.startLedsCoinBrightness;
+	doc["startLedsMarqueeBrightness"] = addonOptions.startLedsMarqueeBrightness == 0xFF ? 100 : addonOptions.startLedsMarqueeBrightness;
+	doc["pcControlAddonEnabled"] = addonOptions.pcControlAddonEnabled;
+	doc["pcControlPowerPin"] == addonOptions.pcControlPowerPin == 0xFF ? -1 : addonOptions.pcControlPowerPin;
+	doc["pcControlPowerSwitchPin"] == addonOptions.pcControlPowerSwitchPin == 0xFF ? -1 : addonOptions.pcControlPowerSwitchPin;
+	doc["z680AddonEnabled"] = addonOptions.z680AddonEnabled;
+	doc["z680PowerPin"] == addonOptions.z680PowerPin == 0xFF ? -1 : addonOptions.z680PowerPin;
+	doc["z680PowerStatePin"] == addonOptions.z680PowerStatePin == 0xFF ? -1 : addonOptions.z680PowerStatePin;
+	doc["z680VolumeUpPin"] == addonOptions.z680VolumeUpPin == 0xFF ? -1 : addonOptions.z680VolumeUpPin;
+	doc["z680VolumeDownPin"] == addonOptions.z680VolumeDownPin == 0xFF ? -1 : addonOptions.z680VolumeDownPin;
+	doc["z680MutePin"] == addonOptions.z680MutePin == 0xFF ? -1 : addonOptions.z680MutePin;
+	
 
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
 	auto usedPins = doc.createNestedArray("usedPins");

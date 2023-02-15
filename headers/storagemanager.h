@@ -114,6 +114,18 @@ struct AddonOptions {
 	uint8_t	startLedsCoinPin3;
 	uint8_t	startLedsCoinPin4;
 	uint8_t	startLedsMarqueePin;
+	uint8_t startLedsStartBrightness;
+	uint8_t startLedsCoinBrightness;
+	uint8_t startLedsMarqueeBrightness;
+	uint8_t pcControlAddonEnabled;
+	uint8_t pcControlPowerPin;
+	uint8_t pcControlPowerSwitchPin;
+	uint8_t z680AddonEnabled;
+	uint8_t z680PowerPin;
+	uint8_t z680PowerStatePin;
+	uint8_t z680VolumeUpPin;
+	uint8_t z680VolumeDownPin;
+	uint8_t z680MutePin;	
 };
 
 struct SplashImage {

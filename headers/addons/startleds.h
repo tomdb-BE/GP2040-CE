@@ -11,46 +11,46 @@
 #include "AnimationStation.hpp"
 #include "gpaddon.h"
 #include "helper.h"
+#include "GamepadState.h"
 
+#ifndef STARTLEDS_ENABLED
+#define STARTLEDS_ENABLED 0
+#endif
 #ifndef START1_BUTTON_MASK
 #define START1_BUTTON_MASK GAMEPAD_MASK_S2
 #endif
 #ifndef COIN1_BUTTON_MASK
 #define COIN1_BUTTON_MASK GAMEPAD_MASK_S1
 #endif
-
+#ifndef STARTLEDS_COUNT
 #define STARTLEDS_COUNT 4
-#define STARTLEDS_DELAY_START 1000
-
-#define STARTLEDS_MAX_START_BRIGHTNESS 0xFF
-#define STARTLEDS_MAX_START_LEVEL 0xFFFF
-#define STARTLEDS_MAX_COIN_BRIGHTNESS 0xFF
-#define STARTLEDS_MAX_COIN_LEVEL 0xFFFF
-#define STARTLEDS_MAX_MARQUEE_BRIGHTNESS 0xFF
-#define STARTLEDS_MAX_MARQUEE_LEVEL 0xFFFF
+#endif
+#ifndef STARTLEDS_INIT_START_STATE
 #define STARTLEDS_INIT_START_STATE 0
+#endif
+#ifndef STARTLEDS_INIT_COIN_STATE
 #define STARTLEDS_INIT_COIN_STATE 1
-
+#endif
 #ifndef STARTLEDS_START_PIN1
 #define STARTLEDS_START_PIN1 -1
-#endif
-#ifndef STARTLEDS_START_PIN2
-#define STARTLEDS_START_PIN2 -1
-#endif
-#ifndef STARTLEDS_START_PIN3
-#define STARTLEDS_START_PIN3 -1
-#endif
-#ifndef STARTLEDS_START_PIN4
-#define STARTLEDS_START_PIN4 -1
 #endif
 #ifndef STARTLEDS_COIN_PIN1
 #define STARTLEDS_COIN_PIN1 -1
 #endif
+#ifndef STARTLEDS_START_PIN2
+#define STARTLEDS_START_PIN2 -1
+#endif
 #ifndef STARTLEDS_COIN_PIN2
 #define STARTLEDS_COIN_PIN2 -1
 #endif
+#ifndef STARTLEDS_START_PIN3
+#define STARTLEDS_START_PIN3 -1
+#endif
 #ifndef STARTLEDS_COIN_PIN3
 #define STARTLEDS_COIN_PIN3 -1
+#endif
+#ifndef STARTLEDS_START_PIN4
+#define STARTLEDS_START_PIN4 -1
 #endif
 #ifndef STARTLEDS_COIN_PIN4
 #define STARTLEDS_COIN_PIN4 -1
@@ -58,11 +58,15 @@
 #ifndef STARTLEDS_MARQUEE_PIN
 #define STARTLEDS_MARQUEE_PIN -1
 #endif
-
-#define STARTLEDS_MASK_ALL ((1U << STARTLEDS_START_PIN1) | (1U << STARTLEDS_START_PIN2) | (1U << STARTLEDS_START_PIN3) | (1U << STARTLEDS_START_PIN4) | (1U << STARTLEDS_COIN_PIN1) | (1U << STARTLEDS_COIN_PIN2) | (1U << STARTLEDS_COIN_PIN3) | (1U << STARTLEDS_COIN_PIN4))
-
-const int STARTLEDS_START_PINS[] = {STARTLEDS_START_PIN1, STARTLEDS_START_PIN2, STARTLEDS_START_PIN3, STARTLEDS_START_PIN4};
-const int STARTLEDS_COIN_PINS[] = {STARTLEDS_COIN_PIN1, STARTLEDS_COIN_PIN2, STARTLEDS_COIN_PIN3, STARTLEDS_COIN_PIN4};
+#ifndef STARTLEDS_START_BRIGHTNESS
+#define STARTLEDS_START_BRIGHTNESS 50
+#endif
+#ifndef STARTLEDS_COIN_BRIGHTNESS
+#define STARTLEDS_COIN_BRIGHTNESS 50
+#endif
+#ifndef STARTLEDS_MARQUEE_BRIGHTNESS
+#define STARTLEDS_MARQUEE_BRIGHTNESS 50
+#endif
 
 typedef enum
 {
@@ -126,7 +130,7 @@ struct StartLedsAnimationState
 class StartLeds
 {
 public:
-	void setup(const int * pins, bool istate, uint64_t mBrightness, uint64_t mLevel);
+	void setup(const int * pins, bool istate, uint8_t mBrightness, uint16_t mLevel);
 	void display();
 	void animate(StartLedsAnimationState animationState);	
 
@@ -181,9 +185,9 @@ protected:
 	uint16_t ledLevels[STARTLEDS_COUNT];
 	bool lastLedState[STARTLEDS_COUNT] = { };
 	bool currentLedState[STARTLEDS_COUNT] = { };
-	uint64_t brightness;
-	uint64_t maxBrightness;
-	uint64_t maxLevel;
+	uint8_t brightness;
+	uint8_t maxBrightness;
+	uint16_t maxLevel;
 	bool fadeIn = false;
 	bool initialState = false;
 };
@@ -198,8 +202,7 @@ public:
 	virtual void setup();
 	virtual void preprocess() {}
 	virtual void process();
-	virtual std::string name() { return StartLedsName; }
-	StartLedsAddon() : type(STARTLEDS_TYPE) { }
+	virtual std::string name() { return StartLedsName; }	
 	void SetAnimationStart(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
 	void SetAnimationCoin(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
 

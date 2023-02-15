@@ -15,7 +15,7 @@
 #include "helper.h"
 
 
-void StartLeds::setup(const int * pinConfig, bool iState, uint64_t mBrightness, uint64_t mLevel)
+void StartLeds::setup(const int * pinConfig, bool iState, uint8_t mBrightness, uint16_t mLevel)
 {
 	this->ledPins = pinConfig;		
 	this->maxBrightness = mBrightness;
@@ -100,8 +100,7 @@ void StartLeds::animate(StartLedsAnimationState animationState)
 
 bool StartLedsAddon::available() {
 	AddonOptions options = Storage::getInstance().getAddonOptions();	
-	return options.startLedsAddonEnabled &&
-		STARTLEDS_TYPE != STARTLEDS_TYPE_NONE;
+	return options.startLedsAddonEnabled;
 }
 
 void StartLedsAddon::setup() {
@@ -109,21 +108,23 @@ void StartLedsAddon::setup() {
 	const int startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2, options.startLedsStartPin3, options.startLedsStartPin4};
 	const int coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2, options.startLedsCoinPin3, options.startLedsCoinPin4};
 	const int marqueePins[] = {options.startLedsMarqueePin, -1, -1, -1};
+	uint8_t startBrightness = options.startLedsStartBrightness / 100 * 255;
+	uint16_t startLevel = startBrightness * 256;
+	uint8_t coinBrightness = options.startLedsCoinBrightness / 100 * 255;
+	uint16_t coinLevel = coinBrightness * 256;		
+	uint8_t marqueeBrightness = options.startLedsMarqueeBrightness / 100 * 255;
+	uint16_t marqueeLevel = marqueeBrightness * 256;
 
-	switch (STARTLEDS_TYPE)
-	{
-		case STARTLEDS_TYPE_PWM:
-			this->ledsStart = new StartLeds();
-			this->ledsCoin = new StartLeds();
-			this->ledsMarquee = new StartLeds();
-			break;
-	}	
+	this->ledsStart = new StartLeds();
+	this->ledsCoin = new StartLeds();
+	this->ledsMarquee = new StartLeds();
+
 	if (ledsStart != nullptr)
-		this->ledsStart->setup(startPins, false, STARTLEDS_MAX_START_BRIGHTNESS, STARTLEDS_MAX_START_LEVEL);	
+		this->ledsStart->setup(startPins, false, startBrightness, startLevel);	
 	if (ledsCoin != nullptr)
-		this->ledsCoin->setup(coinPins, true, STARTLEDS_MAX_COIN_BRIGHTNESS, STARTLEDS_MAX_COIN_LEVEL);
-	if (ledsCoin != nullptr)
-		this->ledsCoin->setup(marqueePins, true, STARTLEDS_MAX_MARQUEE_BRIGHTNESS, STARTLEDS_MAX_MARQUEE_LEVEL);		
+		this->ledsCoin->setup(coinPins, true, coinBrightness, coinLevel);
+	if (marqueePins != nullptr)
+		this->ledsMarquee->setup(marqueePins, true, marqueeBrightness, marqueeLevel);
 	
 	this->animationStateStart.animation = STARTLEDS_ANIM_OFF;
 	this->animationStateCoin.animation = STARTLEDS_ANIM_SOLID;

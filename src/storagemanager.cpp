@@ -24,9 +24,12 @@
 #include "addons/i2cdisplay.h"
 #include "addons/jslider.h"
 #include "addons/neopicoleds.h"
+#include "addons/pccontrol.h"
 #include "addons/pleds.h"
 #include "addons/reverse.h"
+#include "addons/startleds.h"
 #include "addons/turbo.h"
+#include "addons/z680.h"
 
 #include "bitmaps.h"
 
@@ -171,6 +174,18 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.startLedsCoinPin3		= STARTLEDS_COIN_PIN3;
 	addonOptions.startLedsCoinPin4		= STARTLEDS_COIN_PIN4;
 	addonOptions.startLedsMarqueePin	= STARTLEDS_MARQUEE_PIN;
+	addonOptions.startLedsStartBrightness   = STARTLEDS_START_BRIGHTNESS;
+	addonOptions.startLedsCoinBrightness    = STARTLEDS_COIN_BRIGHTNESS;
+	addonOptions.startLedsMarqueeBrightness = STARTLEDS_MARQUEE_BRIGHTNESS;
+	addonOptions.pcControlAddonEnabled   = PCCONTROL_ENABLED;	
+	addonOptions.pcControlPowerPin	     = PCCONTROL_POWER_PIN;
+	addonOptions.pcControlPowerSwitchPin = PCCONTROL_SWITCH_PIN;
+	addonOptions.z680AddonEnabled  = Z680_ENABLED;
+	addonOptions.z680PowerPin	   = Z680_POWER_PIN;
+	addonOptions.z680PowerStatePin = Z680_STATE_PIN;
+	addonOptions.z680VolumeUpPin   = Z680_VOLUME_UP_PIN;
+	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;
+	addonOptions.z680MutePin       = Z680_MUTE_PIN;		
 	setAddonOptions(addonOptions);
 }
 

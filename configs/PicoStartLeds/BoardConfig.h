@@ -112,28 +112,6 @@
 #define PLED3_PIN -1
 #define PLED4_PIN -1
 
-// This is the Start LED section.  
-// In this section you can specify if the start button LEDs will be blinking if coins are inserted and/or the coin button led will blink if the available credits are 0.
-// The default is `STARTLEDS_TYPE_NONE` which will turn the start button LEDs off.
-// The default pin for each Start and Coin button LED is `-1` which disables it. Currently this is supported for four players.
-// To enable a `STARTLEDS#_PIN`, replace the `-1` with the GPIO pin number that is desired. 
-// To enable a `COINLED#_PIN`, replace the `-1` with the GPIO pin number that is desired. 
-// There are two options for `STARTLEDS_TYPE` currently:
-// 1 - `STARTLEDS_TYPE_NONE` - This will disable the Player LEDs
-// 2 - `STARTLEDS_TYPE_PWM` - This will enable the Player LEDs ( it is recommended to run through 3V3(OUT) with a resistor)
-
-#define STARTLEDS_ENABLED 0
-#define STARTLEDS_TYPE STARTLEDS_TYPE_PWM
-#define STARTLEDS_START_PIN1 21
-#define STARTLEDS_COIN_PIN1 17
-#define STARTLEDS_START_PIN2 22
-#define STARTLEDS_COIN_PIN2 18
-#define STARTLEDS_START_PIN3 -1
-#define STARTLEDS_COIN_PIN3 -1
-#define STARTLEDS_START_PIN4 -1
-#define STARTLEDS_COIN_PIN4 -1
-#define STARTLEDS_MARQUEE_PIN -1
-
 // This is the Analog section.
 // In this section you can specify if Analog is enabled, and, if endabled, which pins will be used for it.
 // The default for `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY` is `-1` which disables them.
