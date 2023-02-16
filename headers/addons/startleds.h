@@ -16,6 +16,9 @@
 #ifndef STARTLEDS_ENABLED
 #define STARTLEDS_ENABLED 0
 #endif
+#ifndef STARTLEDS_PWM_MAXLEVEL
+#define STARTLEDS_PWM_MAXLEVEL 0xFFFF
+#endif
 #ifndef START1_BUTTON_MASK
 #define START1_BUTTON_MASK GAMEPAD_MASK_S2
 #endif
@@ -68,41 +71,26 @@
 #define STARTLEDS_MARQUEE_BRIGHTNESS 50
 #endif
 
-typedef enum
-{
-	STARTLEDS_TYPE_NONE = -1,
-	STARTLEDS_TYPE_PWM = 0,	
-} StartLedsType;
 
-typedef enum
-{
-	STARTLEDS_STATE_LED1 = (1 << 0),
-	STARTLEDS_STATE_LED2 = (1 << 1),
-	STARTLEDS_STATE_LED3 = (1 << 2),
-	STARTLEDS_STATE_LED4 = (1 << 3),
-	STARTLEDS_STATE_ALL_ON  = 0xF,
-	STARTLEDS_STATE_ALL_OFF = 0,
-} StartLedsStateMask;
 
-typedef enum
+static const uint8_t STARTLEDS_STATE_LED1 = (1 << 0);
+static const uint8_t STARTLEDS_STATE_LED2 = (1 << 1);
+static const uint8_t STARTLEDS_STATE_LED3 = (1 << 2);
+static const uint8_t STARTLEDS_STATE_LED4 = (1 << 3);
+static const uint8_t STARTLEDS_STATE_ALL_ON  = 0xFF;
+static const uint8_t STARTLEDS_STATE_ALL_OFF = 0;
+
+typedef enum : uint8_t
 {
-	STARTLEDS_ANIM_NONE,
-	STARTLEDS_ANIM_OFF,
-	STARTLEDS_ANIM_SOLID,
-	STARTLEDS_ANIM_BLINK,
-	STARTLEDS_ANIM_FADE,
+	STARTLEDS_ANIM_NONE = 255,
+	STARTLEDS_ANIM_OFF = 0,
+	STARTLEDS_ANIM_SOLID = 1,
+	STARTLEDS_ANIM_BLINK = 2,
+	STARTLEDS_ANIM_CYCLE = 3,
+	STARTLEDS_ANIM_FADE = 4,
 } StartLedsAnimationType;
 
-const StartLedsAnimationType STARTLEDS_ANIMATION_TYPES[] =
-{
-	STARTLEDS_ANIM_NONE,
-	STARTLEDS_ANIM_OFF,
-	STARTLEDS_ANIM_SOLID,
-	STARTLEDS_ANIM_BLINK,
-	STARTLEDS_ANIM_FADE,
-};
-
-typedef enum
+typedef enum : uint16_t
 {
 	STARTLEDS_SPEED_OFF       = 0,
 	STARTLEDS_SPEED_LUDICROUS = 20,
@@ -112,88 +100,55 @@ typedef enum
 	STARTLEDS_SPEED_SLOW      = 1000,
 } StartLedsAnimationSpeed;
 
-const StartLedsAnimationSpeed STARTLEDS_ANIMATION_SPEEDS[] =
+struct StartLedsAnimation
 {
-	STARTLEDS_SPEED_OFF,
-	STARTLEDS_SPEED_LUDICROUS,
-	STARTLEDS_SPEED_FASTER,
-	STARTLEDS_SPEED_FAST,
-	STARTLEDS_SPEED_NORMAL,
-	STARTLEDS_SPEED_SLOW,
+	uint8_t state = STARTLEDS_STATE_ALL_OFF;	
+	uint8_t previousState = STARTLEDS_STATE_ALL_OFF;
+	uint8_t stateMask = 0xFF;
+	StartLedsAnimationType type = STARTLEDS_ANIM_NONE;
+	StartLedsAnimationType previousType = STARTLEDS_ANIM_NONE;
+	StartLedsAnimationSpeed speed = STARTLEDS_SPEED_OFF;
 };
 
-struct StartLedsAnimationState
-{
-	uint8_t state = 0;
-	StartLedsAnimationType animation;
-	StartLedsAnimationSpeed speed;
+static const StartLedsAnimation STARTLEDS_ALL_OFF {
+	state: STARTLEDS_STATE_ALL_OFF,
+	type: STARTLEDS_ANIM_OFF
 };
+
+static const StartLedsAnimation STARTLEDS_ALL_ON {
+	state: STARTLEDS_STATE_ALL_ON,
+	type: STARTLEDS_ANIM_SOLID
+};
+
+static const StartLedsAnimation STARTLEDS_BLINK_FAST_ALL {
+	state: STARTLEDS_STATE_ALL_OFF,
+	type: STARTLEDS_ANIM_BLINK,
+	speed: STARTLEDS_SPEED_FAST
+};
+
+static const StartLedsAnimation STARTLEDS_FADE_ALL {
+	state: STARTLEDS_STATE_ALL_ON,
+	type: STARTLEDS_ANIM_FADE,
+	speed: STARTLEDS_SPEED_LUDICROUS
+};
+
 
 class StartLeds
 {
 public:
-	void setup(const int * pins, bool istate, uint8_t mBrightness, uint16_t mLevel);
+	void setup(const uint8_t * pins, uint8_t mBrightness);
 	void display();
-	void animate(StartLedsAnimationState animationState);	
-
+	void animate();	
+	StartLedsAnimation animation;
 protected:
-	void parseState(uint8_t state)
-	{
-		memcpy(this->lastLedState, this->currentLedState, sizeof(this->currentLedState));
-		for (int i = 0; i < STARTLEDS_COUNT; i++)
-			this->currentLedState[i] = (state & (1 << i)) == (1 << i);
-	}
-
-	inline void reset()
-	{
-		memset(this->lastLedState, 0, sizeof(this->lastLedState));
-		memset(this->currentLedState, 0, sizeof(this->currentLedState));
-		this->nextAnimationTime = get_absolute_time();
-		this->brightness = 0;
-		this->fadeIn = false;
-	}
-
-	inline void handleBlink(StartLedsAnimationSpeed speed)
-	{
-		for (int i = 0; i < STARTLEDS_COUNT; i++)
-		{
-			if (this->lastLedState[i])
-				this->currentLedState[i] = false;
-		}
-		this->nextAnimationTime = make_timeout_time_ms(speed);		
-	}
-
-	inline void handleFade()
-	{
-		if (this->fadeIn)
-		{			
-			if (this->brightness <= this->maxBrightness - 5)
-				this->brightness += 5;
-			else
-				this->fadeIn = false;
-		}
-		else
-		{			
-			if (this->brightness >= 5)
-				this->brightness -= 5;				
-			else
-				this->fadeIn= true;
-		}
-
-		this->nextAnimationTime = make_timeout_time_ms(STARTLEDS_SPEED_LUDICROUS);
-	}
-	
-	const int * ledPins;	
+	inline void reset();
+	inline uint8_t HandleFade(int16_t nBrightness, int16_t mBrightness);
+	const uint8_t * ledPins;	
 	absolute_time_t nextAnimationTime = get_absolute_time();
-	StartLedsAnimationType selectedAnimation = STARTLEDS_ANIM_NONE;
 	uint16_t ledLevels[STARTLEDS_COUNT];
-	bool lastLedState[STARTLEDS_COUNT] = { };
-	bool currentLedState[STARTLEDS_COUNT] = { };
 	uint8_t brightness;
-	uint8_t maxBrightness;
-	uint16_t maxLevel;
-	bool fadeIn = false;
-	bool initialState = false;
+	uint8_t maxBrightness;	
+	bool fadeIn;
 };
 
 #define StartLedsName "STARTLEDS"
@@ -207,17 +162,10 @@ public:
 	virtual void preprocess() {}
 	virtual void process();
 	virtual std::string name() { return StartLedsName; }
-	void SetAnimationStart(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
-	void SetAnimationCoin(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
-	void SetAnimationMarquee(StartLedsStateMask buttonState, StartLedsAnimationType animationType, StartLedsAnimationSpeed animationSpeed = STARTLEDS_SPEED_OFF);
-
 protected:
 	StartLeds * ledsStart = nullptr;
 	StartLeds * ledsCoin = nullptr;
-	StartLeds * ledsMarquee = nullptr;
-	StartLedsAnimationState animationStateStart;
-	StartLedsAnimationState animationStateCoin;
-	StartLedsAnimationState animationStateMarquee;	
+	StartLeds * ledsMarquee = nullptr;	
 	bool lastStartPressed[STARTLEDS_COUNT];
 	bool lastCoinPressed[STARTLEDS_COUNT];
 	uint8_t creditCount = 0;
