@@ -102,74 +102,81 @@ typedef enum : uint16_t
 
 struct StartLedsAnimation
 {
-	uint8_t state = STARTLEDS_STATE_ALL_OFF;	
+	uint8_t currentState = STARTLEDS_STATE_ALL_OFF;	
 	uint8_t previousState = STARTLEDS_STATE_ALL_OFF;
 	uint8_t stateMask = 0xFF;
-	StartLedsAnimationType type = STARTLEDS_ANIM_NONE;
+	StartLedsAnimationType currentType = STARTLEDS_ANIM_NONE;
 	StartLedsAnimationType previousType = STARTLEDS_ANIM_NONE;
 	StartLedsAnimationSpeed speed = STARTLEDS_SPEED_OFF;
 };
 
 static const StartLedsAnimation STARTLEDS_ALL_OFF {
-	state: STARTLEDS_STATE_ALL_OFF,
-	type: STARTLEDS_ANIM_OFF
+	currentState: STARTLEDS_STATE_ALL_OFF,
+	currentType: STARTLEDS_ANIM_OFF
 };
 
 static const StartLedsAnimation STARTLEDS_ALL_ON {
-	state: STARTLEDS_STATE_ALL_ON,
-	type: STARTLEDS_ANIM_SOLID
+	currentState: STARTLEDS_STATE_ALL_ON,
+	currentType: STARTLEDS_ANIM_SOLID
 };
 
 static const StartLedsAnimation STARTLEDS_BLINK_FAST_ALL {
-	state: STARTLEDS_STATE_ALL_OFF,
-	type: STARTLEDS_ANIM_BLINK,
+	currentState: STARTLEDS_STATE_ALL_OFF,
+	currentType: STARTLEDS_ANIM_BLINK,
 	speed: STARTLEDS_SPEED_FAST
 };
 
 static const StartLedsAnimation STARTLEDS_FADE_ALL {
-	state: STARTLEDS_STATE_ALL_ON,
-	type: STARTLEDS_ANIM_FADE,
+	currentState: STARTLEDS_STATE_ALL_ON,
+	currentType: STARTLEDS_ANIM_FADE,
 	speed: STARTLEDS_SPEED_LUDICROUS
 };
 
 
+#define StartLedsAddonName "STARTLEDSADDON"
+
 class StartLeds
 {
-public:
-	void setup(const uint8_t * pins, uint8_t mBrightness);
+public:	
+	void initialize(uint8_t * pins, uint8_t mBrightness) {
+		for (uint8_t i=0; i < STARTLEDS_COUNT; i++)
+			this->ledPins[i] = pins[i];
+		this->brightness = mBrightness;
+		this->maxBrightness = mBrightness;
+	}	
 	void display();
-	void animate();	
-	StartLedsAnimation animation;
-protected:
-	inline void reset();
-	inline uint8_t HandleFade(int16_t nBrightness, int16_t mBrightness);
-	const uint8_t * ledPins;	
-	absolute_time_t nextAnimationTime = get_absolute_time();
-	uint16_t ledLevels[STARTLEDS_COUNT];
+	void animate();
+	void SetAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; }
+	StartLedsAnimation GetAnimation() { return this->animation; }
+private:
+	uint8_t ledPins[STARTLEDS_COUNT];
 	uint8_t brightness;
-	uint8_t maxBrightness;	
+	uint8_t maxBrightness;
+	StartLedsAnimation animation;
+	inline void reset();
+	inline uint8_t HandleFade(int16_t nBrightness, int16_t mBrightness);	
+	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
+	uint16_t ledLevels[STARTLEDS_COUNT];
 	bool fadeIn;
 };
 
-#define StartLedsName "STARTLEDS"
-
-// Start LED Addon
 class StartLedsAddon : public GPAddon
 {
 public:
-	virtual bool available();  // GPAddon
+	virtual bool available();
 	virtual void setup();
 	virtual void preprocess() {}
 	virtual void process();
-	virtual std::string name() { return StartLedsName; }
-protected:
-	StartLeds * ledsStart = nullptr;
-	StartLeds * ledsCoin = nullptr;
-	StartLeds * ledsMarquee = nullptr;	
+	virtual std::string name() { return StartLedsAddonName; }
+private:	
+	StartLeds ledsStart;
+	StartLeds ledsCoin;
+	StartLeds ledsMarquee;
 	bool lastStartPressed[STARTLEDS_COUNT];
 	bool lastCoinPressed[STARTLEDS_COUNT];
 	uint8_t creditCount = 0;
 	absolute_time_t nextButtonCheckTime;
+	bool setupDone = false;
 };
 
 #endif
