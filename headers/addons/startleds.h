@@ -138,26 +138,23 @@ static const StartLedsAnimation STARTLEDS_FADE_ALL {
 class StartLeds
 {
 public:	
-	void initialize(uint8_t * pins, uint8_t mBrightness) {
-		for (uint8_t i=0; i < STARTLEDS_COUNT; i++)
-			this->ledPins[i] = pins[i];
-		this->brightness = mBrightness;
-		this->maxBrightness = mBrightness;
-	}	
+	std::vector<uint> initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation);
 	void display();
-	void animate();
-	void SetAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; }
-	StartLedsAnimation GetAnimation() { return this->animation; }
+	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; }
+	StartLedsAnimation getAnimation() { return this->animation; }
+	bool isReady() {return this->ready;}
 private:
-	uint8_t ledPins[STARTLEDS_COUNT];
-	uint8_t brightness;
-	uint8_t maxBrightness;
-	StartLedsAnimation animation;
+	inline void animate();
 	inline void reset();
 	inline uint8_t HandleFade(int16_t nBrightness, int16_t mBrightness);	
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[STARTLEDS_COUNT];
+	uint8_t ledPins[STARTLEDS_COUNT];
+	uint8_t brightness;
+	uint8_t maxBrightness;
+	StartLedsAnimation animation;
 	bool fadeIn;
+	bool ready;
 };
 
 class StartLedsAddon : public GPAddon
@@ -176,7 +173,6 @@ private:
 	bool lastCoinPressed[STARTLEDS_COUNT];
 	uint8_t creditCount = 0;
 	absolute_time_t nextButtonCheckTime;
-	bool setupDone = false;
 };
 
 #endif

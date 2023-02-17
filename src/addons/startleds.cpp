@@ -15,14 +15,42 @@
 #include "helper.h"
 
 
+std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation) 
+{
+	if (pins[0] == 255)
+		return slices;
+		
+	uint8_t newPin;
+	this->brightness = mBrightness;
+	this->maxBrightness = mBrightness;
+	for (uint8_t i=0; i < STARTLEDS_COUNT; i++)
+	{
+		newPin = pins[i];
+		this->ledPins[i] = newPin;
+		if (newPin != 255)
+		{
+			gpio_set_function(newPin, GPIO_FUNC_PWM);
+			uint sliceNum = pwm_gpio_to_slice_num(newPin);
+			uint channelNum = pwm_gpio_to_channel(newPin);
+			slices.push_back(sliceNum);
+			pwm_set_chan_level(sliceNum, channelNum, STARTLEDS_PWM_MAXLEVEL);			
+		}
+	}
+	this->animation = initAnimation;
+	this->animate();
+	this->ready = true;
+	return slices;
+}
+
 void StartLeds::display()
 {
+	this->animate();
 	for (int i = 0; i < STARTLEDS_COUNT; i++)
 		if (this->ledPins[i] != 255)
 			pwm_set_gpio_level(this->ledPins[i], this->ledLevels[i]);
 }
 
-void StartLeds::animate()
+inline void StartLeds::animate()
 {
 	uint8_t newState = this->animation.currentState;
 	uint8_t mask = this->animation.stateMask;
@@ -53,12 +81,13 @@ void StartLeds::animate()
 
 		default:
 			break;
-	}	
+	}
+
 	this->animation.currentState = newState;
+
 	for (uint8_t i = 0; i < STARTLEDS_COUNT; i++)
 		if (this->ledPins[i] != 255)
-			this->ledLevels[i] = (newState & (1 << i) == (1 << i)) ? this->brightness * this->brightness : 0;
-			//this->ledLevels[i] = this->brightness * this->brightness;
+			this->ledLevels[i] = (newState & (1 << i) == (1 << i)) ? this->brightness * this->brightness : 0;			
 }
 
 inline void StartLeds::reset()
@@ -96,77 +125,41 @@ bool StartLedsAddon::available() {
 
 void StartLedsAddon::setup() {	
 	AddonOptions options = Storage::getInstance().getAddonOptions();
-	uint8_t configuredPins[STARTLEDS_COUNT * 3];
-	uint8_t startPins[] = {22, 255, 255, 255};
-	uint8_t coinPins[] = {21, 255, 255, 255};
-	uint8_t marqueePins[] = {255, 255, 255, 255};
+	uint8_t startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2, options.startLedsStartPin3, options.startLedsStartPin4};
+	uint8_t coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2, options.startLedsCoinPin3, options.startLedsCoinPin4};
+	uint8_t marqueePins[] = {options.startLedsMarqueePin, 255, 255, 255};
 	uint8_t startBrightness = (float)options.startLedsStartBrightness / 100 * 255;	
 	uint8_t coinBrightness = (float)options.startLedsCoinBrightness / 100 * 255;	
 	uint8_t marqueeBrightness = (float)options.startLedsMarqueeBrightness / 100 * 255;
-
-	for (uint8_t j = 0; j < STARTLEDS_COUNT; j++) {
-		 configuredPins[j] = startPins[j];
-		 configuredPins[j + STARTLEDS_COUNT] = coinPins[j];
-		 configuredPins[j + STARTLEDS_COUNT * 2] = marqueePins[j];
-	}
 
 	pwm_config config = pwm_get_default_config();
 	pwm_config_set_clkdiv(&config, 4.f);
 
 	std::vector<uint> sliceNums;
 
-	for (uint8_t i = 0; i < STARTLEDS_COUNT * 3; i++)
-	{
-		if (configuredPins[i] != 255)
-		{
-			gpio_set_function(configuredPins[i], GPIO_FUNC_PWM);
-			uint sliceNum = pwm_gpio_to_slice_num(configuredPins[i]);
-			uint channelNum = pwm_gpio_to_channel(configuredPins[i]);
-			sliceNums.push_back(sliceNum);
-			pwm_set_chan_level(sliceNum, channelNum, STARTLEDS_PWM_MAXLEVEL);			
-		}	
-	}
+	sliceNums = this->ledsStart.initialize(sliceNums, startPins, startBrightness, STARTLEDS_BLINK_FAST_ALL); 
+	sliceNums = this->ledsCoin.initialize(sliceNums, coinPins, coinBrightness, STARTLEDS_FADE_ALL);
+	sliceNums = this->ledsMarquee.initialize(sliceNums, marqueePins, marqueeBrightness, STARTLEDS_ALL_ON);
 
 	for (auto sliceNum : sliceNums)
 		pwm_set_enabled(sliceNum, true);
-
-	if (startPins[0] != 255)
-	{			
-		this->ledsStart.initialize(startPins, startBrightness); 
-		this->ledsStart.SetAnimation(STARTLEDS_FADE_ALL);
-		this->ledsStart.animate();
-	}
-	if (coinPins[0] != 255)
-	{
-		this->ledsCoin.initialize(coinPins, coinBrightness);
-		this->ledsCoin.SetAnimation(STARTLEDS_BLINK_FAST_ALL);
-		this->ledsCoin.animate();
-	}
-	if (marqueePins[0] != 255)
-	{		
-		this->ledsMarquee.initialize(marqueePins, marqueeBrightness);
-		this->ledsMarquee.SetAnimation(STARTLEDS_BLINK_FAST_ALL);
-		this->ledsMarquee.animate();
-		
-	}
-	this->setupDone = true;
-
 }
 
 void StartLedsAddon::process()
 {
-	if (! this->setupDone) return;
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
 	uint16_t start1Pressed = gamepad->state.buttons & START1_BUTTON_MASK;
 	uint16_t coin1Pressed = gamepad->state.buttons & COIN1_BUTTON_MASK;	
 
-	
-	this->ledsStart.display();
-	this->ledsCoin.display();
+	if (this->ledsStart.isReady())
+		this->ledsStart.display();
+	if (this->ledsCoin.isReady())
+		this->ledsCoin.display();
+	if (this->ledsMarquee.isReady())
+		this->ledsMarquee.display();
 
-	this->ledsStart.animate();
-	this->ledsCoin.animate();
+
 /**
 	return;
 	if (this->ledsStart == nullptr || this->ledsCoin == nullptr)
