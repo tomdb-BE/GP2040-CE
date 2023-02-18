@@ -16,6 +16,9 @@
 #ifndef STARTLEDS_ENABLED
 #define STARTLEDS_ENABLED 0
 #endif
+#ifndef STARTLEDS_COUNT
+#define STARTLEDS_COUNT 4
+#endif
 #ifndef STARTLEDS_PWM_MAXLEVEL
 #define STARTLEDS_PWM_MAXLEVEL 0xFFFF
 #endif
@@ -25,14 +28,29 @@
 #ifndef COIN1_BUTTON_MASK
 #define COIN1_BUTTON_MASK GAMEPAD_MASK_S1
 #endif
-#ifndef STARTLEDS_COUNT
-#define STARTLEDS_COUNT 4
+#ifndef START2_BUTTON_MASK
+#define START2_BUTTON_MASK 0
 #endif
-#ifndef STARTLEDS_INIT_START_STATE
-#define STARTLEDS_INIT_START_STATE 0
+#ifndef COIN2_BUTTON_MASK
+#define COIN2_BUTTON_MASK 0
 #endif
-#ifndef STARTLEDS_INIT_COIN_STATE
-#define STARTLEDS_INIT_COIN_STATE 1
+#ifndef START3_BUTTON_MASK
+#define START3_BUTTON_MASK 0
+#endif
+#ifndef COIN3_BUTTON_MASK
+#define COIN3_BUTTON_MASK 0
+#endif
+#ifndef START4_BUTTON_MASK
+#define START4_BUTTON_MASK 0
+#endif
+#ifndef COIN4_BUTTON_MASK
+#define COIN4_BUTTON_MASK 0
+#endif
+#ifndef START_BUTTON_MASKS
+#define START_BUTTON_MASKS START1_BUTTON_MASK | START2_BUTTON_MASK | START3_BUTTON_MASK | START4_BUTTON_MASK
+#endif
+#ifndef COIN_BUTTON_MASKS
+#define COIN_BUTTON_MASKS COIN1_BUTTON_MASK | COIN2_BUTTON_MASK | COIN3_BUTTON_MASK | COIN4_BUTTON_MASK
 #endif
 #ifndef STARTLEDS_START_PIN1
 #define STARTLEDS_START_PIN1 -1
@@ -102,8 +120,7 @@ typedef enum : uint16_t
 
 struct StartLedsAnimation
 {
-	uint8_t currentState = STARTLEDS_STATE_ALL_OFF;	
-	uint8_t previousState = STARTLEDS_STATE_ALL_OFF;
+	uint8_t currentState = STARTLEDS_STATE_ALL_OFF;		
 	uint8_t stateMask = 0xFF;
 	StartLedsAnimationType currentType = STARTLEDS_ANIM_NONE;
 	StartLedsAnimationType previousType = STARTLEDS_ANIM_NONE;
@@ -112,6 +129,7 @@ struct StartLedsAnimation
 
 static const StartLedsAnimation STARTLEDS_ALL_OFF {
 	currentState: STARTLEDS_STATE_ALL_OFF,
+	stateMask: 0,
 	currentType: STARTLEDS_ANIM_OFF
 };
 
@@ -140,8 +158,15 @@ class StartLeds
 public:	
 	std::vector<uint> initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation);
 	void display();
-	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; }
+	void update() {this->nextAnimationTime = make_timeout_time_ms(0);}
+	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; this->update(); }
+	void setType(StartLedsAnimationType newType) { this->animation.currentType = newType; }
+	void setSpeed(StartLedsAnimationSpeed newSpeed) { this->animation.speed = newSpeed; this->update(); }
+	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }	
 	StartLedsAnimation getAnimation() { return this->animation; }
+	StartLedsAnimationSpeed getSpeed() { return this->animation.speed; }
+	StartLedsAnimationType getType() { return this->animation.currentType; }
+	uint8_t getMask() { return this->animation.stateMask; }
 	bool isReady() {return this->ready;}
 private:
 	inline void animate();

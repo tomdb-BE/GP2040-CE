@@ -62,19 +62,20 @@ inline void StartLeds::animate()
 	switch (this->animation.currentType)
 	{
 		case STARTLEDS_ANIM_OFF:
-			newState = STARTLEDS_STATE_ALL_OFF;
+			newState = STARTLEDS_STATE_ALL_OFF | mask;
 			break;
 
 		case STARTLEDS_ANIM_SOLID:
-			newState = STARTLEDS_STATE_ALL_ON;
+			newState = STARTLEDS_STATE_ALL_ON & mask;
 			break;	
 
 		case STARTLEDS_ANIM_BLINK:
-			newState = ~newState;
+			newState = ~newState & mask;
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
 			break;
 
 		case STARTLEDS_ANIM_FADE:
+			newState = newState & mask;
 			this->brightness = this->HandleFade(this->brightness, this->maxBrightness);
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
 			break;
@@ -87,7 +88,7 @@ inline void StartLeds::animate()
 
 	for (uint8_t i = 0; i < STARTLEDS_COUNT; i++)
 		if (this->ledPins[i] != 255)
-			this->ledLevels[i] = (newState & (1 << i) == (1 << i)) ? this->brightness * this->brightness : 0;			
+			this->ledLevels[i] = (newState & (1 << i)) ? this->brightness * this->brightness : 0;			
 }
 
 inline void StartLeds::reset()
@@ -137,7 +138,7 @@ void StartLedsAddon::setup() {
 
 	std::vector<uint> sliceNums;
 
-	sliceNums = this->ledsStart.initialize(sliceNums, startPins, startBrightness, STARTLEDS_BLINK_FAST_ALL); 
+	sliceNums = this->ledsStart.initialize(sliceNums, startPins, startBrightness, STARTLEDS_ALL_OFF); 
 	sliceNums = this->ledsCoin.initialize(sliceNums, coinPins, coinBrightness, STARTLEDS_FADE_ALL);
 	sliceNums = this->ledsMarquee.initialize(sliceNums, marqueePins, marqueeBrightness, STARTLEDS_ALL_ON);
 
@@ -159,21 +160,16 @@ void StartLedsAddon::process()
 	if (this->ledsMarquee.isReady())
 		this->ledsMarquee.display();
 
-
-/**
-	return;
-	if (this->ledsStart == nullptr || this->ledsCoin == nullptr)
-		return;
 	if (coin1Pressed) {	
 		this->lastCoinPressed[0] = true;
 	}	
 	else if (this->lastCoinPressed[0]) {
-		this->ledsCoin->animation = STARTLEDS_ALL_ON;
+		this->ledsCoin.setAnimation(STARTLEDS_ALL_ON);
 		this->lastCoinPressed[0] = false;
 		if (this->creditCount == 0)
-			ledsStart->animation = STARTLEDS_BLINK_FAST_ALL;
-		else if (this->ledsStart->animation.type != STARTLEDS_BLINK_FAST_ALL.type)
-			this->ledsStart->animation = STARTLEDS_ALL_ON;
+			ledsStart.setAnimation(STARTLEDS_BLINK_FAST_ALL);
+		else
+			ledsStart.setAnimation(STARTLEDS_ALL_ON);
 		if (this->creditCount < 255)
 			this->creditCount++;		
 	}
@@ -184,19 +180,16 @@ void StartLedsAddon::process()
 	else if (this->lastStartPressed[0]) {
 		this->lastStartPressed[0] = false;
 		if (this->creditCount == 0) {
-			this->ledsStart->animation = STARTLEDS_ALL_OFF;
-			this->ledsCoin->animation = STARTLEDS_FADE_ALL;
+			this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
+			this->ledsCoin.setAnimation(STARTLEDS_FADE_ALL);
 		}			
 		else {
 			this->creditCount--;
 			if (this->creditCount == 0)
-				this->ledsStart->animation = STARTLEDS_ALL_ON;
+				this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
 			else				
-				this->ledsStart->animation = STARTLEDS_ALL_OFF;
+				this->ledsStart.setAnimation(STARTLEDS_ALL_ON);
 		}		
 	}	
 
-	this->ledsStart->animate();
-	this->ledsCoin->animate();	
-	**/
 }
