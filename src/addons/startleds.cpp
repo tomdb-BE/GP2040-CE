@@ -44,6 +44,9 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 
 void StartLeds::display()
 {
+	if (! this->ready)
+		return;
+
 	this->animate();
 	for (int i = 0; i < STARTLEDS_COUNT; i++)
 		if (this->ledPins[i] != 255)
@@ -76,7 +79,7 @@ inline void StartLeds::animate()
 
 		case STARTLEDS_ANIM_FADE:
 			newState = newState & mask;
-			this->brightness = this->HandleFade(this->brightness, this->maxBrightness);
+			this->brightness = this->handleBrightness(STARTLEDS_BRIGHTNESS_STEP, this->fadeIn);
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
 			break;
 
@@ -99,9 +102,12 @@ inline void StartLeds::reset()
 	this->fadeIn = false;
 }
 
-inline uint8_t StartLeds::HandleFade(int16_t nBrightness, int16_t mBrightness)
+uint8_t StartLeds::handleBrightness(uint8_t amount, bool increase)
 {
-	if (this->fadeIn)	
+	int16_t nBrightness = this->brightness;
+	uint16_t mBrightness = this->maxBrightness;
+
+	if (increase)	
 	{				
 		nBrightness += 5;
 		if (nBrightness >= mBrightness) {
@@ -139,7 +145,7 @@ void StartLedsAddon::setup() {
 	std::vector<uint> sliceNums;
 
 	sliceNums = this->ledsStart.initialize(sliceNums, startPins, startBrightness, STARTLEDS_ALL_OFF); 
-	sliceNums = this->ledsCoin.initialize(sliceNums, coinPins, coinBrightness, STARTLEDS_FADE_ALL);
+	sliceNums = this->ledsCoin.initialize(sliceNums, coinPins, coinBrightness, STARTLEDS_ALL_ON);
 	sliceNums = this->ledsMarquee.initialize(sliceNums, marqueePins, marqueeBrightness, STARTLEDS_ALL_ON);
 
 	for (auto sliceNum : sliceNums)
@@ -150,46 +156,69 @@ void StartLedsAddon::process()
 {
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t start1Pressed = gamepad->state.buttons & START1_BUTTON_MASK;
-	uint16_t coin1Pressed = gamepad->state.buttons & COIN1_BUTTON_MASK;	
+	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS);
+	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
-	if (this->ledsStart.isReady())
-		this->ledsStart.display();
-	if (this->ledsCoin.isReady())
-		this->ledsCoin.display();
-	if (this->ledsMarquee.isReady())
-		this->ledsMarquee.display();
+	this->ledsStart.display();
+	this->ledsCoin.display();
+	this->ledsMarquee.display();
 
-	if (coin1Pressed) {	
-		this->lastCoinPressed[0] = true;
-	}	
-	else if (this->lastCoinPressed[0]) {
-		this->ledsCoin.setAnimation(STARTLEDS_ALL_ON);
-		this->lastCoinPressed[0] = false;
+	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
+	{
+		if (this->debounce(&this->debounceMarqueeBrightness) || !this->ledsMarquee.isReady())
+			return;
+		if (dpadPressed & GAMEPAD_MASK_UP)
+			this->ledsMarquee.brightnessUp();
+		if (dpadPressed & GAMEPAD_MASK_DOWN)
+			this->ledsMarquee.brightnessDown();
+		return;
+	}
+
+	if (buttonsPressed == this->lastButtonsPressed)
+		return;
+	
+	this->lastButtonsPressed = buttonsPressed;
+
+	if (!this->ledsStart.isReady() || !this->ledsCoin.isReady() || dpadPressed)
+		return;
+
+	if (buttonsPressed & COIN_BUTTON_MASKS)
+	{				
 		if (this->creditCount == 0)
-			ledsStart.setAnimation(STARTLEDS_BLINK_FAST_ALL);
-		else
-			ledsStart.setAnimation(STARTLEDS_ALL_ON);
+		{
+			this->ledsStart.setAnimation(STARTLEDS_BLINK_FAST_ALL);
+			this->ledsCoin.setAnimation(STARTLEDS_ALL_ON);
+		}
 		if (this->creditCount < 255)
-			this->creditCount++;		
+			this->creditCount++;
 	}
-
-	if (start1Pressed) {
-		this->lastStartPressed[0] = true;		
-	}
-	else if (this->lastStartPressed[0]) {
-		this->lastStartPressed[0] = false;
-		if (this->creditCount == 0) {
+	else if (buttonsPressed & START_BUTTON_MASKS) 
+	{
+		if (this->creditCount > 0)
+			this->creditCount--;				
+		if (this->creditCount == 0)
+		{
 			this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
 			this->ledsCoin.setAnimation(STARTLEDS_FADE_ALL);
-		}			
-		else {
-			this->creditCount--;
-			if (this->creditCount == 0)
-				this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
-			else				
-				this->ledsStart.setAnimation(STARTLEDS_ALL_ON);
-		}		
+		}
+		else
+		{
+			this->ledsStart.setAnimation(STARTLEDS_ALL_ON);
+		}
 	}	
+}
 
+bool StartLedsAddon::debounce(uint32_t * debounceTime)
+{
+	if (STARTLEDS_DEBOUNCE_MILLIS <= 0)
+		return true;
+				
+    uint32_t nowTime = getMillis();
+
+    if ((nowTime - *debounceTime) > STARTLEDS_DEBOUNCE_MILLIS)
+	{
+        *debounceTime = nowTime;
+		return false;
+    }
+    return true;
 }

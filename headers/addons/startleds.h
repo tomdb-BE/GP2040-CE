@@ -88,8 +88,12 @@
 #ifndef STARTLEDS_MARQUEE_BRIGHTNESS
 #define STARTLEDS_MARQUEE_BRIGHTNESS 50
 #endif
-
-
+#ifndef STARTLEDS_BRIGHTNESS_STEP
+#define STARTLEDS_BRIGHTNESS_STEP 5
+#endif
+#ifndef STARTLEDS_DEBOUNCE_MILLIS
+#define STARTLEDS_DEBOUNCE_MILLIS 50
+#endif
 
 static const uint8_t STARTLEDS_STATE_LED1 = (1 << 0);
 static const uint8_t STARTLEDS_STATE_LED2 = (1 << 1);
@@ -162,7 +166,9 @@ public:
 	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; this->update(); }
 	void setType(StartLedsAnimationType newType) { this->animation.currentType = newType; }
 	void setSpeed(StartLedsAnimationSpeed newSpeed) { this->animation.speed = newSpeed; this->update(); }
-	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }	
+	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }
+	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = handleBrightness(amount, true); }
+	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = handleBrightness(amount); }
 	StartLedsAnimation getAnimation() { return this->animation; }
 	StartLedsAnimationSpeed getSpeed() { return this->animation.speed; }
 	StartLedsAnimationType getType() { return this->animation.currentType; }
@@ -171,7 +177,7 @@ public:
 private:
 	inline void animate();
 	inline void reset();
-	inline uint8_t HandleFade(int16_t nBrightness, int16_t mBrightness);	
+	uint8_t handleBrightness(uint8_t amount, bool negative = false);	
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[STARTLEDS_COUNT];
 	uint8_t ledPins[STARTLEDS_COUNT];
@@ -190,14 +196,14 @@ public:
 	virtual void preprocess() {}
 	virtual void process();
 	virtual std::string name() { return StartLedsAddonName; }
+	bool debounce(uint32_t * ptrDebounceTime);
 private:	
 	StartLeds ledsStart;
 	StartLeds ledsCoin;
 	StartLeds ledsMarquee;
-	bool lastStartPressed[STARTLEDS_COUNT];
-	bool lastCoinPressed[STARTLEDS_COUNT];
+	uint16_t lastButtonsPressed;
 	uint8_t creditCount = 0;
-	absolute_time_t nextButtonCheckTime;
+	uint32_t debounceMarqueeBrightness;	
 };
 
 #endif
