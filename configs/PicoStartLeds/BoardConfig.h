@@ -18,8 +18,8 @@
 
 #define PIN_DPAD_UP     3           // UP
 #define PIN_DPAD_DOWN   2           // DOWN
-#define PIN_DPAD_RIGHT  0           // RIGHT
-#define PIN_DPAD_LEFT   1           // LEFT
+#define PIN_DPAD_RIGHT  1           // RIGHT
+#define PIN_DPAD_LEFT   0           // LEFT
 #define PIN_BUTTON_B1   12          // B1 / A / B / Cross / 2 / K1
 #define PIN_BUTTON_B2   11          // B2 / B / A / Circle / 3 / K2
 #define PIN_BUTTON_R2   6           // R2 / RT / ZR / R2 / 8 / K3
@@ -28,8 +28,8 @@
 #define PIN_BUTTON_B4   8           // B4 / Y / X / Triangle / 4 / P2
 #define PIN_BUTTON_R1   10          // R1 / RB / R / R1 / 6 / P3
 #define PIN_BUTTON_L1   7           // L1 / LB / L / L1 / 5 / P4
-#define PIN_BUTTON_S1   20          // S1 / Back / Minus / Select / 9 / Coin
-#define PIN_BUTTON_S2   26          // S2 / Start / Plus / Start / 10 / Start
+#define PIN_BUTTON_S1   26          // S1 / Back / Minus / Select / 9 / Coin
+#define PIN_BUTTON_S2   20          // S2 / Start / Plus / Start / 10 / Start
 #define PIN_BUTTON_L3   4           // L3 / LS / LS / L3 / 11 / LS
 #define PIN_BUTTON_R3   5           // R3 / RS / RS / R3 / 12 / RS
 #define PIN_BUTTON_A1   14          // A1 / Guide / Home / PS / 13 / ~
