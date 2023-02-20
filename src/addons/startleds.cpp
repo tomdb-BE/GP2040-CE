@@ -135,6 +135,8 @@ void StartLedsAddon::setup() {
 	uint8_t startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2, options.startLedsStartPin3, options.startLedsStartPin4};
 	uint8_t coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2, options.startLedsCoinPin3, options.startLedsCoinPin4};
 	uint8_t marqueePins[] = {options.startLedsMarqueePin, 255, 255, 255};
+	uint8_t extStartPin = options.startLedsExtStartPin;
+	uint8_t extCoinPin = options.startLedsExtCoinPin;
 	uint8_t startBrightness = (float)options.startLedsStartBrightness / 100 * 255;	
 	uint8_t coinBrightness = (float)options.startLedsCoinBrightness / 100 * 255;	
 	uint8_t marqueeBrightness = (float)options.startLedsMarqueeBrightness / 100 * 255;
@@ -150,18 +152,44 @@ void StartLedsAddon::setup() {
 
 	for (auto sliceNum : sliceNums)
 		pwm_set_enabled(sliceNum, true);
+	
+	if (extStartPin != 255)
+	{
+		gpio_init(extStartPin);
+    	gpio_set_dir(extStartPin, GPIO_OUT);
+		gpio_put(extStartPin, 1);
+		this->externalStartPin = extStartPin;
+	}
+
+	if (extCoinPin != 255)
+	{
+		gpio_init(extCoinPin);
+    	gpio_set_dir(extCoinPin, GPIO_OUT);
+		gpio_put(extCoinPin, 1);
+		this->externalCoinPin = extCoinPin;
+	}
 }
 
 void StartLedsAddon::process()
 {
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS);
+	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS | GAMEPAD_MASK_A1 | GAMEPAD_MASK_A2);
 	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
 	this->ledsStart.display();
 	this->ledsCoin.display();
 	this->ledsMarquee.display();
+
+	if ((buttonsPressed & GAMEPAD_MASK_A1) && this->externalStartPin != 255)
+		gpio_put(this->externalStartPin, 0);
+	else
+		gpio_put(this->externalStartPin, 1);
+
+	if ((buttonsPressed & GAMEPAD_MASK_A2) && this->externalCoinPin != 255)
+		gpio_put(this->externalCoinPin, 0);
+	else
+		gpio_put(this->externalCoinPin, 1);	
 
 	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
 	{

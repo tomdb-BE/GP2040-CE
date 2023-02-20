@@ -35,7 +35,6 @@ else()
   set(SKIP_WEBBUILD FALSE)
 endif()
 
-
 if(SKIP_SUBMODULES)
   cmake_print_variables(SKIP_SUBMODULES)
 else()

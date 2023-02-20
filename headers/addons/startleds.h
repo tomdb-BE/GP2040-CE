@@ -79,6 +79,12 @@
 #ifndef STARTLEDS_MARQUEE_PIN
 #define STARTLEDS_MARQUEE_PIN -1
 #endif
+#ifndef STARTLEDS_EXT_START_PIN
+#define STARTLEDS_EXT_START_PIN -1
+#endif
+#ifndef STARTLEDS_EXT_COIN_PIN
+#define STARTLEDS_EXT_COIN_PIN -1
+#endif
 #ifndef STARTLEDS_START_BRIGHTNESS
 #define STARTLEDS_START_BRIGHTNESS 50
 #endif
@@ -201,9 +207,11 @@ private:
 	StartLeds ledsStart;
 	StartLeds ledsCoin;
 	StartLeds ledsMarquee;
-	uint16_t lastButtonsPressed;
 	uint8_t creditCount = 0;
-	uint32_t debounceMarqueeBrightness;	
+	uint16_t lastButtonsPressed;	
+	uint32_t debounceMarqueeBrightness;
+	uint8_t externalStartPin	= 0xFF;
+	uint8_t externalCoinPin	= 0xFF;
 };
 
 #endif

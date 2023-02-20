@@ -114,6 +114,8 @@ struct AddonOptions {
 	uint8_t	startLedsCoinPin3;
 	uint8_t	startLedsCoinPin4;
 	uint8_t	startLedsMarqueePin;
+	uint8_t startLedsExtStartPin;
+	uint8_t startLedsExtCoinPin;	
 	uint8_t startLedsStartBrightness;
 	uint8_t startLedsCoinBrightness;
 	uint8_t startLedsMarqueeBrightness;
