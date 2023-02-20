@@ -26,20 +26,30 @@
 #ifndef Z680_MUTE_PIN
 #define Z680_MUTE_PIN -1
 #endif
-
-struct Z680Controls
-{
-	bool power;    
-    bool volumeUp;
-    bool volumeDown;
-    bool mute;
-    bool powerState;
-	uint8_t pinPower;    
-    uint8_t pinVolumeUp;
-    uint8_t pinVolumeDown;
-    uint8_t pinMute;
-    uint8_t pinPowerState;
-};
+#ifndef Z680_VOLUME_STEP
+#define Z680_VOLUME_STEP 5
+#endif
+#ifndef Z680_CONTROL_TRIGGER
+#define Z680_CONTROL_TRIGGER GAMEPAD_MASK_S1
+#endif
+#ifndef Z680_CONTROL_POWER
+#define Z680_CONTROL_POWER GAMEPAD_MASK_LEFT
+#endif
+#ifndef Z680_CONTROL_MUTE
+#define Z680_CONTROL_MUTE GAMEPAD_MASK_RIGHT
+#endif
+#ifndef Z680_CONTROL_VOLUME_UP
+#define Z680_CONTROL_VOLUME_UP GAMEPAD_MASK_UP
+#endif
+#ifndef Z680_CONTROL_VOLUME_DOWN
+#define Z680_CONTROL_VOLUME_DOWN GAMEPAD_MASK_DOWN
+#endif
+#ifndef Z680_CONTROL_VOLUME
+#define Z680_CONTROL_VOLUME Z680_CONTROL_VOLUME_UP | Z680_CONTROL_VOLUME_DOWN
+#endif
+#ifndef Z680_DEBOUNCE_MILLIS
+#define Z680_DEBOUNCE_MILLIS 50
+#endif
 
 #define Z680Name "Z680"
 
@@ -52,8 +62,25 @@ public:
 	virtual void preprocess() {}
 	virtual void process();
 	virtual std::string name() { return Z680Name; }
+	void volumeUp(uint8_t amount = Z680_VOLUME_STEP) { this->handeVolume(amount, true); }
+	void volumeDown(uint8_t amount = Z680_VOLUME_STEP) { this->handeVolume(amount); }
+    void mute();
+    bool isReady() {return this->ready;}
+    bool isOn();
+    bool powerOn() {return this->setPower();}
+    bool powerOff() {return this->setPower(true);}
 protected:
-    Z680Controls controls;
+    bool setPower(bool setOff = false);
+    void handeVolume(uint8_t amount, bool up = false);
+    bool debounce(uint32_t * ptrDebounceTime);
+    uint32_t debounceVolume;    
+	uint8_t pinPower = 0xFF;
+    uint8_t pinVolumeA = 0xFF;
+    uint8_t pinVolumeB = 0xFF;
+    uint8_t pinMute = 0xFF;
+    uint8_t pinPowerState = 0xFF;    
+    uint16_t lastDpadPressed;
+    bool ready;
 };
 
 #endif

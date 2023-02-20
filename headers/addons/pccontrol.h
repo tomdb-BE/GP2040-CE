@@ -17,6 +17,19 @@
 #ifndef PCCONTROL_SWITCH_PIN
 #define PCCONTROL_SWITCH_PIN -1
 #endif
+#ifndef PCCONTROL_POWER_OFF_MASK
+#define PCCONTROL_POWER_OFF_MASK GAMEPAD_MASK_S1 & GAMEPAD_MASK_S2
+#endif
+#ifndef PCCONTROL_POWER_TOGGLE_MILLIS
+#define PCCONTROL_POWER_TOGGLE_MILLIS 100
+#endif
+#ifndef PCCONTROL_POWER_FORCE_OFF_MILLIS
+#define PCCONTROL_POWER_FORCE_OFF_MILLIS 5000
+#endif
+#ifndef PCCONTROL_TIMEOUT_SWITCH_MILLIS
+#define PCCONTROL_TIMEOUT_SWITCH_MILLIS 5000
+#endif
+
 
 #define PcControlName "PcControl"
 
@@ -29,10 +42,20 @@ public:
 	virtual void preprocess() {}
 	virtual void process();
 	virtual std::string name() { return PcControlName; }
+	void togglePower() {this->setPower(PCCONTROL_POWER_TOGGLE_MILLIS); }
+	void forcePowerOff() {this->setPower(PCCONTROL_POWER_FORCE_OFF_MILLIS); }
 protected:
-	bool switchEnabled = false;
+	void setPower(uint16_t pressLength);
+	absolute_time_t timeoutButtons;
+	absolute_time_t timeoutButtonsForce;
+	absolute_time_t timeoutSwitch;	    
+	uint16_t lastButtonsPressed;
     uint8_t pinPower;
-    uint8_t pinSwitch;	
+    uint8_t pinSwitch;
+	bool triggeredButton;
+	bool triggeredSwitch;
+	bool timedOutSwitch;
+	bool ready;	
 };
 
 #endif
