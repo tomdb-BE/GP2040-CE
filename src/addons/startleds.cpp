@@ -17,7 +17,7 @@
 
 std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation) 
 {
-	if (pins[0] == 255)
+	if (pins[0] == 0xFF)
 		return slices;
 		
 	uint8_t newPin;
@@ -27,7 +27,7 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 	{
 		newPin = pins[i];
 		this->ledPins[i] = newPin;
-		if (newPin != 255)
+		if (newPin != 0xFF)
 		{
 			gpio_set_function(newPin, GPIO_FUNC_PWM);
 			uint sliceNum = pwm_gpio_to_slice_num(newPin);
@@ -49,7 +49,7 @@ void StartLeds::display()
 
 	this->animate();
 	for (int i = 0; i < STARTLEDS_COUNT; i++)
-		if (this->ledPins[i] != 255)
+		if (this->ledPins[i] != 0xFF)
 			pwm_set_gpio_level(this->ledPins[i], this->ledLevels[i]);
 }
 
@@ -90,7 +90,7 @@ inline void StartLeds::animate()
 	this->animation.currentState = newState;
 
 	for (uint8_t i = 0; i < STARTLEDS_COUNT; i++)
-		if (this->ledPins[i] != 255)
+		if (this->ledPins[i] != 0xFF)
 			this->ledLevels[i] = (newState & (1 << i)) ? this->brightness * this->brightness : 0;			
 }
 
@@ -134,7 +134,9 @@ void StartLedsAddon::setup() {
 	AddonOptions options = Storage::getInstance().getAddonOptions();
 	uint8_t startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2, options.startLedsStartPin3, options.startLedsStartPin4};
 	uint8_t coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2, options.startLedsCoinPin3, options.startLedsCoinPin4};
-	uint8_t marqueePins[] = {options.startLedsMarqueePin, 255, 255, 255};
+	uint8_t marqueePins[] = {options.startLedsMarqueePin, 0xFF, 0xFF, 0xFF};
+	uint8_t extStartPin = options.startLedsExtStartPin;
+	uint8_t extCoinPin = options.startLedsExtCoinPin;
 	uint8_t startBrightness = (float)options.startLedsStartBrightness / 100 * 255;	
 	uint8_t coinBrightness = (float)options.startLedsCoinBrightness / 100 * 255;	
 	uint8_t marqueeBrightness = (float)options.startLedsMarqueeBrightness / 100 * 255;
@@ -150,18 +152,38 @@ void StartLedsAddon::setup() {
 
 	for (auto sliceNum : sliceNums)
 		pwm_set_enabled(sliceNum, true);
+	
+	if (extStartPin != 0xFF)
+	{
+		gpio_init(extStartPin);
+    	gpio_set_dir(extStartPin, GPIO_OUT);
+		gpio_put(extStartPin, 1);
+		this->externalStartPin = extStartPin;
+	}
+
+	if (extCoinPin != 0xFF)
+	{
+		gpio_init(extCoinPin);
+    	gpio_set_dir(extCoinPin, GPIO_OUT);
+		gpio_put(extCoinPin, 1);
+		this->externalCoinPin = extCoinPin;
+	}
+	this->ready = true;
 }
 
 void StartLedsAddon::process()
 {
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS);
+	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS | STARTLEDS_EXT_MASKS);
 	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
 	this->ledsStart.display();
 	this->ledsCoin.display();
 	this->ledsMarquee.display();
+
+	if (!(buttonsPressed && this->ready))
+		return;
 
 	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
 	{
@@ -179,6 +201,12 @@ void StartLedsAddon::process()
 	
 	this->lastButtonsPressed = buttonsPressed;
 
+	if ((buttonsPressed & STARTLEDS_EXT_MASKS))
+		if (this->externalStartPin != 0xFF)
+			(buttonsPressed & STARTLEDS_EXT_START_MASK) ?  gpio_put(this->externalStartPin, 1) : gpio_put(this->externalStartPin, 0);
+		if (this->externalCoinPin != 0xFF)
+			(buttonsPressed & STARTLEDS_EXT_COIN_MASK) ?  gpio_put(this->externalCoinPin, 1) : gpio_put(this->externalCoinPin, 0);			
+
 	if (!this->ledsStart.isReady() || !this->ledsCoin.isReady() || dpadPressed)
 		return;
 
@@ -189,7 +217,7 @@ void StartLedsAddon::process()
 			this->ledsStart.setAnimation(STARTLEDS_BLINK_FAST_ALL);
 			this->ledsCoin.setAnimation(STARTLEDS_ALL_ON);
 		}
-		if (this->creditCount < 255)
+		if (this->creditCount < 0xFF)
 			this->creditCount++;
 	}
 	else if (buttonsPressed & START_BUTTON_MASKS) 

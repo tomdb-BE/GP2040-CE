@@ -79,6 +79,21 @@
 #ifndef STARTLEDS_MARQUEE_PIN
 #define STARTLEDS_MARQUEE_PIN -1
 #endif
+#ifndef STARTLEDS_EXT_START_PIN
+#define STARTLEDS_EXT_START_PIN -1
+#endif
+#ifndef STARTLEDS_EXT_COIN_PIN
+#define STARTLEDS_EXT_COIN_PIN -1
+#endif
+#ifndef STARTLEDS_EXT_START_MASK
+#define STARTLEDS_EXT_START_MASK GAMEPAD_MASK_A1
+#endif
+#ifndef STARTLEDS_EXT_COIN_MASK
+#define STARTLEDS_EXT_COIN_MASK GAMEPAD_MASK_A2
+#endif
+#ifndef STARTLEDS_EXT_MASKS
+#define STARTLEDS_EXT_MASKS STARTLEDS_EXT_START_MASK | STARTLEDS_EXT_COIN_MASK
+#endif
 #ifndef STARTLEDS_START_BRIGHTNESS
 #define STARTLEDS_START_BRIGHTNESS 50
 #endif
@@ -167,8 +182,8 @@ public:
 	void setType(StartLedsAnimationType newType) { this->animation.currentType = newType; }
 	void setSpeed(StartLedsAnimationSpeed newSpeed) { this->animation.speed = newSpeed; this->update(); }
 	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }
-	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = handleBrightness(amount, true); }
-	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = handleBrightness(amount); }
+	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = this->handleBrightness(amount, true); }
+	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = this->handleBrightness(amount); }
 	StartLedsAnimation getAnimation() { return this->animation; }
 	StartLedsAnimationSpeed getSpeed() { return this->animation.speed; }
 	StartLedsAnimationType getType() { return this->animation.currentType; }
@@ -195,15 +210,18 @@ public:
 	virtual void setup();
 	virtual void preprocess() {}
 	virtual void process();
-	virtual std::string name() { return StartLedsAddonName; }
-	bool debounce(uint32_t * ptrDebounceTime);
+	virtual std::string name() { return StartLedsAddonName; }	
 private:	
 	StartLeds ledsStart;
 	StartLeds ledsCoin;
 	StartLeds ledsMarquee;
-	uint16_t lastButtonsPressed;
+	bool debounce(uint32_t * ptrDebounceTime);
 	uint8_t creditCount = 0;
-	uint32_t debounceMarqueeBrightness;	
+	uint16_t lastButtonsPressed;	
+	uint32_t debounceMarqueeBrightness;
+	uint8_t externalStartPin = 0xFF;
+	uint8_t externalCoinPin	= 0xFF;
+	bool ready;
 };
 
 #endif

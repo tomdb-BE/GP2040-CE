@@ -499,6 +499,8 @@ std::string setAddonOptions()
 	addonOptions.startLedsCoinPin3		=  doc["startLedsCoinPin3"] == -1 ? 0xFF : doc["startLedsCoinPin3"];
 	addonOptions.startLedsCoinPin4		=  doc["startLedsCoinPin4"] == -1 ? 0xFF : doc["startLedsCoinPin4"];
 	addonOptions.startLedsMarqueePin	=  doc["startLedsMarqueePin"] == -1 ? 0xFF : doc["startLedsMarqueePin"];
+	addonOptions.startLedsExtStartPin	=  doc["startLedsExtStartPin"] == -1 ? 0xFF : doc["startLedsExtStartPin"];
+	addonOptions.startLedsExtCoinPin	=  doc["startLedsExtCoinPin"] == -1 ? 0xFF : doc["startLedsExtCoinPin"];
 	addonOptions.startLedsStartBrightness	=  doc["startLedsStartBrightness"];
 	addonOptions.startLedsCoinBrightness	=  doc["startLedsCoinBrightness"];
 	addonOptions.startLedsMarqueeBrightness	=  doc["startLedsMarqueeBrightness"];
@@ -568,6 +570,8 @@ std::string getAddonOptions()
 	doc["startLedsCoinPin3"] = addonOptions.startLedsCoinPin3 == 0xFF ? -1 : addonOptions.startLedsCoinPin3;
 	doc["startLedsCoinPin4"] = addonOptions.startLedsCoinPin4 == 0xFF ? -1 : addonOptions.startLedsCoinPin4;
 	doc["startLedsMarqueePin"] = addonOptions.startLedsMarqueePin == 0xFF ? -1 : addonOptions.startLedsMarqueePin;
+	doc["startLedsExtStartPin"] = addonOptions.startLedsExtStartPin == 0xFF ? -1 : addonOptions.startLedsExtStartPin;
+	doc["startLedsExtCoinPin"] = addonOptions.startLedsExtCoinPin == 0xFF ? -1 : addonOptions.startLedsExtCoinPin;
 	doc["startLedsStartBrightness"] = addonOptions.startLedsStartBrightness == 0xFF ? 100 : addonOptions.startLedsStartBrightness;
 	doc["startLedsCoinBrightness"] = addonOptions.startLedsCoinBrightness == 0xFF ? 100 : addonOptions.startLedsCoinBrightness;
 	doc["startLedsMarqueeBrightness"] = addonOptions.startLedsMarqueeBrightness == 0xFF ? 100 : addonOptions.startLedsMarqueeBrightness;
