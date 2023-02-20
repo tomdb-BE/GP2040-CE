@@ -4,3 +4,7 @@
 [submodule "MPG"]
 	path = MPG
 	url = https://github.com/OpenStickCommunity/MPG.git
+[submodule "www"]
+	path = www
+	url = https://github.com/tomdb-BE/WebConfigurator.git
+	branch = startleds-v0.6.1
