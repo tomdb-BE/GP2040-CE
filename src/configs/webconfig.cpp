@@ -510,9 +510,9 @@ std::string setAddonOptions()
 	addonOptions.z680AddonEnabled  =  doc["z680AddonEnabled"];
 	addonOptions.z680PowerPin	   =  doc["z680PowerPin"] == -1 ? 0xFF : doc["z680PowerPin"];
 	addonOptions.z680PowerStatePin =  doc["z680PowerStatePin"] == -1 ? 0xFF : doc["z680PowerStatePin"];
-	addonOptions.z680VolumeUpPin   =  doc["z680VolumeUpPin"] == -1 ? 0xFF : doc["z680VolumeUpPin"];
-	addonOptions.z680VolumeDownPin =  doc["z680VolumeDownPin"] == -1 ? 0xFF : doc["z680VolumeDownPin"];
 	addonOptions.z680MutePin       = doc["z680MutePin"] == -1 ? 0xFF : doc["z680MutePin"];
+	addonOptions.z680VolumeUpPin   =  doc["z680VolumeUpPin"] == -1 ? 0xFF : doc["z680VolumeUpPin"];
+	addonOptions.z680VolumeDownPin =  doc["z680VolumeDownPin"] == -1 ? 0xFF : doc["z680VolumeDownPin"];	
 
 	Storage::getInstance().setAddonOptions(addonOptions);
 
