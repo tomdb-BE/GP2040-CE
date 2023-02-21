@@ -182,7 +182,7 @@ void StartLedsAddon::process()
 	this->ledsCoin.display();
 	this->ledsMarquee.display();
 
-	if (!(buttonsPressed && this->ready))
+	if (!this->ready)
 		return;
 
 	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
@@ -193,6 +193,7 @@ void StartLedsAddon::process()
 			this->ledsMarquee.brightnessUp();
 		if (dpadPressed & GAMEPAD_MASK_DOWN)
 			this->ledsMarquee.brightnessDown();
+		this->lastButtonsPressed = buttonsPressed;
 		return;
 	}
 
