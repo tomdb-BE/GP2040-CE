@@ -174,6 +174,8 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.startLedsCoinPin3		= STARTLEDS_COIN_PIN3;
 	addonOptions.startLedsCoinPin4		= STARTLEDS_COIN_PIN4;
 	addonOptions.startLedsMarqueePin	= STARTLEDS_MARQUEE_PIN;
+	addonOptions.startLedsExtStartPin	= STARTLEDS_EXT_START_PIN;
+	addonOptions.startLedsExtCoinPin	= STARTLEDS_EXT_COIN_PIN;
 	addonOptions.startLedsStartBrightness   = STARTLEDS_START_BRIGHTNESS;
 	addonOptions.startLedsCoinBrightness    = STARTLEDS_COIN_BRIGHTNESS;
 	addonOptions.startLedsMarqueeBrightness = STARTLEDS_MARQUEE_BRIGHTNESS;
@@ -183,9 +185,9 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.z680AddonEnabled  = Z680_ENABLED;
 	addonOptions.z680PowerPin	   = Z680_POWER_PIN;
 	addonOptions.z680PowerStatePin = Z680_STATE_PIN;
+	addonOptions.z680MutePin       = Z680_MUTE_PIN;	
 	addonOptions.z680VolumeUpPin   = Z680_VOLUME_UP_PIN;
-	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;
-	addonOptions.z680MutePin       = Z680_MUTE_PIN;		
+	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;		
 	setAddonOptions(addonOptions);
 }
 

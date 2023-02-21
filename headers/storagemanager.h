@@ -125,9 +125,9 @@ struct AddonOptions {
 	uint8_t z680AddonEnabled;
 	uint8_t z680PowerPin;
 	uint8_t z680PowerStatePin;
+	uint8_t z680MutePin;
 	uint8_t z680VolumeUpPin;
-	uint8_t z680VolumeDownPin;
-	uint8_t z680MutePin;	
+	uint8_t z680VolumeDownPin;	
 };
 
 struct SplashImage {

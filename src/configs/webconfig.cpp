@@ -581,9 +581,9 @@ std::string getAddonOptions()
 	doc["z680AddonEnabled"] = addonOptions.z680AddonEnabled;
 	doc["z680PowerPin"] = addonOptions.z680PowerPin == 0xFF ? -1 : addonOptions.z680PowerPin;
 	doc["z680PowerStatePin"] = addonOptions.z680PowerStatePin == 0xFF ? -1 : addonOptions.z680PowerStatePin;
-	doc["z680VolumeUpPin"] = addonOptions.z680VolumeUpPin == 0xFF ? -1 : addonOptions.z680VolumeUpPin;
-	doc["z680VolumeDownPin"] = addonOptions.z680VolumeDownPin == 0xFF ? -1 : addonOptions.z680VolumeDownPin;
 	doc["z680MutePin"] = addonOptions.z680MutePin == 0xFF ? -1 : addonOptions.z680MutePin;
+	doc["z680VolumeUpPin"] = addonOptions.z680VolumeUpPin == 0xFF ? -1 : addonOptions.z680VolumeUpPin;
+	doc["z680VolumeDownPin"] = addonOptions.z680VolumeDownPin == 0xFF ? -1 : addonOptions.z680VolumeDownPin;	
 	
 
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
