@@ -20,11 +20,13 @@
 #include "addons/bootsel_button.h"
 #include "addons/buzzerspeaker.h"
 #include "addons/dualdirectional.h"
+#include "addons/extra_button.h"
 #include "addons/i2canalog1219.h"
 #include "addons/i2cdisplay.h"
 #include "addons/jslider.h"
 #include "addons/neopicoleds.h"
 #include "addons/pccontrol.h"
+#include "addons/playernum.h"
 #include "addons/pleds.h"
 #include "addons/reverse.h"
 #include "addons/startleds.h"
@@ -155,13 +157,18 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.bootselButtonMap		= BOOTSEL_BUTTON_MASK;
 	addonOptions.buzzerPin              = BUZZER_PIN;
 	addonOptions.buzzerVolume           = BUZZER_VOLUME;
+	addonOptions.extraButtonMap		    = EXTRA_BUTTON_MASK;
+	addonOptions.extraButtonPin		    = EXTRA_BUTTON_PIN;
+	addonOptions.playerNumber           = PLAYER_NUMBER;
 	addonOptions.AnalogInputEnabled     = ANALOG_INPUT_ENABLED;
 	addonOptions.BoardLedAddonEnabled   = BOARD_LED_ENABLED;
 	addonOptions.BootselButtonAddonEnabled = BOOTSEL_BUTTON_ENABLED;
 	addonOptions.BuzzerSpeakerAddonEnabled = BUZZER_ENABLED;
 	addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
+	addonOptions.ExtraButtonAddonEnabled = EXTRA_BUTTON_ENABLED;
 	addonOptions.I2CAnalog1219InputEnabled = I2C_ANALOG1219_ENABLED;
 	addonOptions.JSliderInputEnabled    = JSLIDER_ENABLED;
+	addonOptions.PlayerNumAddonEnabled  = PLAYERNUM_ADDON_ENABLED;
 	addonOptions.ReverseInputEnabled    = REVERSE_ENABLED;
 	addonOptions.TurboInputEnabled      = TURBO_ENABLED;
 	addonOptions.startLedsAddonEnabled  = STARTLEDS_ENABLED;
@@ -187,7 +194,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.z680PowerStatePin = Z680_STATE_PIN;
 	addonOptions.z680MutePin       = Z680_MUTE_PIN;	
 	addonOptions.z680VolumeUpPin   = Z680_VOLUME_UP_PIN;
-	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;		
+	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;	
 	setAddonOptions(addonOptions);
 }
 
