@@ -29,10 +29,10 @@
 #define COIN1_BUTTON_MASK GAMEPAD_MASK_S1
 #endif
 #ifndef START2_BUTTON_MASK
-#define START2_BUTTON_MASK GAMEPAD_MASK_A2
+#define START2_BUTTON_MASK 0
 #endif
 #ifndef COIN2_BUTTON_MASK
-#define COIN2_BUTTON_MASK GAMEPAD_MASK_A1
+#define COIN2_BUTTON_MASK 0
 #endif
 #ifndef START_BUTTON_MASKS
 #define START_BUTTON_MASKS START1_BUTTON_MASK | START2_BUTTON_MASK
@@ -117,9 +117,10 @@ struct StartLedsAnimation
 {
 	uint8_t currentState = STARTLEDS_STATE_ALL_OFF;		
 	uint8_t stateMask = 0xFF;
+	uint8_t prevStateMask = 0xFF;
 	StartLedsAnimationType currentType = STARTLEDS_ANIM_NONE;
 	StartLedsAnimationType previousType = STARTLEDS_ANIM_NONE;
-	StartLedsAnimationSpeed speed = STARTLEDS_SPEED_OFF;
+	uint16_t speed = STARTLEDS_SPEED_OFF;
 };
 
 static const StartLedsAnimation STARTLEDS_ALL_OFF {
@@ -158,25 +159,32 @@ public:
 	void setType(StartLedsAnimationType newType) { this->animation.currentType = newType; }
 	void setSpeed(StartLedsAnimationSpeed newSpeed) { this->animation.speed = newSpeed; this->update(); }
 	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }
-	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = this->handleBrightness(amount, true); }
-	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightness = this->handleBrightness(amount); }
+	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightnessCycle(amount, true); }
+	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightnessCycle(amount, false); }
+	void brightnessCycle(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP, bool direction = false) { this->brightness = (direction) ? this->brightness + amount : this->brightness - amount; this->maxAnimationBrightness = this->brightness; this->reset();}	
+	uint16_t getSpeed() { return this->animation.speed; }
 	StartLedsAnimation getAnimation() { return this->animation; }
-	StartLedsAnimationSpeed getSpeed() { return this->animation.speed; }
 	StartLedsAnimationType getType() { return this->animation.currentType; }
 	uint8_t getMask() { return this->animation.stateMask; }
-	bool isReady() {return this->ready;}
+	void toggleState() {(this->turnedOff) ? this->turnOn() : this->turnOff();}
+	bool isReady() {return this->ready;}	
 private:
-	inline void animate();
-	inline void reset();
-	uint8_t handleBrightness(uint8_t amount, bool negative = false);	
+	void turnOn() {this->animation.stateMask = this->animation.prevStateMask; this->reset();}
+	void turnOff() {this->animation.prevStateMask = this->animation.stateMask; this->animation.stateMask = 0; this->reset();}
+	void animate();
+	void reset();
+	uint8_t handleBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP);	
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[STARTLEDS_COUNT];
 	uint8_t ledPins[STARTLEDS_COUNT];
 	uint8_t brightness;
 	uint8_t maxBrightness;
+	uint8_t maxAnimationBrightness;
+	uint8_t previousBrightness;
 	StartLedsAnimation animation;
 	bool fadeIn;
 	bool ready;
+	bool turnedOff;
 };
 
 class StartLedsAddon : public GPAddon
@@ -193,8 +201,9 @@ private:
 	StartLeds ledsMarquee;
 	bool debounce(uint32_t * ptrDebounceTime);
 	uint8_t creditCount = 0;
-	uint16_t lastButtonsPressed;	
-	uint32_t debounceMarqueeBrightness;
+	uint16_t lastButtonsPressed;
+	uint16_t lastDpadPressed;
+	uint32_t debounceBrightness;
 	uint8_t externalStartPin = 0xFF;
 	uint8_t externalCoinPin	= 0xFF;
 	bool ready;

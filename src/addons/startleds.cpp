@@ -23,6 +23,7 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 	uint8_t newPin;
 	this->brightness = mBrightness;
 	this->maxBrightness = mBrightness;
+	this->maxAnimationBrightness = mBrightness;
 	for (uint8_t i=0; i < STARTLEDS_COUNT; i++)
 	{
 		newPin = pins[i];
@@ -44,7 +45,7 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 
 void StartLeds::display()
 {
-	if (! this->ready)
+	if (! this->ready || this->turnedOff)
 		return;
 
 	this->animate();
@@ -53,7 +54,7 @@ void StartLeds::display()
 			pwm_set_gpio_level(this->ledPins[i], this->ledLevels[i]);
 }
 
-inline void StartLeds::animate()
+void StartLeds::animate()
 {
 	uint8_t newState = this->animation.currentState;
 	uint8_t mask = this->animation.stateMask;
@@ -79,7 +80,7 @@ inline void StartLeds::animate()
 
 		case STARTLEDS_ANIM_FADE:
 			newState = newState & mask;
-			this->brightness = this->handleBrightness(STARTLEDS_BRIGHTNESS_STEP, this->fadeIn);
+			this->brightness = this->handleBrightness();
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
 			break;
 
@@ -94,22 +95,26 @@ inline void StartLeds::animate()
 			this->ledLevels[i] = (newState & (1 << i)) ? this->brightness * this->brightness : 0;			
 }
 
-inline void StartLeds::reset()
+void StartLeds::reset()
 {	
-	this->animation.previousType = this->animation.currentType;
-	this->nextAnimationTime = make_timeout_time_ms(0);
-	this->brightness = this->maxBrightness;
+	this->animation.previousType = this->animation.currentType;	
+	this->brightness = this->maxAnimationBrightness;
 	this->fadeIn = false;
+	if (this->animation.currentType == STARTLEDS_ANIM_FADE)
+		this->animation.speed = STARTLEDS_SPEED_LUDICROUS + (this->maxBrightness - this->maxAnimationBrightness);
+	this->nextAnimationTime = make_timeout_time_ms(0);
 }
 
-uint8_t StartLeds::handleBrightness(uint8_t amount, bool increase)
+
+
+uint8_t StartLeds::handleBrightness(uint8_t amount)
 {
 	int16_t nBrightness = this->brightness;
-	uint16_t mBrightness = this->maxBrightness;
+	int16_t mBrightness = this->maxAnimationBrightness;
 
-	if (increase)	
+	if (this->fadeIn)	
 	{				
-		nBrightness += 5;
+		nBrightness += amount;
 		if (nBrightness >= mBrightness) {
 			this->fadeIn = false;
 			return mBrightness;
@@ -117,7 +122,7 @@ uint8_t StartLeds::handleBrightness(uint8_t amount, bool increase)
 		return nBrightness;
 	}
 	
-	nBrightness -= 5;
+	nBrightness -= amount;
 	if (nBrightness <= 0) {
 		this->fadeIn = true;
 		return 0;
@@ -187,15 +192,25 @@ void StartLedsAddon::process()
 
 	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
 	{
-		if (this->debounce(&this->debounceMarqueeBrightness) || !this->ledsMarquee.isReady())
+		if (this->debounce(&this->debounceBrightness))
 			return;
-		if (dpadPressed & GAMEPAD_MASK_UP)
-			this->ledsMarquee.brightnessUp();
-		if (dpadPressed & GAMEPAD_MASK_DOWN)
-			this->ledsMarquee.brightnessDown();
+		if ((dpadPressed & GAMEPAD_MASK_UP))
+			this->ledsMarquee.brightnessCycle();
+		if ((dpadPressed & GAMEPAD_MASK_LEFT));
+			this->ledsCoin.brightnessCycle();			
+		if ((dpadPressed & GAMEPAD_MASK_RIGHT));
+			this->ledsStart.brightnessCycle();
+		if ((dpadPressed & GAMEPAD_MASK_DOWN) && this->lastDpadPressed != dpadPressed) {
+			this->ledsMarquee.toggleState();
+			this->ledsCoin.toggleState();
+			this->ledsStart.toggleState();
+		}			
 		this->lastButtonsPressed = buttonsPressed;
+		this->lastDpadPressed = dpadPressed;		
 		return;
 	}
+
+	this->lastDpadPressed = dpadPressed;
 
 	if (buttonsPressed == this->lastButtonsPressed)
 		return;
@@ -223,17 +238,15 @@ void StartLedsAddon::process()
 	}
 	else if (buttonsPressed & START_BUTTON_MASKS) 
 	{
-		if (this->creditCount > 0)
-			this->creditCount--;				
-		if (this->creditCount == 0)
-		{
-			this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
+		if (this->creditCount == 0) {
 			this->ledsCoin.setAnimation(STARTLEDS_FADE_ALL);
+			return;
 		}
-		else
-		{
+		this->creditCount--;
+		if (this->creditCount == 0)		
+			this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
+		else		
 			this->ledsStart.setAnimation(STARTLEDS_ALL_ON);
-		}
 	}	
 }
 
