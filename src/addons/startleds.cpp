@@ -132,9 +132,9 @@ bool StartLedsAddon::available() {
 
 void StartLedsAddon::setup() {	
 	AddonOptions options = Storage::getInstance().getAddonOptions();
-	uint8_t startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2, options.startLedsStartPin3, options.startLedsStartPin4};
-	uint8_t coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2, options.startLedsCoinPin3, options.startLedsCoinPin4};
-	uint8_t marqueePins[] = {options.startLedsMarqueePin, 0xFF, 0xFF, 0xFF};
+	uint8_t startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2};
+	uint8_t coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2};
+	uint8_t marqueePins[] = {options.startLedsMarqueePin, 0xFF};
 	uint8_t extStartPin = options.startLedsExtStartPin;
 	uint8_t extCoinPin = options.startLedsExtCoinPin;
 	uint8_t startBrightness = (float)options.startLedsStartBrightness / 100 * 255;	

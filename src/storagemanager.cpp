@@ -19,7 +19,7 @@
 #include "addons/board_led.h"
 #include "addons/bootsel_button.h"
 #include "addons/buzzerspeaker.h"
-#include "addons/dualdirectional.h"
+//#include "addons/dualdirectional.h"
 #include "addons/extra_button.h"
 #include "addons/i2canalog1219.h"
 #include "addons/i2cdisplay.h"
@@ -132,26 +132,26 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.pinButtonTurbo    		= PIN_BUTTON_TURBO;
 	addonOptions.pinButtonReverse  		= PIN_BUTTON_REVERSE;
 	addonOptions.pinSliderLS       		= PIN_SLIDER_LS;
-	addonOptions.pinSliderRS       		= PIN_SLIDER_RS;
-	addonOptions.pinDualDirDown    		= PIN_DUAL_DIRECTIONAL_DOWN;
-	addonOptions.pinDualDirUp      		= PIN_DUAL_DIRECTIONAL_UP;
-	addonOptions.pinDualDirLeft    		= PIN_DUAL_DIRECTIONAL_LEFT;
-	addonOptions.pinDualDirRight   		= PIN_DUAL_DIRECTIONAL_RIGHT;
+	addonOptions.pinSliderRS       		= PIN_SLIDER_RS;	
+	//addonOptions.pinDualDirDown    		= PIN_DUAL_DIRECTIONAL_DOWN;
+	//addonOptions.pinDualDirUp      		= PIN_DUAL_DIRECTIONAL_UP;
+	//addonOptions.pinDualDirLeft    		= PIN_DUAL_DIRECTIONAL_LEFT;
+	//addonOptions.pinDualDirRight   		= PIN_DUAL_DIRECTIONAL_RIGHT;
 	addonOptions.turboShotCount    		= DEFAULT_SHOT_PER_SEC;
 	addonOptions.pinTurboLED       		= TURBO_LED_PIN;
 	addonOptions.pinReverseLED     		= REVERSE_LED_PIN;
 	addonOptions.reverseActionUp        = REVERSE_UP_DEFAULT;
 	addonOptions.reverseActionDown      = REVERSE_DOWN_DEFAULT;
 	addonOptions.reverseActionLeft      = REVERSE_LEFT_DEFAULT;
-	addonOptions.reverseActionRight     = REVERSE_RIGHT_DEFAULT;
+	addonOptions.reverseActionRight     = REVERSE_RIGHT_DEFAULT;	
 	addonOptions.i2cAnalog1219SDAPin    = I2C_ANALOG1219_SDA_PIN;
 	addonOptions.i2cAnalog1219SCLPin    = I2C_ANALOG1219_SCL_PIN;
 	addonOptions.i2cAnalog1219Block     = (I2C_ANALOG1219_BLOCK == i2c0) ? 0 : 1;
 	addonOptions.i2cAnalog1219Speed     = I2C_ANALOG1219_SPEED;
 	addonOptions.i2cAnalog1219Address   = I2C_ANALOG1219_ADDRESS;
 	addonOptions.onBoardLedMode			= BOARD_LED_TYPE;
-	addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
-	addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
+	//addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
+	//addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
 	addonOptions.analogAdcPinX      	= ANALOG_ADC_VRX;
 	addonOptions.analogAdcPinY      	= ANALOG_ADC_VRY;
 	addonOptions.bootselButtonMap		= BOOTSEL_BUTTON_MASK;
@@ -164,7 +164,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.BoardLedAddonEnabled   = BOARD_LED_ENABLED;
 	addonOptions.BootselButtonAddonEnabled = BOOTSEL_BUTTON_ENABLED;
 	addonOptions.BuzzerSpeakerAddonEnabled = BUZZER_ENABLED;
-	addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
+	//addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
 	addonOptions.ExtraButtonAddonEnabled = EXTRA_BUTTON_ENABLED;
 	addonOptions.I2CAnalog1219InputEnabled = I2C_ANALOG1219_ENABLED;
 	addonOptions.JSliderInputEnabled    = JSLIDER_ENABLED;
@@ -174,12 +174,12 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.startLedsAddonEnabled  = STARTLEDS_ENABLED;
 	addonOptions.startLedsStartPin1		= STARTLEDS_START_PIN1;
 	addonOptions.startLedsStartPin2		= STARTLEDS_START_PIN2;
-	addonOptions.startLedsStartPin3		= STARTLEDS_START_PIN3;
-	addonOptions.startLedsStartPin4		= STARTLEDS_START_PIN4;
+	//addonOptions.startLedsStartPin3		= STARTLEDS_START_PIN3;
+	//addonOptions.startLedsStartPin4		= STARTLEDS_START_PIN4;
 	addonOptions.startLedsCoinPin1		= STARTLEDS_COIN_PIN1;
 	addonOptions.startLedsCoinPin2		= STARTLEDS_COIN_PIN1;
-	addonOptions.startLedsCoinPin3		= STARTLEDS_COIN_PIN3;
-	addonOptions.startLedsCoinPin4		= STARTLEDS_COIN_PIN4;
+	//addonOptions.startLedsCoinPin3		= STARTLEDS_COIN_PIN3;
+	//addonOptions.startLedsCoinPin4		= STARTLEDS_COIN_PIN4;
 	addonOptions.startLedsMarqueePin	= STARTLEDS_MARQUEE_PIN;
 	addonOptions.startLedsExtStartPin	= STARTLEDS_EXT_START_PIN;
 	addonOptions.startLedsExtCoinPin	= STARTLEDS_EXT_COIN_PIN;
