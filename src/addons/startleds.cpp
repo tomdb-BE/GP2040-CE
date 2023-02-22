@@ -181,7 +181,7 @@ void StartLedsAddon::process()
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
 	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS | STARTLEDS_EXT_MASKS);
-	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
+	uint8_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
 	this->ledsStart.display();
 	this->ledsCoin.display();
@@ -192,21 +192,23 @@ void StartLedsAddon::process()
 
 	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
 	{
-		if (this->debounce())
-			return;
-		if ((dpadPressed & GAMEPAD_MASK_UP))
-			this->ledsMarquee.brightnessCycle();
-		if ((dpadPressed & GAMEPAD_MASK_LEFT));
-			this->ledsCoin.brightnessCycle();			
-		if ((dpadPressed & GAMEPAD_MASK_RIGHT));
-			this->ledsStart.brightnessCycle();
-		if ((dpadPressed & GAMEPAD_MASK_DOWN) && this->lastDpadPressed != dpadPressed) {
+		this->lastButtonsPressed = buttonsPressed;		
+		if (dpadPressed	== GAMEPAD_MASK_DOWN && this->lastDpadPressed != GAMEPAD_MASK_DOWN) {
 			this->ledsMarquee.toggleState();
 			this->ledsCoin.toggleState();
 			this->ledsStart.toggleState();
-		}			
-		this->lastButtonsPressed = buttonsPressed;
-		this->lastDpadPressed = dpadPressed;		
+			this->lastDpadPressed = dpadPressed;
+			return;
+		}
+		this->lastDpadPressed = dpadPressed;
+		if (this->debounce())
+			return;
+		switch (dpadPressed)
+		{
+			case GAMEPAD_MASK_UP:                        this->ledsMarquee.brightnessCycle();  break;			
+			case GAMEPAD_MASK_LEFT:                      this->ledsCoin.brightnessCycle();     break;			
+			case GAMEPAD_MASK_RIGHT:                     this->ledsStart.brightnessCycle();    break;
+		}
 		return;
 	}
 
