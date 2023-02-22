@@ -19,26 +19,38 @@
 #ifndef STARTLEDS_COUNT
 #define STARTLEDS_COUNT 2
 #endif
+#ifndef STARTLEDS_MAX_BRIGHTNESS
+#define STARTLEDS_MAX_BRIGHTNESS 0xFF
+#endif
 #ifndef STARTLEDS_PWM_MAXLEVEL
 #define STARTLEDS_PWM_MAXLEVEL 0xFFFF
 #endif
-#ifndef START1_BUTTON_MASK
-#define START1_BUTTON_MASK GAMEPAD_MASK_S2
+#ifndef STARTLEDS_START1_BUTTON_MASK
+#define STARTLEDS_START1_BUTTON_MASK GAMEPAD_MASK_S2
 #endif
-#ifndef COIN1_BUTTON_MASK
-#define COIN1_BUTTON_MASK GAMEPAD_MASK_S1
+#ifndef STARTLEDS_COIN1_BUTTON_MASK
+#define STARTLEDS_COIN1_BUTTON_MASK GAMEPAD_MASK_S1
 #endif
-#ifndef START2_BUTTON_MASK
-#define START2_BUTTON_MASK 0
+#ifndef STARTLEDS_START2_BUTTON_MASK
+#define STARTLEDS_START2_BUTTON_MASK 0
 #endif
-#ifndef COIN2_BUTTON_MASK
-#define COIN2_BUTTON_MASK 0
+#ifndef STARTLEDS_COIN2_BUTTON_MASK
+#define STARTLEDS_COIN2_BUTTON_MASK 0
 #endif
-#ifndef START_BUTTON_MASKS
-#define START_BUTTON_MASKS START1_BUTTON_MASK | START2_BUTTON_MASK
+#ifndef STARTLEDS_START_BUTTON_MASKS
+#define STARTLEDS_START_BUTTON_MASKS STARTLEDS_START1_BUTTON_MASK | STARTLEDS_START2_BUTTON_MASK
 #endif
-#ifndef COIN_BUTTON_MASKS
-#define COIN_BUTTON_MASKS COIN1_BUTTON_MASK | COIN2_BUTTON_MASK
+#ifndef STARTLEDS_COIN_BUTTON_MASKS
+#define STARTLEDS_COIN_BUTTON_MASKS STARTLEDS_COIN1_BUTTON_MASK | STARTLEDS_COIN2_BUTTON_MASK
+#endif
+#ifndef STARTLEDS_EXT_START_MASK
+#define STARTLEDS_EXT_START_MASK GAMEPAD_MASK_A2
+#endif
+#ifndef STARTLEDS_EXT_COIN_MASK
+#define STARTLEDS_EXT_COIN_MASK GAMEPAD_MASK_A1
+#endif
+#ifndef STARTLEDS_EXT_MASKS
+#define STARTLEDS_EXT_MASKS STARTLEDS_EXT_START_MASK | STARTLEDS_EXT_COIN_MASK
 #endif
 #ifndef STARTLEDS_START_PIN1
 #define STARTLEDS_START_PIN1 -1
@@ -60,15 +72,6 @@
 #endif
 #ifndef STARTLEDS_EXT_COIN_PIN
 #define STARTLEDS_EXT_COIN_PIN -1
-#endif
-#ifndef STARTLEDS_EXT_START_MASK
-#define STARTLEDS_EXT_START_MASK GAMEPAD_MASK_A2
-#endif
-#ifndef STARTLEDS_EXT_COIN_MASK
-#define STARTLEDS_EXT_COIN_MASK GAMEPAD_MASK_A1
-#endif
-#ifndef STARTLEDS_EXT_MASKS
-#define STARTLEDS_EXT_MASKS STARTLEDS_EXT_START_MASK | STARTLEDS_EXT_COIN_MASK
 #endif
 #ifndef STARTLEDS_START_BRIGHTNESS
 #define STARTLEDS_START_BRIGHTNESS 50
@@ -151,34 +154,26 @@ static const StartLedsAnimation STARTLEDS_FADE_ALL {
 
 class StartLeds
 {
-public:	
-	std::vector<uint> initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation);
-	void display();
-	void update() {this->nextAnimationTime = make_timeout_time_ms(0);}
-	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; this->update(); }
-	void setType(StartLedsAnimationType newType) { this->animation.currentType = newType; }
-	void setSpeed(StartLedsAnimationSpeed newSpeed) { this->animation.speed = newSpeed; this->update(); }
-	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }
-	void setBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->handleBrightness(this->maxBrightness, amount); this->maxAnimationBrightness = this->brightness; }
+public:		
 	void initAnimation() { this->animation.previousType = STARTLEDS_ANIM_NONE; }
-	void updateAnimation() {this->nextAnimationTime = make_timeout_time_ms(0); }
-	uint16_t getSpeed() { return this->animation.speed; }
-	StartLedsAnimation getAnimation() { return this->animation; }
-	StartLedsAnimationType getType() { return this->animation.currentType; }
-	uint8_t getMask() { return this->animation.stateMask; }
-	void toggleState() {(this->turnedOff) ? this->turnOn() : this->turnOff();}
-	bool isReady() {return this->ready;}	
+	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; this->nextAnimationTime = make_timeout_time_ms(0); }	
+	void setAnimationBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->handleBrightness(this->maxBrightness, amount); this->maxAnimationBrightness = this->brightness; }	
+	uint8_t getAnimationBrightness() {return this->maxAnimationBrightness; }
+	bool toggleState() {(this->turnedOff) ? this->turnOn() : this->turnOff(); return this->turnedOff;}
+	bool isReady() {return this->ready; }
+	std::vector<uint> initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation);
+	void display();	
 private:
-	void turnOn() {this->animation.stateMask = this->animation.prevStateMask; this->updateAnimation(); this->turnedOff = false; }
-	void turnOff() {this->animation.prevStateMask = this->animation.stateMask; this->animation.stateMask = 0; this->updateAnimation(); this->turnedOff = true; }
-	inline void animate();
+	void turnOn() {this->animation.stateMask = this->animation.prevStateMask; this->nextAnimationTime = make_timeout_time_ms(0); this->turnedOff = false; }
+	void turnOff() {this->animation.prevStateMask = this->animation.stateMask; this->animation.stateMask = 0; this->nextAnimationTime = make_timeout_time_ms(0); this->turnedOff = true; }
+	void handleBrightness(uint8_t mBrightness, uint8_t amount = STARTLEDS_BRIGHTNESS_STEP);
 	inline void resetAnimation();
-	void handleBrightness(uint8_t mBrightness, uint8_t amount = STARTLEDS_BRIGHTNESS_STEP);	
+	inline void animate();
+	const uint8_t maxBrightness = STARTLEDS_MAX_BRIGHTNESS;
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[STARTLEDS_COUNT];
 	uint8_t ledPins[STARTLEDS_COUNT];
-	uint8_t brightness;
-	uint8_t maxBrightness;
+	uint8_t brightness;	
 	uint8_t maxAnimationBrightness;
 	StartLedsAnimation animation;
 	bool fadeIn;
@@ -194,11 +189,15 @@ public:
 	virtual void preprocess() {}
 	virtual void process();
 	virtual std::string name() { return StartLedsAddonName; }	
-private:	
+private:
+	bool debounce();
+	void saveBrightness();
+	void processBrightness(uint8_t dpadPressedMask);
+	void processExternalButtons(uint16_t buttonsPressedMask);
+	void processCredits(uint16_t buttonsPressedMask);
 	StartLeds ledsStart;
 	StartLeds ledsCoin;
 	StartLeds ledsMarquee;
-	bool debounce();
 	uint8_t creditCount = 0;
 	uint16_t lastButtonsPressed;
 	uint16_t lastDpadPressed;
