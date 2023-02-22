@@ -45,7 +45,7 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 
 void StartLeds::display()
 {
-	if (! this->ready || this->turnedOff)
+	if (! this->ready)
 		return;
 
 	this->animate();
@@ -54,12 +54,12 @@ void StartLeds::display()
 			pwm_set_gpio_level(this->ledPins[i], this->ledLevels[i]);
 }
 
-void StartLeds::animate()
+inline void StartLeds::animate()
 {
 	uint8_t newState = this->animation.currentState;
 	uint8_t mask = this->animation.stateMask;
 	if (this->animation.currentType != this->animation.previousType)	
-		this->reset();			
+		this->resetAnimation();			
 	else if (!time_reached(this->nextAnimationTime))	
 		return;			
 
@@ -95,7 +95,7 @@ void StartLeds::animate()
 			this->ledLevels[i] = (newState & (1 << i)) ? this->brightness * this->brightness : 0;			
 }
 
-void StartLeds::reset()
+inline void StartLeds::resetAnimation()
 {	
 	this->animation.previousType = this->animation.currentType;	
 	this->brightness = this->maxAnimationBrightness;
@@ -192,7 +192,7 @@ void StartLedsAddon::process()
 
 	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
 	{
-		if (this->debounce(&this->debounceBrightness))
+		if (this->debounce())
 			return;
 		if ((dpadPressed & GAMEPAD_MASK_UP))
 			this->ledsMarquee.brightnessCycle();
@@ -250,16 +250,16 @@ void StartLedsAddon::process()
 	}	
 }
 
-bool StartLedsAddon::debounce(uint32_t * debounceTime)
+bool StartLedsAddon::debounce()
 {
 	if (STARTLEDS_DEBOUNCE_MILLIS <= 0)
 		return true;
 				
     uint32_t nowTime = getMillis();
 
-    if ((nowTime - *debounceTime) > STARTLEDS_DEBOUNCE_MILLIS)
+    if ((nowTime - this->debounceBrightness) > STARTLEDS_DEBOUNCE_MILLIS)
 	{
-        *debounceTime = nowTime;
+        this->debounceBrightness = nowTime;
 		return false;
     }
     return true;

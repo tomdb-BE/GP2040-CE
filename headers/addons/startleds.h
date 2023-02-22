@@ -161,7 +161,9 @@ public:
 	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }
 	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightnessCycle(amount, true); }
 	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightnessCycle(amount, false); }
-	void brightnessCycle(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP, bool direction = false) { this->brightness = (direction) ? this->brightness + amount : this->brightness - amount; this->maxAnimationBrightness = this->brightness; this->reset();}	
+	void brightnessCycle(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP, bool direction = false) { this->brightness = (direction) ? this->brightness + amount : this->brightness - amount; this->maxAnimationBrightness = this->brightness; this->updateAnimation();}
+	void initAnimation() { this->animation.previousType = STARTLEDS_ANIM_NONE; }
+	void updateAnimation() {this->nextAnimationTime = make_timeout_time_ms(0); }
 	uint16_t getSpeed() { return this->animation.speed; }
 	StartLedsAnimation getAnimation() { return this->animation; }
 	StartLedsAnimationType getType() { return this->animation.currentType; }
@@ -169,10 +171,10 @@ public:
 	void toggleState() {(this->turnedOff) ? this->turnOn() : this->turnOff();}
 	bool isReady() {return this->ready;}	
 private:
-	void turnOn() {this->animation.stateMask = this->animation.prevStateMask; this->reset();}
-	void turnOff() {this->animation.prevStateMask = this->animation.stateMask; this->animation.stateMask = 0; this->reset();}
-	void animate();
-	void reset();
+	void turnOn() {this->animation.stateMask = this->animation.prevStateMask; this->updateAnimation(); this->turnedOff = false; }
+	void turnOff() {this->animation.prevStateMask = this->animation.stateMask; this->animation.stateMask = 0; this->updateAnimation(); this->turnedOff = true; }
+	inline void animate();
+	inline void resetAnimation();
 	uint8_t handleBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP);	
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[STARTLEDS_COUNT];
@@ -199,7 +201,7 @@ private:
 	StartLeds ledsStart;
 	StartLeds ledsCoin;
 	StartLeds ledsMarquee;
-	bool debounce(uint32_t * ptrDebounceTime);
+	bool debounce();
 	uint8_t creditCount = 0;
 	uint16_t lastButtonsPressed;
 	uint16_t lastDpadPressed;
