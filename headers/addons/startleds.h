@@ -74,13 +74,13 @@
 #define STARTLEDS_EXT_COIN_PIN -1
 #endif
 #ifndef STARTLEDS_START_BRIGHTNESS
-#define STARTLEDS_START_BRIGHTNESS 50
+#define STARTLEDS_START_BRIGHTNESS 0xFF
 #endif
 #ifndef STARTLEDS_COIN_BRIGHTNESS
-#define STARTLEDS_COIN_BRIGHTNESS 50
+#define STARTLEDS_COIN_BRIGHTNESS 0xFF
 #endif
 #ifndef STARTLEDS_MARQUEE_BRIGHTNESS
-#define STARTLEDS_MARQUEE_BRIGHTNESS 50
+#define STARTLEDS_MARQUEE_BRIGHTNESS 0xFF
 #endif
 #ifndef STARTLEDS_BRIGHTNESS_STEP
 #define STARTLEDS_BRIGHTNESS_STEP 5
@@ -159,7 +159,7 @@ public:
 	void setAnimation(StartLedsAnimation newAnimation) { this->animation = newAnimation; this->nextAnimationTime = make_timeout_time_ms(0); }	
 	void setAnimationBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->handleBrightness(this->maxBrightness, amount); this->maxAnimationBrightness = this->brightness; }	
 	uint8_t getAnimationBrightness() {return this->maxAnimationBrightness; }
-	bool toggleState() {(this->turnedOff) ? this->turnOn() : this->turnOff(); return this->turnedOff;}
+	bool toggleState() {(this->turnedOff) ? this->turnOn() : this->turnOff(); return !this->turnedOff;}
 	bool isReady() {return this->ready; }
 	std::vector<uint> initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation);
 	void display();	

@@ -506,9 +506,9 @@ std::string setAddonOptions()
 	addonOptions.startLedsMarqueePin	=  doc["startLedsMarqueePin"] == -1 ? 0xFF : doc["startLedsMarqueePin"];
 	addonOptions.startLedsExtStartPin	=  doc["startLedsExtStartPin"] == -1 ? 0xFF : doc["startLedsExtStartPin"];
 	addonOptions.startLedsExtCoinPin	=  doc["startLedsExtCoinPin"] == -1 ? 0xFF : doc["startLedsExtCoinPin"];
-	addonOptions.startLedsStartBrightness	=  doc["startLedsStartBrightness"];
-	addonOptions.startLedsCoinBrightness	=  doc["startLedsCoinBrightness"];
-	addonOptions.startLedsMarqueeBrightness	=  doc["startLedsMarqueeBrightness"];
+	addonOptions.startLedsStartBrightness	=  (float)doc["startLedsStartBrightness"] / 100 * 255;
+	addonOptions.startLedsCoinBrightness	=  (float)doc["startLedsCoinBrightness"] / 100 * 255;
+	addonOptions.startLedsMarqueeBrightness	=  (float)doc["startLedsMarqueeBrightness"] / 100 * 255;
 	addonOptions.pcControlAddonEnabled   =  doc["pcControlAddonEnabled"];
 	addonOptions.pcControlPowerPin	     =  doc["pcControlPowerPin"] == -1 ? 0xFF : doc["pcControlPowerPin"];
 	addonOptions.pcControlPowerSwitchPin =  doc["pcControlPowerSwitchPin"] == -1 ? 0xFF : doc["pcControlPowerSwitchPin"];
@@ -582,9 +582,9 @@ std::string getAddonOptions()
 	doc["startLedsMarqueePin"] = addonOptions.startLedsMarqueePin == 0xFF ? -1 : addonOptions.startLedsMarqueePin;
 	doc["startLedsExtStartPin"] = addonOptions.startLedsExtStartPin == 0xFF ? -1 : addonOptions.startLedsExtStartPin;
 	doc["startLedsExtCoinPin"] = addonOptions.startLedsExtCoinPin == 0xFF ? -1 : addonOptions.startLedsExtCoinPin;
-	doc["startLedsStartBrightness"] = addonOptions.startLedsStartBrightness == 0xFF ? 50 : addonOptions.startLedsStartBrightness;
-	doc["startLedsCoinBrightness"] = addonOptions.startLedsCoinBrightness == 0xFF ? 50 : addonOptions.startLedsCoinBrightness;
-	doc["startLedsMarqueeBrightness"] = addonOptions.startLedsMarqueeBrightness == 0xFF ? 50 : addonOptions.startLedsMarqueeBrightness;
+	doc["startLedsStartBrightness"] = (uint8_t)((float)addonOptions.startLedsStartBrightness / 255 * 100);
+	doc["startLedsCoinBrightness"] = (uint8_t)((float)addonOptions.startLedsCoinBrightness / 255 * 100);
+	doc["startLedsMarqueeBrightness"] =  (uint8_t)((float)addonOptions.startLedsMarqueeBrightness / 255 * 100);
 	doc["pcControlAddonEnabled"] = addonOptions.pcControlAddonEnabled;
 	doc["pcControlPowerPin"] = addonOptions.pcControlPowerPin == 0xFF ? -1 : addonOptions.pcControlPowerPin;
 	doc["pcControlPowerSwitchPin"] = addonOptions.pcControlPowerSwitchPin == 0xFF ? -1 : addonOptions.pcControlPowerSwitchPin;

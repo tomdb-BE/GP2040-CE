@@ -164,9 +164,9 @@ void StartLedsAddon::setup() {
 	uint8_t marqueePins[] = {options.startLedsMarqueePin, 0xFF};
 	uint8_t extStartPin = options.startLedsExtStartPin;
 	uint8_t extCoinPin = options.startLedsExtCoinPin;
-	uint8_t startBrightness = (float)options.startLedsStartBrightness / 100 * 255;	
-	uint8_t coinBrightness = (float)options.startLedsCoinBrightness / 100 * 255;	
-	uint8_t marqueeBrightness = (float)options.startLedsMarqueeBrightness / 100 * 255;
+	uint8_t startBrightness = options.startLedsStartBrightness;	
+	uint8_t coinBrightness = options.startLedsCoinBrightness;	
+	uint8_t marqueeBrightness = options.startLedsMarqueeBrightness;
 
 	pwm_config config = pwm_get_default_config();
 	pwm_config_set_clkdiv(&config, 4.f);
