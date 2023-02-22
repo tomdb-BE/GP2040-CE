@@ -80,7 +80,7 @@ inline void StartLeds::animate()
 
 		case STARTLEDS_ANIM_FADE:
 			newState = newState & mask;
-			this->brightness = this->handleBrightness();
+			this->handleBrightness(this->maxAnimationBrightness);
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
 			break;
 
@@ -101,33 +101,32 @@ inline void StartLeds::resetAnimation()
 	this->brightness = this->maxAnimationBrightness;
 	this->fadeIn = false;
 	if (this->animation.currentType == STARTLEDS_ANIM_FADE)
-		this->animation.speed = STARTLEDS_SPEED_LUDICROUS + (this->maxBrightness - this->maxAnimationBrightness);
+		this->animation.speed = STARTLEDS_SPEED_LUDICROUS + (this->maxBrightness - this->maxAnimationBrightness) / 2;
 	this->nextAnimationTime = make_timeout_time_ms(0);
 }
 
 
 
-uint8_t StartLeds::handleBrightness(uint8_t amount)
+void StartLeds::handleBrightness(uint8_t mBrightness, uint8_t amount)
 {
-	int16_t nBrightness = this->brightness;
-	int16_t mBrightness = this->maxAnimationBrightness;
-
+	uint8_t nBrightness = this->brightness;
 	if (this->fadeIn)	
-	{				
-		nBrightness += amount;
-		if (nBrightness >= mBrightness) {
+	{					
+		nBrightness += amount;	
+		if (nBrightness >= mBrightness || nBrightness < this->brightness) {
 			this->fadeIn = false;
-			return mBrightness;
+			nBrightness = mBrightness;
+		}		
+	}
+	else
+	{
+		nBrightness -= amount;
+		if (nBrightness > this->brightness) {
+			this->fadeIn = true;
+			nBrightness = 0;
 		}
-		return nBrightness;
 	}
-	
-	nBrightness -= amount;
-	if (nBrightness <= 0) {
-		this->fadeIn = true;
-		return 0;
-	}
-	return nBrightness;
+	this->brightness = nBrightness;
 }
 
 bool StartLedsAddon::available() {
@@ -205,9 +204,9 @@ void StartLedsAddon::process()
 			return;
 		switch (dpadPressed)
 		{
-			case GAMEPAD_MASK_UP:                        this->ledsMarquee.brightnessCycle();  break;			
-			case GAMEPAD_MASK_LEFT:                      this->ledsCoin.brightnessCycle();     break;			
-			case GAMEPAD_MASK_RIGHT:                     this->ledsStart.brightnessCycle();    break;
+			case GAMEPAD_MASK_UP:                        this->ledsMarquee.setBrightness();  break;			
+			case GAMEPAD_MASK_LEFT:                      this->ledsCoin.setBrightness();     break;			
+			case GAMEPAD_MASK_RIGHT:                     this->ledsStart.setBrightness();    break;
 		}
 		return;
 	}

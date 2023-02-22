@@ -159,9 +159,7 @@ public:
 	void setType(StartLedsAnimationType newType) { this->animation.currentType = newType; }
 	void setSpeed(StartLedsAnimationSpeed newSpeed) { this->animation.speed = newSpeed; this->update(); }
 	void setMask(uint8_t newMask) { this->animation.stateMask = newMask; this->update(); }
-	void brightnessUp(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightnessCycle(amount, true); }
-	void brightnessDown(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->brightnessCycle(amount, false); }
-	void brightnessCycle(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP, bool direction = false) { this->brightness = (direction) ? this->brightness + amount : this->brightness - amount; this->maxAnimationBrightness = this->brightness; this->updateAnimation();}
+	void setBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP) { this->handleBrightness(this->maxBrightness, amount); this->maxAnimationBrightness = this->brightness; }
 	void initAnimation() { this->animation.previousType = STARTLEDS_ANIM_NONE; }
 	void updateAnimation() {this->nextAnimationTime = make_timeout_time_ms(0); }
 	uint16_t getSpeed() { return this->animation.speed; }
@@ -175,18 +173,17 @@ private:
 	void turnOff() {this->animation.prevStateMask = this->animation.stateMask; this->animation.stateMask = 0; this->updateAnimation(); this->turnedOff = true; }
 	inline void animate();
 	inline void resetAnimation();
-	uint8_t handleBrightness(uint8_t amount = STARTLEDS_BRIGHTNESS_STEP);	
+	void handleBrightness(uint8_t mBrightness, uint8_t amount = STARTLEDS_BRIGHTNESS_STEP);	
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[STARTLEDS_COUNT];
 	uint8_t ledPins[STARTLEDS_COUNT];
 	uint8_t brightness;
 	uint8_t maxBrightness;
 	uint8_t maxAnimationBrightness;
-	uint8_t previousBrightness;
 	StartLedsAnimation animation;
 	bool fadeIn;
-	bool ready;
 	bool turnedOff;
+	bool ready;
 };
 
 class StartLedsAddon : public GPAddon
