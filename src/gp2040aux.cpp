@@ -10,7 +10,7 @@
 #include "addons/pleds.h"
 #include "addons/board_led.h"
 #include "addons/buzzerspeaker.h"
-#include "addons/startleds.h"
+#include "addons/creditleds.h"
 #include "addons/pccontrol.h"
 #include "addons/z680.h"
 
@@ -28,7 +28,7 @@ void GP2040Aux::setup() {
 	addons.LoadAddon(new PlayerLEDAddon(), CORE1_LOOP);
 	addons.LoadAddon(new BoardLedAddon(), CORE1_LOOP);
 	addons.LoadAddon(new BuzzerSpeakerAddon(), CORE1_LOOP);
-	addons.LoadAddon(new StartLedsAddon(), CORE1_LOOP);
+	addons.LoadAddon(new CreditLedsAddon(), CORE1_LOOP);
 	addons.LoadAddon(new PcControlAddon(), CORE1_LOOP);
 	addons.LoadAddon(new Z680Addon(), CORE1_LOOP);
 }

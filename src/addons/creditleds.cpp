@@ -11,21 +11,21 @@
 #include "storagemanager.h"
 
 // GP2040 Includes
-#include "addons/startleds.h"
+#include "addons/creditleds.h"
 #include "helper.h"
 
 
-inline void StartLeds::resetAnimation()
+inline void CreditLeds::resetAnimation()
 {	
 	this->animation.previousType = this->animation.currentType;	
 	this->brightness = this->maxAnimationBrightness;
 	this->fadeIn = false;
-	if (this->animation.currentType == STARTLEDS_ANIM_FADE)
-		this->animation.speed = STARTLEDS_SPEED_LUDICROUS + (this->maxBrightness - this->maxAnimationBrightness) / 2;
+	if (this->animation.currentType == CREDITLEDS_ANIM_FADE)
+		this->animation.speed = CREDITLEDS_SPEED_LUDICROUS + (this->maxBrightness - this->maxAnimationBrightness) / 2;
 	this->nextAnimationTime = make_timeout_time_ms(0);
 }
 
-void StartLeds::handleBrightness(uint8_t mBrightness, uint8_t amount)
+void CreditLeds::handleBrightness(uint8_t mBrightness, uint8_t amount)
 {
 	uint8_t nBrightness = this->brightness;
 	if (this->fadeIn)	
@@ -47,7 +47,7 @@ void StartLeds::handleBrightness(uint8_t mBrightness, uint8_t amount)
 	this->brightness = nBrightness;
 }
 
-inline void StartLeds::animate()
+inline void CreditLeds::animate()
 {
 	uint8_t newState = this->animation.currentState;
 	uint8_t mask = this->animation.stateMask;
@@ -58,20 +58,20 @@ inline void StartLeds::animate()
 
 	switch (this->animation.currentType)
 	{
-		case STARTLEDS_ANIM_OFF:
-			newState = STARTLEDS_STATE_ALL_OFF | mask;
+		case CREDITLEDS_ANIM_OFF:
+			newState = CREDITLEDS_STATE_ALL_OFF | mask;
 			break;
 
-		case STARTLEDS_ANIM_SOLID:
-			newState = STARTLEDS_STATE_ALL_ON & mask;
+		case CREDITLEDS_ANIM_SOLID:
+			newState = CREDITLEDS_STATE_ALL_ON & mask;
 			break;	
 
-		case STARTLEDS_ANIM_BLINK:
+		case CREDITLEDS_ANIM_BLINK:
 			newState = ~newState & mask;
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
 			break;
 
-		case STARTLEDS_ANIM_FADE:
+		case CREDITLEDS_ANIM_FADE:
 			newState = newState & mask;
 			this->handleBrightness(this->maxAnimationBrightness);
 			this->nextAnimationTime = make_timeout_time_ms(this->animation.speed);
@@ -83,12 +83,12 @@ inline void StartLeds::animate()
 
 	this->animation.currentState = newState;
 
-	for (uint8_t i = 0; i < STARTLEDS_COUNT; i++)
+	for (uint8_t i = 0; i < CREDITLEDS_COUNT; i++)
 		if (this->ledPins[i] != 0xFF)
 			this->ledLevels[i] = (newState & (1 << i)) ? this->brightness * this->brightness : 0;			
 }
 
-std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, StartLedsAnimation initAnimation) 
+std::vector<uint> CreditLeds::initialize(std::vector<uint> slices, uint8_t * pins, uint8_t mBrightness, CreditLedsAnimation initAnimation) 
 {
 	if (pins[0] == 0xFF)
 		return slices;
@@ -96,7 +96,7 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 	uint8_t newPin;
 	this->brightness = mBrightness;	
 	this->maxAnimationBrightness = mBrightness;
-	for (uint8_t i=0; i < STARTLEDS_COUNT; i++)
+	for (uint8_t i=0; i < CREDITLEDS_COUNT; i++)
 	{
 		newPin = pins[i];
 		this->ledPins[i] = newPin;
@@ -106,7 +106,7 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 			uint sliceNum = pwm_gpio_to_slice_num(newPin);
 			uint channelNum = pwm_gpio_to_channel(newPin);
 			slices.push_back(sliceNum);
-			pwm_set_chan_level(sliceNum, channelNum, STARTLEDS_PWM_MAXLEVEL);			
+			pwm_set_chan_level(sliceNum, channelNum, CREDITLEDS_PWM_MAXLEVEL);			
 		}
 	}
 	this->animation = initAnimation;
@@ -115,27 +115,27 @@ std::vector<uint> StartLeds::initialize(std::vector<uint> slices, uint8_t * pins
 	return slices;
 }
 
-void StartLeds::display()
+void CreditLeds::display()
 {
 	if (! this->ready)
 		return;
 
 	this->animate();
-	for (int i = 0; i < STARTLEDS_COUNT; i++)
+	for (int i = 0; i < CREDITLEDS_COUNT; i++)
 		if (this->ledPins[i] != 0xFF)
 			pwm_set_gpio_level(this->ledPins[i], this->ledLevels[i]);
 }
 
 // ADDON
 
-bool StartLedsAddon::debounce()
+bool CreditLedsAddon::debounce()
 {
-	if (STARTLEDS_DEBOUNCE_MILLIS <= 0)
+	if (CREDITLEDS_DEBOUNCE_MILLIS <= 0)
 		return true;
 				
     uint32_t nowTime = getMillis();
 
-    if ((nowTime - this->debounceBrightness) > STARTLEDS_DEBOUNCE_MILLIS)
+    if ((nowTime - this->debounceBrightness) > CREDITLEDS_DEBOUNCE_MILLIS)
 	{
         this->debounceBrightness = nowTime;
 		return false;
@@ -143,39 +143,39 @@ bool StartLedsAddon::debounce()
     return true;
 }
 
-void StartLedsAddon::saveBrightness()
+void CreditLedsAddon::saveBrightness()
 {
 	AddonOptions options = Storage::getInstance().getAddonOptions();
-	options.startLedsStartBrightness = this->ledsStart.getAnimationBrightness();
-	options.startLedsCoinBrightness =  this->ledsCoin.getAnimationBrightness();
-	options.startLedsMarqueeBrightness = this->ledsMarquee.getAnimationBrightness();
+	options.creditLedsStartBrightness = this->ledsStart.getAnimationBrightness();
+	options.creditLedsCoinBrightness =  this->ledsCoin.getAnimationBrightness();
+	options.creditLedsMarqueeBrightness = this->ledsMarquee.getAnimationBrightness();
 	Storage::getInstance().setAddonOptions(options);
 }
 
-bool StartLedsAddon::available() {
+bool CreditLedsAddon::available() {
 	AddonOptions options = Storage::getInstance().getAddonOptions();	
-	return options.startLedsAddonEnabled;
+	return options.creditLedsAddonEnabled;
 }
 
-void StartLedsAddon::setup() {	
+void CreditLedsAddon::setup() {	
 	AddonOptions options = Storage::getInstance().getAddonOptions();
-	uint8_t startPins[] = {options.startLedsStartPin1, options.startLedsStartPin2};
-	uint8_t coinPins[] = {options.startLedsCoinPin1, options.startLedsCoinPin2};
-	uint8_t marqueePins[] = {options.startLedsMarqueePin, 0xFF};
-	uint8_t extStartPin = options.startLedsExtStartPin;
-	uint8_t extCoinPin = options.startLedsExtCoinPin;
-	uint8_t startBrightness = options.startLedsStartBrightness;	
-	uint8_t coinBrightness = options.startLedsCoinBrightness;	
-	uint8_t marqueeBrightness = options.startLedsMarqueeBrightness;
+	uint8_t startPins[] = {options.creditLedsStartPin1, options.creditLedsStartPin2};
+	uint8_t coinPins[] = {options.creditLedsCoinPin1, options.creditLedsCoinPin2};
+	uint8_t marqueePins[] = {options.creditLedsMarqueePin, 0xFF};
+	uint8_t extStartPin = options.creditLedsExtStartPin;
+	uint8_t extCoinPin = options.creditLedsExtCoinPin;
+	uint8_t startBrightness = options.creditLedsStartBrightness;	
+	uint8_t coinBrightness = options.creditLedsCoinBrightness;	
+	uint8_t marqueeBrightness = options.creditLedsMarqueeBrightness;
 
 	pwm_config config = pwm_get_default_config();
 	pwm_config_set_clkdiv(&config, 4.f);
 
 	std::vector<uint> sliceNums;
 
-	sliceNums = this->ledsStart.initialize(sliceNums, startPins, startBrightness, STARTLEDS_ALL_OFF); 
-	sliceNums = this->ledsCoin.initialize(sliceNums, coinPins, coinBrightness, STARTLEDS_ALL_ON);
-	sliceNums = this->ledsMarquee.initialize(sliceNums, marqueePins, marqueeBrightness, STARTLEDS_ALL_ON);
+	sliceNums = this->ledsStart.initialize(sliceNums, startPins, startBrightness, CREDITLEDS_ALL_OFF); 
+	sliceNums = this->ledsCoin.initialize(sliceNums, coinPins, coinBrightness, CREDITLEDS_ALL_ON);
+	sliceNums = this->ledsMarquee.initialize(sliceNums, marqueePins, marqueeBrightness, CREDITLEDS_ALL_ON);
 
 	for (auto sliceNum : sliceNums)
 		pwm_set_enabled(sliceNum, true);
@@ -198,7 +198,7 @@ void StartLedsAddon::setup() {
 	this->ready = true;
 }
 
-void StartLedsAddon::processBrightness(uint8_t dpadPressedMask)
+void CreditLedsAddon::processBrightness(uint8_t dpadPressedMask)
 {	
 	if (dpadPressedMask	== GAMEPAD_MASK_DOWN && this->lastDpadPressed != GAMEPAD_MASK_DOWN) {		
 		this->ledsMarquee.toggleState();
@@ -219,47 +219,47 @@ void StartLedsAddon::processBrightness(uint8_t dpadPressedMask)
 	}	
 }
 
-void StartLedsAddon::processExternalButtons(uint16_t buttonsPressedMask)
+void CreditLedsAddon::processExternalButtons(uint16_t buttonsPressedMask)
 {
 	if (this->externalStartPin != 0xFF)
-		(buttonsPressedMask & STARTLEDS_EXT_START_MASK) ?  gpio_put(this->externalStartPin, 1) : gpio_put(this->externalStartPin, 0);
+		(buttonsPressedMask & CREDITLEDS_EXT_START_MASK) ?  gpio_put(this->externalStartPin, 1) : gpio_put(this->externalStartPin, 0);
 	if (this->externalCoinPin != 0xFF)
-		(buttonsPressedMask & STARTLEDS_EXT_COIN_MASK) ?  gpio_put(this->externalCoinPin, 1) : gpio_put(this->externalCoinPin, 0);
+		(buttonsPressedMask & CREDITLEDS_EXT_COIN_MASK) ?  gpio_put(this->externalCoinPin, 1) : gpio_put(this->externalCoinPin, 0);
 }
 
-void StartLedsAddon::processCredits(uint16_t buttonsPressedMask)
+void CreditLedsAddon::processCredits(uint16_t buttonsPressedMask)
 {	
-	if (buttonsPressedMask & STARTLEDS_COIN_BUTTON_MASKS)
+	if (buttonsPressedMask & CREDITLEDS_COIN_BUTTON_MASKS)
 	{				
 		if (this->creditCount == 0)
 		{
-			this->ledsStart.setAnimation(STARTLEDS_BLINK_FAST_ALL);
-			this->ledsCoin.setAnimation(STARTLEDS_ALL_ON);
+			this->ledsStart.setAnimation(CREDITLEDS_BLINK_FAST_ALL);
+			this->ledsCoin.setAnimation(CREDITLEDS_ALL_ON);
 		}
 		if (this->creditCount < 0xFF)
 			this->creditCount++;
 		return;
 	}
-	if (buttonsPressedMask & STARTLEDS_START_BUTTON_MASKS) 
+	if (buttonsPressedMask & CREDITLEDS_START_BUTTON_MASKS) 
 	{
 		if (this->creditCount == 0) {
-			this->ledsCoin.setAnimation(STARTLEDS_FADE_ALL);
+			this->ledsCoin.setAnimation(CREDITLEDS_FADE_ALL);
 			return;
 		}
 		this->creditCount--;
 		if (this->creditCount == 0)		
-			this->ledsStart.setAnimation(STARTLEDS_ALL_OFF);
+			this->ledsStart.setAnimation(CREDITLEDS_ALL_OFF);
 		else		
-			this->ledsStart.setAnimation(STARTLEDS_ALL_ON);
+			this->ledsStart.setAnimation(CREDITLEDS_ALL_ON);
 		return;
 	}
 }
 
-void StartLedsAddon::process()
+void CreditLedsAddon::process()
 {
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (STARTLEDS_START_BUTTON_MASKS | STARTLEDS_COIN_BUTTON_MASKS | STARTLEDS_EXT_MASKS);
+	uint16_t buttonsPressed = gamepad->state.buttons & (CREDITLEDS_START_BUTTON_MASKS | CREDITLEDS_COIN_BUTTON_MASKS | CREDITLEDS_EXT_MASKS);
 	uint8_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
 	this->ledsStart.display();
@@ -271,7 +271,7 @@ void StartLedsAddon::process()
 
 	if (dpadPressed)
 	{
-		if (buttonsPressed & STARTLEDS_COIN_BUTTON_MASKS)
+		if (buttonsPressed & CREDITLEDS_COIN_BUTTON_MASKS)
 			this->processBrightness(dpadPressed);
 		this->lastDpadPressed = dpadPressed;
 		this->lastButtonsPressed = buttonsPressed;	

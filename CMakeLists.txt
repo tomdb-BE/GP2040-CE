@@ -118,7 +118,7 @@ src/addons/playernum.cpp
 src/addons/playerleds.cpp
 src/addons/reverse.cpp
 src/addons/turbo.cpp
-src/addons/startleds.cpp
+src/addons/creditleds.cpp
 src/addons/pccontrol.cpp
 src/addons/z680.cpp
 )

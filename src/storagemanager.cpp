@@ -29,7 +29,7 @@
 #include "addons/playernum.h"
 #include "addons/pleds.h"
 #include "addons/reverse.h"
-#include "addons/startleds.h"
+#include "addons/creditleds.h"
 #include "addons/turbo.h"
 #include "addons/z680.h"
 
@@ -171,21 +171,21 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.PlayerNumAddonEnabled  = PLAYERNUM_ADDON_ENABLED;
 	addonOptions.ReverseInputEnabled    = REVERSE_ENABLED;
 	addonOptions.TurboInputEnabled      = TURBO_ENABLED;
-	addonOptions.startLedsAddonEnabled  = STARTLEDS_ENABLED;
-	addonOptions.startLedsStartPin1		= STARTLEDS_START_PIN1;
-	addonOptions.startLedsStartPin2		= STARTLEDS_START_PIN2;
-	//addonOptions.startLedsStartPin3		= STARTLEDS_START_PIN3;
-	//addonOptions.startLedsStartPin4		= STARTLEDS_START_PIN4;
-	addonOptions.startLedsCoinPin1		= STARTLEDS_COIN_PIN1;
-	addonOptions.startLedsCoinPin2		= STARTLEDS_COIN_PIN1;
-	//addonOptions.startLedsCoinPin3		= STARTLEDS_COIN_PIN3;
-	//addonOptions.startLedsCoinPin4		= STARTLEDS_COIN_PIN4;
-	addonOptions.startLedsMarqueePin	= STARTLEDS_MARQUEE_PIN;
-	addonOptions.startLedsExtStartPin	= STARTLEDS_EXT_START_PIN;
-	addonOptions.startLedsExtCoinPin	= STARTLEDS_EXT_COIN_PIN;
-	addonOptions.startLedsStartBrightness   = STARTLEDS_START_BRIGHTNESS;
-	addonOptions.startLedsCoinBrightness    = STARTLEDS_COIN_BRIGHTNESS;
-	addonOptions.startLedsMarqueeBrightness = STARTLEDS_MARQUEE_BRIGHTNESS;
+	addonOptions.creditLedsAddonEnabled  = CREDITLEDS_ENABLED;
+	addonOptions.creditLedsStartPin1		= CREDITLEDS_START_PIN1;
+	addonOptions.creditLedsStartPin2		= CREDITLEDS_START_PIN2;
+	//addonOptions.creditLedsStartPin3		= CREDITLEDS_START_PIN3;
+	//addonOptions.creditLedsStartPin4		= CREDITLEDS_START_PIN4;
+	addonOptions.creditLedsCoinPin1		= CREDITLEDS_COIN_PIN1;
+	addonOptions.creditLedsCoinPin2		= CREDITLEDS_COIN_PIN1;
+	//addonOptions.creditLedsCoinPin3		= CREDITLEDS_COIN_PIN3;
+	//addonOptions.creditLedsCoinPin4		= CREDITLEDS_COIN_PIN4;
+	addonOptions.creditLedsMarqueePin	= CREDITLEDS_MARQUEE_PIN;
+	addonOptions.creditLedsExtStartPin	= CREDITLEDS_EXT_START_PIN;
+	addonOptions.creditLedsExtCoinPin	= CREDITLEDS_EXT_COIN_PIN;
+	addonOptions.creditLedsStartBrightness   = CREDITLEDS_START_BRIGHTNESS;
+	addonOptions.creditLedsCoinBrightness    = CREDITLEDS_COIN_BRIGHTNESS;
+	addonOptions.creditLedsMarqueeBrightness = CREDITLEDS_MARQUEE_BRIGHTNESS;
 	addonOptions.pcControlAddonEnabled   = PCCONTROL_ENABLED;	
 	addonOptions.pcControlPowerPin	     = PCCONTROL_POWER_PIN;
 	addonOptions.pcControlPowerSwitchPin = PCCONTROL_SWITCH_PIN;
