@@ -259,7 +259,7 @@ void CreditLedsAddon::process()
 {
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (CREDITLEDS_START_BUTTON_MASKS | CREDITLEDS_COIN_BUTTON_MASKS | CREDITLEDS_EXT_MASKS);
+	uint16_t buttonsPressed = gamepad->state.buttons & (CREDITLEDS_START_BUTTON_MASKS | CREDITLEDS_COIN_BUTTON_MASKS | CREDITLEDS_EXT_BUTTON_MASKS);
 	uint8_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
 	this->ledsStart.display();
