@@ -222,9 +222,9 @@ void CreditLedsAddon::processBrightness(uint8_t dpadPressedMask)
 void CreditLedsAddon::processExternalButtons(uint16_t buttonsPressedMask)
 {
 	if (this->externalStartPin != 0xFF)
-		(buttonsPressedMask & CREDITLEDS_EXT_START_MASK) ?  gpio_put(this->externalStartPin, 1) : gpio_put(this->externalStartPin, 0);
+		(buttonsPressedMask & CREDITLEDS_EXT_START_MASK) ?  gpio_put(this->externalStartPin, 0) : gpio_put(this->externalStartPin, 1);
 	if (this->externalCoinPin != 0xFF)
-		(buttonsPressedMask & CREDITLEDS_EXT_COIN_MASK) ?  gpio_put(this->externalCoinPin, 1) : gpio_put(this->externalCoinPin, 0);
+		(buttonsPressedMask & CREDITLEDS_EXT_COIN_MASK) ?  gpio_put(this->externalCoinPin, 0) : gpio_put(this->externalCoinPin, 1);
 }
 
 void CreditLedsAddon::processCredits(uint16_t buttonsPressedMask)

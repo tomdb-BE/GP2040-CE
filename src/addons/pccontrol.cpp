@@ -9,78 +9,71 @@ bool PcControlAddon::available() {
 void PcControlAddon::setup()
 {
     AddonOptions options = Storage::getInstance().getAddonOptions();
-    this->pinPower = options.pcControlPowerPin;
-    this->pinSwitch = options.pcControlPowerSwitchPin;
-    if (this->pinPower != 0xFF) {
-        gpio_init(this->pinPower);
-        gpio_set_dir(this->pinPower, GPIO_OUT);
-        gpio_put(this->pinPower, 1);
-        if (this->pinSwitch != 0xFF) {        
-            gpio_init(this->pinSwitch);
-            gpio_set_dir(this->pinSwitch, GPIO_IN);
-            gpio_pull_up(this->pinSwitch); 
+    this->_pinPower = options.pcControlPowerPin;
+    this->_pinSwitch = options.pcControlPowerSwitchPin;
+    if (this->_pinPower != 0xFF) {
+        gpio_init(this->_pinPower);
+        gpio_set_dir(this->_pinPower, GPIO_OUT);
+        gpio_put(this->_pinPower, 0);
+        if (this->_pinSwitch != 0xFF) {        
+            gpio_init(this->_pinSwitch);
+            gpio_set_dir(this->_pinSwitch, GPIO_IN);
+            gpio_pull_up(this->_pinSwitch); 
         }
-        this->ready=true;
+        this->_ready=true;
     }
 }
 
 void PcControlAddon::process()
 {
-    if (!this->ready)
+    if (!this->_ready)
         return;
-
+    
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
-    
-	uint16_t buttonsPressed = gamepad->state.buttons & (PCCONTROL_POWER_OFF_MASK);
+    bool buttonsPressed = (gamepad->state.buttons & (PCCONTROL_POWER_OFF_MASK)) ? true : false;
 
-    if (!buttonsPressed && this->triggeredButton) {
-        this->triggeredButton = false;        
-        if (time_reached(this->timeoutButtons))
-            this->togglePower();
-        return;
-    }
-    if (buttonsPressed) {      
-        if (!this->triggeredButton) {
-            this->timeoutButtons = make_timeout_time_ms(PCCONTROL_POWER_TOGGLE_MILLIS);
-            this->timeoutButtonsForce = make_timeout_time_ms(PCCONTROL_POWER_FORCE_OFF_MILLIS);
-            this->triggeredButton = true;
-            return;
+    if (!this->_triggeredSwitch)
+        this->_triggeredButton = this->handleState(
+            buttonsPressed, 
+            this->_triggeredButton,
+            PCCONTROL_BUTTON_TOGGLE_MILLIS,
+            PCCONTROL_BUTTON_FORCE_OFF_MILLIS
+        );
+
+
+    if (this->_pinSwitch != 0xFF && !this->_triggeredButton)
+        this->_triggeredSwitch = this->handleState(
+            !gpio_get(this->_pinSwitch), 
+            this->_triggeredSwitch,
+            PCCONTROL_SWITCH_TOGGLE_MILLIS,
+            PCCONTROL_SWITCH_FORCE_OFF_MILLIS        
+        );
+}
+
+bool PcControlAddon::handleState(bool currentState, bool triggered, uint32_t timeout, uint32_t timeoutForced) {    
+    if (currentState) {
+        if (!triggered) {             
+            this->_heldTimeout = make_timeout_time_ms(timeout);
+            this->_heldTimeoutForced = make_timeout_time_ms(timeoutForced);            
+            return 1;
         }
-        if (time_reached(this->timeoutButtons))
+        if (time_reached(this->_heldTimeoutForced)) {
             this->forcePowerOff();
-        return;  
-    }
-
-    
-    if (this->pinSwitch == 0xFF)
-        return;
-
-    if (!gpio_get(this->pinSwitch)) {                
-        if (this->triggeredSwitch) {        
-            if (time_reached(this->timeoutSwitch) && !this->timedOutSwitch) {
-                gpio_put(this->pinPower, 1);
-                this->timedOutSwitch = true;
-            }
-			return;
+            return 0;
         }
-        this->triggeredSwitch = true;
-        this->timeoutSwitch = make_timeout_time_ms(PCCONTROL_TIMEOUT_SWITCH_MILLIS);
-        gpio_put(this->pinPower, 0);
-        return;
+        return 1;
     }
+ 
+    if (triggered && time_reached(this->_heldTimeout)) {
+        this->togglePower();
+        return 0;
+    }  
 
-    if (this->triggeredSwitch)
-    {
-        this->triggeredSwitch = false;
-        this->timedOutSwitch = false;
-        gpio_put(this->pinPower, 1);
-    }   
+    return triggered;
 }
 
 void PcControlAddon::setPower(uint16_t pressLength) {
-    if (!this->ready || this->triggeredSwitch)
-        return;    
-    gpio_put(this->pinPower, 0);
+    gpio_put(this->_pinPower, 1);
     sleep_ms(pressLength);
-    gpio_put(this->pinPower, 1);    
+    gpio_put(this->_pinPower, 0);
 }

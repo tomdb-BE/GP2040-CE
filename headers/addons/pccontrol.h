@@ -17,19 +17,20 @@
 #ifndef PCCONTROL_SWITCH_PIN
 #define PCCONTROL_SWITCH_PIN -1
 #endif
-#ifndef PCCONTROL_POWER_OFF_MASK
-#define PCCONTROL_POWER_OFF_MASK GAMEPAD_MASK_S1 & GAMEPAD_MASK_S2
+#ifndef PCCONTROL_SWITCH_TOGGLE_MILLIS
+#define PCCONTROL_SWITCH_TOGGLE_MILLIS 1000
 #endif
-#ifndef PCCONTROL_POWER_TOGGLE_MILLIS
-#define PCCONTROL_POWER_TOGGLE_MILLIS 100
+#ifndef PCCONTROL_SWITCH_FORCE_OFF_MILLIS
+#define PCCONTROL_SWITCH_FORCE_OFF_MILLIS 5000
 #endif
-#ifndef PCCONTROL_POWER_FORCE_OFF_MILLIS
-#define PCCONTROL_POWER_FORCE_OFF_MILLIS 5000
+#ifndef PCCONTROL_BUTTON_TOGGLE_MILLIS
+#define PCCONTROL_BUTTON_TOGGLE_MILLIS 3000
 #endif
-#ifndef PCCONTROL_TIMEOUT_SWITCH_MILLIS
-#define PCCONTROL_TIMEOUT_SWITCH_MILLIS 5000
+#ifndef PCCONTROL_BUTTON_FORCE_OFF_MILLIS
+#define PCCONTROL_BUTTON_FORCE_OFF_MILLIS 5000
 #endif
 
+static const uint16_t PCCONTROL_POWER_OFF_MASK = GAMEPAD_MASK_S1 | GAMEPAD_MASK_S2;
 
 #define PcControlName "PcControl"
 
@@ -37,25 +38,23 @@
 class PcControlAddon : public GPAddon
 {
 public:
-	virtual bool available();
-	virtual void setup();
-	virtual void preprocess() {}
-	virtual void process();
-	virtual std::string name() { return PcControlName; }
-	void togglePower() {this->setPower(PCCONTROL_POWER_TOGGLE_MILLIS); }
-	void forcePowerOff() {this->setPower(PCCONTROL_POWER_FORCE_OFF_MILLIS); }
-protected:
+	bool available();
+	void setup();
+	void preprocess() {}
+	void process();
+	std::string name() { return PcControlName; }
+	void togglePower() {this->setPower(PCCONTROL_SWITCH_TOGGLE_MILLIS); }
+	void forcePowerOff() {this->setPower(PCCONTROL_SWITCH_FORCE_OFF_MILLIS); }
+private:	
+	bool handleState(bool currentState, bool triggered, uint32_t timeout, uint32_t timeoutForced);
 	void setPower(uint16_t pressLength);
-	absolute_time_t timeoutButtons;
-	absolute_time_t timeoutButtonsForce;
-	absolute_time_t timeoutSwitch;	    
-	uint16_t lastButtonsPressed;
-    uint8_t pinPower;
-    uint8_t pinSwitch;
-	bool triggeredButton;
-	bool triggeredSwitch;
-	bool timedOutSwitch;
-	bool ready;	
+	absolute_time_t _heldTimeout;
+	absolute_time_t _heldTimeoutForced;	
+    uint8_t _pinPower;
+    uint8_t _pinSwitch;
+	bool _triggeredButton;
+	bool _triggeredSwitch;	
+	bool _ready;	
 };
 
 #endif
