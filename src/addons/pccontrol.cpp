@@ -30,8 +30,7 @@ void PcControlAddon::process()
         return;
     
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
-    bool buttonsPressed = (gamepad->state.buttons & (PCCONTROL_POWER_OFF_MASK)) ? true : false;
-
+    bool buttonsPressed = (gamepad->state.buttons & PCCONTROL_BUTTON1_MASK) && (gamepad->state.buttons & PCCONTROL_BUTTON2_MASK);
     if (!this->_triggeredSwitch)
         this->_triggeredButton = this->handleState(
             buttonsPressed, 

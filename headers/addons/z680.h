@@ -44,9 +44,6 @@
 #ifndef Z680_CONTROL_VOLUME_DOWN
 #define Z680_CONTROL_VOLUME_DOWN GAMEPAD_MASK_DOWN
 #endif
-#ifndef Z680_CONTROL_VOLUME
-#define Z680_CONTROL_VOLUME Z680_CONTROL_VOLUME_UP | Z680_CONTROL_VOLUME_DOWN
-#endif
 #ifndef Z680_DEBOUNCE_MILLIS
 #define Z680_DEBOUNCE_MILLIS 50
 #endif
@@ -57,30 +54,29 @@
 class Z680Addon : public GPAddon
 {
 public:
-	virtual bool available();
-	virtual void setup();
-	virtual void preprocess() {}
-	virtual void process();
-	virtual std::string name() { return Z680Name; }
+	bool available();
+	void setup();
+	void preprocess() {}
+	void process();
+	std::string name() { return Z680Name; }
 	void volumeUp(uint8_t amount = Z680_VOLUME_STEP) { this->handeVolume(amount, true); }
 	void volumeDown(uint8_t amount = Z680_VOLUME_STEP) { this->handeVolume(amount); }
-    void mute();
-    bool isReady() {return this->ready;}
+    void mute();    
     bool isOn();
     bool powerOn() {return this->setPower();}
     bool powerOff() {return this->setPower(true);}
 protected:
     bool setPower(bool setOff = false);
     void handeVolume(uint8_t amount, bool up = false);
-    bool debounce(uint32_t * ptrDebounceTime);
-    uint32_t debounceVolume;    
-	uint8_t pinPower = 0xFF;
-    uint8_t pinVolumeA = 0xFF;
-    uint8_t pinVolumeB = 0xFF;
-    uint8_t pinMute = 0xFF;
-    uint8_t pinPowerState = 0xFF;    
-    uint16_t lastDpadPressed;
-    bool ready;
+    bool debounce();
+    uint32_t _debounceVolume;    
+	uint8_t _pinPower = 0xFF;
+    uint8_t _pinVolumeA = 0xFF;
+    uint8_t _pinVolumeB = 0xFF;
+    uint8_t _pinMute = 0xFF;
+    uint8_t _pinPowerState = 0xFF;    
+    uint16_t _lastDpadPressed;
+    bool _ready;
 };
 
 #endif

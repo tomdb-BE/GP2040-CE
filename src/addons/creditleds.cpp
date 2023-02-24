@@ -131,7 +131,7 @@ void CreditLeds::display()
 bool CreditLedsAddon::debounce()
 {
 	if (CREDITLEDS_DEBOUNCE_MILLIS <= 0)
-		return true;
+		return false;
 				
     uint32_t nowTime = getMillis();
 

@@ -9,63 +9,67 @@ bool Z680Addon::available() {
 void Z680Addon::setup()
 {
     AddonOptions options = Storage::getInstance().getAddonOptions();
-    this->pinPower = options.z680PowerPin;    
-    this->pinVolumeA = options.z680VolumeUpPin;
-    this->pinVolumeB = options.z680VolumeDownPin;
-    this->pinMute = options.z680MutePin;
-    this->pinPowerState = options.z680PowerStatePin;
-    if (this->pinPower != 0xFF) {
-        gpio_init(this->pinPower);
-        gpio_set_dir(this->pinPower, GPIO_OUT);
+    this->_pinPower = options.z680PowerPin;    
+    this->_pinVolumeA = options.z680VolumeUpPin;
+    this->_pinVolumeB = options.z680VolumeDownPin;
+    this->_pinMute = options.z680MutePin;
+    this->_pinPowerState = options.z680PowerStatePin;
+    if (this->_pinPower != 0xFF) {
+        gpio_init(this->_pinPower);
+        gpio_set_dir(this->_pinPower, GPIO_OUT);
+        gpio_put(this->_pinPower, 0);
     }
-    if (this->pinVolumeA != 0xFF) {
-        gpio_init(this->pinVolumeA);
-        gpio_set_dir(this->pinVolumeA, GPIO_OUT);
+    if (this->_pinVolumeA != 0xFF) {
+        gpio_init(this->_pinVolumeA);
+        gpio_set_dir(this->_pinVolumeA, GPIO_OUT);
+        gpio_put(this->_pinVolumeA, 0);
     }
-    if (this->pinVolumeB != 0xFF) {
-        gpio_init(this->pinVolumeB);
-        gpio_set_dir(this->pinVolumeB, GPIO_OUT);
+    if (this->_pinVolumeB != 0xFF) {
+        gpio_init(this->_pinVolumeB);
+        gpio_set_dir(this->_pinVolumeB, GPIO_OUT);
+        gpio_put(this->_pinVolumeB, 0);
     }
-    if (this->pinMute != 0xFF) {
-        gpio_init(this->pinMute);
-        gpio_set_dir(this->pinMute, GPIO_OUT);
+    if (this->_pinMute != 0xFF) {
+        gpio_init(this->_pinMute);
+        gpio_set_dir(this->_pinMute, GPIO_OUT);
+        gpio_put(this->_pinMute, 0);
     }
-    if (this->pinPowerState != 0xFF) {
-        gpio_init(this->pinPowerState);
-        gpio_set_dir(this->pinPowerState, GPIO_IN);
-        gpio_pull_up(this->pinPowerState);
+    if (this->_pinPowerState != 0xFF) {
+        gpio_init(this->_pinPowerState);
+        gpio_set_dir(this->_pinPowerState, GPIO_IN);
+        gpio_pull_up(this->_pinPowerState);
     }
-    this->ready = true;
+    this->_ready = true;
 }
 
 void Z680Addon::process()
 {
-    if (!this->ready)
+    if (!this->_ready)
         return;
 
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (Z680_CONTROL_TRIGGER);
+	bool buttonsPressed = gamepad->state.buttons & Z680_CONTROL_TRIGGER;
 	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
-    if (!(buttonsPressed && dpadPressed))
+    if (!buttonsPressed)
         return;
 
-	if ((dpadPressed & Z680_CONTROL_VOLUME))
+	if (dpadPressed & (Z680_CONTROL_VOLUME_UP | Z680_CONTROL_VOLUME_DOWN))
 	{
-		if (this->debounce(&this->debounceVolume))
+		if (this->debounce())
 			return;
 		(dpadPressed & Z680_CONTROL_VOLUME_UP) ? this->volumeUp() : this->volumeDown();
 		return;
 	}
 
-    if (this->lastDpadPressed == dpadPressed)
+    if (this->_lastDpadPressed == dpadPressed)
         return;
 
-    this->lastDpadPressed = dpadPressed;
+    this->_lastDpadPressed = dpadPressed;
 
 	if ((dpadPressed & Z680_CONTROL_POWER))
-        (this->isOn()) ? this->powerOff(): this->powerOn();
+        this->setPower();
 	else if ((dpadPressed & Z680_CONTROL_MUTE))
         this->mute();
   		   
@@ -73,21 +77,21 @@ void Z680Addon::process()
 
 bool Z680Addon::isOn()
 {
-    if (this->pinPowerState == 0xFF)
+    if (this->_pinPowerState == 0xFF)
         return true;
-    return(!gpio_get(this->pinPowerState));
+    return(!gpio_get(this->_pinPowerState));
 }
 
-bool Z680Addon::debounce(uint32_t * debounceTime)
+bool Z680Addon::debounce()
 {
 	if (Z680_DEBOUNCE_MILLIS <= 0)
-		return true;
+		return false;
 				
     uint32_t nowTime = getMillis();
 
-    if ((nowTime - *debounceTime) > Z680_DEBOUNCE_MILLIS)
+    if ((nowTime - this->_debounceVolume) > Z680_DEBOUNCE_MILLIS)
 	{
-        *debounceTime = nowTime;
+        this->_debounceVolume = nowTime;
 		return false;
     }
     return true;
@@ -95,39 +99,34 @@ bool Z680Addon::debounce(uint32_t * debounceTime)
 
 bool Z680Addon::setPower(bool setOff)
 {
-    if (this->pinPower == 0xFF)
-        return false;
-    if (this->isOn()^setOff)
-        return true;       
-    gpio_put(this->pinPower, 1);
-    sleep_ms(10);
-    gpio_put(this->pinPower, 0);
+    if (this->_pinPower == 0xFF)
+        return false;     
+    gpio_put(this->_pinPower, 1);
+    sleep_ms(200);
+    gpio_put(this->_pinPower, 0);
     return true;
 }
 
 void Z680Addon::mute()
 {
-    if (!this->isOn())
-        return;
-    gpio_put(this->pinMute, 1);
-    sleep_ms(10);
-    gpio_put(this->pinMute, 0);
+    gpio_put(this->_pinMute, 1);
+    sleep_ms(200);
+    gpio_put(this->_pinMute, 0);
 }
 
 void Z680Addon::handeVolume(uint8_t amount, bool up)
 {
-    if (this->pinVolumeA == 0xFF || this->pinVolumeB == 0xFF)
+    if (this->_pinVolumeA == 0xFF || this->_pinVolumeB == 0xFF)
         return;
 
-    if (!this->powerOn())
-        return;
-
-    bool pinValue = true; 
+    bool pinValueA = true;
+    bool pinValueB = up;
 
     for (uint8_t i = 0; i < amount; i++) {
-		gpio_put(this->pinVolumeA, pinValue);	        
-		gpio_put(this->pinVolumeB, pinValue^up);
-        pinValue ^= true;
+		gpio_put(this->_pinVolumeA, pinValueA);        
+		gpio_put(this->_pinVolumeB, pinValueB);
+        pinValueA ^= true;
+        pinValueB ^= true;
         sleep_ms(10);
     }
 }
