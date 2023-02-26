@@ -54,19 +54,25 @@
 class Z680Addon : public GPAddon
 {
 public:
+	static Z680Addon& getInstance()
+	{
+		static Z680Addon instance;
+		return instance;
+	}
 	bool available();
 	void setup();
 	void preprocess() {}
 	void process();
 	std::string name() { return Z680Name; }
+    bool isReady() {return this->_ready; }
 	void volumeUp(uint8_t amount = Z680_VOLUME_STEP) { this->handeVolume(amount, true); }
 	void volumeDown(uint8_t amount = Z680_VOLUME_STEP) { this->handeVolume(amount); }
+    void powerOn() {if (!this->isOn(false)) this->togglePower(false); }
+    void powerOff() {if (this->isOn(true)) this->togglePower(true); }
     void mute();    
-    bool isOn();
-    bool powerOn() {return this->setPower();}
-    bool powerOff() {return this->setPower(true);}
-protected:
-    bool setPower(bool setOff = false);
+    bool isOn(bool setOff = false);
+    bool togglePower(bool setOff = false);    
+protected:    
     void handeVolume(uint8_t amount, bool up = false);
     bool debounce();
     uint32_t _debounceVolume;    

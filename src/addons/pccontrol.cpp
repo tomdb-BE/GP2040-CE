@@ -1,4 +1,5 @@
 #include "addons/pccontrol.h"
+#include "addons/z680.h"
 #include "storagemanager.h"
 
 bool PcControlAddon::available() {
@@ -9,8 +10,10 @@ bool PcControlAddon::available() {
 void PcControlAddon::setup()
 {
     AddonOptions options = Storage::getInstance().getAddonOptions();
+    if (options.z680AddonEnabled)        
+        this->_z680 = true;
     this->_pinPower = options.pcControlPowerPin;
-    this->_pinSwitch = options.pcControlPowerSwitchPin;
+    this->_pinSwitch = options.pcControlPowerSwitchPin;     
     if (this->_pinPower != 0xFF) {
         gpio_init(this->_pinPower);
         gpio_set_dir(this->_pinPower, GPIO_OUT);

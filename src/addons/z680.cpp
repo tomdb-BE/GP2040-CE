@@ -69,16 +69,16 @@ void Z680Addon::process()
     this->_lastDpadPressed = dpadPressed;
 
 	if ((dpadPressed & Z680_CONTROL_POWER))
-        this->setPower();
+        this->togglePower();
 	else if ((dpadPressed & Z680_CONTROL_MUTE))
         this->mute();
   		   
 }
 
-bool Z680Addon::isOn()
+bool Z680Addon::isOn(bool setOff)
 {
     if (this->_pinPowerState == 0xFF)
-        return true;
+        return setOff;
     return(!gpio_get(this->_pinPowerState));
 }
 
@@ -97,14 +97,14 @@ bool Z680Addon::debounce()
     return true;
 }
 
-bool Z680Addon::setPower(bool setOff)
+bool Z680Addon::togglePower(bool setOff)
 {
     if (this->_pinPower == 0xFF)
         return false;     
     gpio_put(this->_pinPower, 1);
     sleep_ms(200);
     gpio_put(this->_pinPower, 0);
-    return true;
+    return this->isOn(!setOff);
 }
 
 void Z680Addon::mute()

@@ -4,6 +4,7 @@
  */
 
 #include "gpaddon.h"
+#include "addons/z680.h"
 
 #ifndef _PCCONTROL_H_
 #define _PCCONTROL_H_
@@ -47,8 +48,8 @@ public:
 	void preprocess() {}
 	void process();
 	std::string name() { return PcControlName; }
-	void togglePower() {this->setPower(PCCONTROL_SWITCH_TOGGLE_MILLIS); }
-	void forcePowerOff() {this->setPower(PCCONTROL_SWITCH_FORCE_OFF_MILLIS); }
+	void togglePower() {if (this->_z680) Z680Addon::getInstance().togglePower(); this->setPower(PCCONTROL_SWITCH_TOGGLE_MILLIS); }
+	void forcePowerOff() {if (this->_z680) Z680Addon::getInstance().powerOff(); this->setPower(PCCONTROL_SWITCH_FORCE_OFF_MILLIS); };
 private:	
 	bool handleState(bool currentState, bool triggered, uint32_t timeout, uint32_t timeoutForced);
 	void setPower(uint16_t pressLength);
@@ -58,6 +59,7 @@ private:
     uint8_t _pinSwitch;
 	bool _triggeredButton;
 	bool _triggeredSwitch;	
+	bool _z680;
 	bool _ready;	
 };
 

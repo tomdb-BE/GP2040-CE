@@ -28,9 +28,9 @@ void GP2040Aux::setup() {
 	addons.LoadAddon(new PlayerLEDAddon(), CORE1_LOOP);
 	addons.LoadAddon(new BoardLedAddon(), CORE1_LOOP);
 	addons.LoadAddon(new BuzzerSpeakerAddon(), CORE1_LOOP);
-	addons.LoadAddon(new CreditLedsAddon(), CORE1_LOOP);
-	addons.LoadAddon(new PcControlAddon(), CORE1_LOOP);
+	addons.LoadAddon(new CreditLedsAddon(), CORE1_LOOP);	
 	addons.LoadAddon(new Z680Addon(), CORE1_LOOP);
+	addons.LoadAddon(new PcControlAddon(), CORE1_LOOP);
 }
 
 void GP2040Aux::run() {
