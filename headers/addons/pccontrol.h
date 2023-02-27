@@ -18,8 +18,14 @@
 #ifndef PCCONTROL_SWITCH_PIN
 #define PCCONTROL_SWITCH_PIN -1
 #endif
+#ifndef PCCONTROL_HOLD_TOGGLE_MILLIS
+#define PCCONTROL_HOLD_TOGGLE_MILLIS 1000
+#endif
+#ifndef PCCONTROL_HOLD_FORCE_OFF_MILLIS
+#define PCCONTROL_HOLD_FORCE_OFF_MILLIS 5000
+#endif
 #ifndef PCCONTROL_SWITCH_TOGGLE_MILLIS
-#define PCCONTROL_SWITCH_TOGGLE_MILLIS 1000
+#define PCCONTROL_SWITCH_TOGGLE_MILLIS 50
 #endif
 #ifndef PCCONTROL_SWITCH_FORCE_OFF_MILLIS
 #define PCCONTROL_SWITCH_FORCE_OFF_MILLIS 5000
@@ -28,7 +34,7 @@
 #define PCCONTROL_BUTTON_TOGGLE_MILLIS 3000
 #endif
 #ifndef PCCONTROL_BUTTON_FORCE_OFF_MILLIS
-#define PCCONTROL_BUTTON_FORCE_OFF_MILLIS 5000
+#define PCCONTROL_BUTTON_FORCE_OFF_MILLIS 10000
 #endif
 #ifndef PCCONTROL_BUTTON1_MASK
 #define PCCONTROL_BUTTON1_MASK GAMEPAD_MASK_S1
@@ -48,8 +54,8 @@ public:
 	void preprocess() {}
 	void process();
 	std::string name() { return PcControlName; }
-	void togglePower() {if (this->_z680) Z680Addon::getInstance().togglePower(); this->setPower(PCCONTROL_SWITCH_TOGGLE_MILLIS); }
-	void forcePowerOff() {if (this->_z680) Z680Addon::getInstance().powerOff(); this->setPower(PCCONTROL_SWITCH_FORCE_OFF_MILLIS); };
+	void togglePower() {if (this->_z680) Z680Addon::getInstance().togglePower(); this->setPower(PCCONTROL_HOLD_TOGGLE_MILLIS); }
+	void forcePowerOff() {if (this->_z680) Z680Addon::getInstance().powerOff(); this->setPower(PCCONTROL_HOLD_FORCE_OFF_MILLIS); };
 private:	
 	bool handleState(bool currentState, bool triggered, uint32_t timeout, uint32_t timeoutForced);
 	void setPower(uint16_t pressLength);

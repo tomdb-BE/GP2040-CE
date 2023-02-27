@@ -34,6 +34,7 @@ void PcControlAddon::process()
     
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     bool buttonsPressed = (gamepad->state.buttons & PCCONTROL_BUTTON1_MASK) && (gamepad->state.buttons & PCCONTROL_BUTTON2_MASK);
+    
     if (!this->_triggeredSwitch)
         this->_triggeredButton = this->handleState(
             buttonsPressed, 
@@ -66,12 +67,10 @@ bool PcControlAddon::handleState(bool currentState, bool triggered, uint32_t tim
         return 1;
     }
  
-    if (triggered && time_reached(this->_heldTimeout)) {
+    if (triggered && time_reached(this->_heldTimeout))
         this->togglePower();
-        return 0;
-    }  
 
-    return triggered;
+    return 0;
 }
 
 void PcControlAddon::setPower(uint16_t pressLength) {

@@ -24,8 +24,8 @@
 #define PIN_BUTTON_B2   8           // B2 / B / A / Circle / 3 / K2
 #define PIN_BUTTON_B3   12          // B3 / X / Y / Square / 1 / P1
 #define PIN_BUTTON_B4   9           // B4 / Y / X / Triangle / 4 / P2
-#define PIN_BUTTON_L1   10          // L1 / LB / L / L1 / 5 / P4
-#define PIN_BUTTON_R1   7           // R1 / RB / R / R1 / 6 / P3
+#define PIN_BUTTON_L1   7           // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_R1   10          // R1 / RB / R / R1 / 6 / P3
 #define PIN_BUTTON_L2   5           // L2 / LT / ZL / L2 / 7 / K4
 #define PIN_BUTTON_R2   6           // R2 / RT / ZR / R2 / 8 / K3
 #define PIN_BUTTON_S1   16          // S1 / Back / Minus / Select / 9 / Coin
@@ -228,5 +228,10 @@
 #define BUZZER_ENABLED 0
 #define BUZZER_PIN -1
 #define BUZZER_VOLUME 100
+
+// Player Number Add-on setting
+
+#define PLAYERNUM_ADDON_ENABLED 1
+#define PLAYER_NUMBER 1
 
 #endif
