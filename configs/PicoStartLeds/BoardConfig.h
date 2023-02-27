@@ -231,7 +231,7 @@
 
 // Player Number Add-on setting
 
-#define PLAYERNUM_ADDON_ENABLED 1
+#define PLAYERNUM_ADDON_ENABLED 0
 #define PLAYER_NUMBER 1
 
 #endif
