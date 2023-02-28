@@ -44,7 +44,7 @@ void PcControlAddon::process()
         );
 
 
-    if (this->_pinSwitch != 0xFF && !this->_triggeredButton)
+    if (this->_pinSwitch != 0xFF && this->_triggeredButton)
         this->_triggeredSwitch = this->handleState(
             !gpio_get(this->_pinSwitch), 
             this->_triggeredSwitch,
