@@ -18,8 +18,8 @@
 #define BOARD_STORAGE_INDEX     		1024 //  512 bytes for hardware options
 #define LED_STORAGE_INDEX       		1536 //  512 bytes for LED configuration
 #define ANIMATION_STORAGE_INDEX 		2048 // 1024 bytes for LED animations
-#define ADDON_STORAGE_INDEX             3072 // 1024 bytes for Add-Ons
-#define SPLASH_IMAGE_STORAGE_INDEX		4096 // 1032 bytes for Display Config
+#define ADDON_STORAGE_INDEX             3072 // 1032 bytes for Add-Ons
+#define SPLASH_IMAGE_STORAGE_INDEX		4096 // 1024 bytes for Display Config
 
 #define CHECKSUM_MAGIC          0 	// Checksum CRC
 
@@ -79,28 +79,33 @@ struct AddonOptions {
 	int i2cAnalog1219Block;
 	uint32_t i2cAnalog1219Speed;
 	uint8_t i2cAnalog1219Address;
-	uint8_t pinDualDirUp;    // Pins for Dual Directional Input
-	uint8_t pinDualDirDown;
-	uint8_t pinDualDirLeft;
-	uint8_t pinDualDirRight;
-	DpadMode dualDirDpadMode;    // LS/DP/RS
-	uint8_t dualDirCombineMode; // Mix/Gamepad/Dual/None
+	//uint8_t pinDualDirUp;    // Pins for Dual Directional Input
+	//uint8_t pinDualDirDown;
+	//uint8_t pinDualDirLeft;
+	//uint8_t pinDualDirRight;
+	//DpadMode dualDirDpadMode;    // LS/DP/RS	
+	//uint8_t dualDirCombineMode; // Mix/Gamepad/Dual/None
 	OnBoardLedMode onBoardLedMode;
 	uint8_t analogAdcPinX;
 	uint8_t analogAdcPinY;
 	uint16_t bootselButtonMap;
+	uint8_t extraButtonPin;
+	uint16_t extraButtonMap;
 	uint8_t buzzerPin;
 	uint8_t buzzerVolume;
+	uint8_t playerNumber;
 	uint8_t AnalogInputEnabled;
 	uint8_t BoardLedAddonEnabled;
 	uint8_t BootselButtonAddonEnabled;
 	uint8_t BuzzerSpeakerAddonEnabled;
-	uint8_t DualDirectionalInputEnabled;
+	//uint8_t DualDirectionalInputEnabled;
+	uint8_t ExtraButtonAddonEnabled;
 	uint8_t I2CAnalog1219InputEnabled;
 	//bool I2CDisplayAddonEnabled; // I2C is special case
 	uint8_t JSliderInputEnabled;
 	//bool NeoPicoLEDAddonEnabled; // NeoPico is special case
 	//bool PlayerLEDAddonEnabled; // PlayerLED is special case
+	uint8_t PlayerNumAddonEnabled;
 	uint8_t ReverseInputEnabled;
 	uint8_t TurboInputEnabled;
 	uint32_t checksum;
@@ -125,9 +130,10 @@ struct AddonOptions {
 	uint8_t z680AddonEnabled;
 	uint8_t z680PowerPin;
 	uint8_t z680PowerStatePin;
+	uint8_t z680MutePin;
 	uint8_t z680VolumeUpPin;
 	uint8_t z680VolumeDownPin;
-	uint8_t z680MutePin;	
+	uint32_t checksum;
 };
 
 struct SplashImage {

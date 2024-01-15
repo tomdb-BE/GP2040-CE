@@ -25,9 +25,10 @@
 #include "addons/jslider.h"
 #include "addons/neopicoleds.h"
 #include "addons/pccontrol.h"
+#include "addons/playernum.h"
 #include "addons/pleds.h"
 #include "addons/reverse.h"
-#include "addons/startleds.h"
+#include "addons/creditleds.h"
 #include "addons/turbo.h"
 #include "addons/z680.h"
 
@@ -141,7 +142,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.reverseActionUp        = REVERSE_UP_DEFAULT;
 	addonOptions.reverseActionDown      = REVERSE_DOWN_DEFAULT;
 	addonOptions.reverseActionLeft      = REVERSE_LEFT_DEFAULT;
-	addonOptions.reverseActionRight     = REVERSE_RIGHT_DEFAULT;
+	addonOptions.reverseActionRight     = REVERSE_RIGHT_DEFAULT;	
 	addonOptions.i2cAnalog1219SDAPin    = I2C_ANALOG1219_SDA_PIN;
 	addonOptions.i2cAnalog1219SCLPin    = I2C_ANALOG1219_SCL_PIN;
 	addonOptions.i2cAnalog1219Block     = (I2C_ANALOG1219_BLOCK == i2c0) ? 0 : 1;
@@ -150,11 +151,16 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.onBoardLedMode			= BOARD_LED_TYPE;
 	//addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
 	//addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
+	//addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
+	//addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
 	addonOptions.analogAdcPinX      	= ANALOG_ADC_VRX;
 	addonOptions.analogAdcPinY      	= ANALOG_ADC_VRY;
 	addonOptions.bootselButtonMap		= BOOTSEL_BUTTON_MASK;
 	addonOptions.buzzerPin              = BUZZER_PIN;
 	addonOptions.buzzerVolume           = BUZZER_VOLUME;
+	addonOptions.extraButtonMap		    = EXTRA_BUTTON_MASK;
+	addonOptions.extraButtonPin		    = EXTRA_BUTTON_PIN;
+	addonOptions.playerNumber           = PLAYER_NUMBER;
 	addonOptions.AnalogInputEnabled     = ANALOG_INPUT_ENABLED;
 	addonOptions.BoardLedAddonEnabled   = BOARD_LED_ENABLED;
 	addonOptions.BootselButtonAddonEnabled = BOOTSEL_BUTTON_ENABLED;
@@ -162,6 +168,7 @@ void Storage::setDefaultAddonOptions()
 	//addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
 	addonOptions.I2CAnalog1219InputEnabled = I2C_ANALOG1219_ENABLED;
 	addonOptions.JSliderInputEnabled    = JSLIDER_ENABLED;
+	addonOptions.PlayerNumAddonEnabled  = PLAYERNUM_ADDON_ENABLED;
 	addonOptions.ReverseInputEnabled    = REVERSE_ENABLED;
 	addonOptions.TurboInputEnabled      = TURBO_ENABLED;
 	addonOptions.startLedsAddonEnabled  = STARTLEDS_ENABLED;
@@ -185,9 +192,9 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.z680AddonEnabled  = Z680_ENABLED;
 	addonOptions.z680PowerPin	   = Z680_POWER_PIN;
 	addonOptions.z680PowerStatePin = Z680_STATE_PIN;
+	addonOptions.z680MutePin       = Z680_MUTE_PIN;	
 	addonOptions.z680VolumeUpPin   = Z680_VOLUME_UP_PIN;
-	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;
-	addonOptions.z680MutePin       = Z680_MUTE_PIN;		
+	addonOptions.z680VolumeDownPin = Z680_VOLUME_DOWN_PIN;	
 	setAddonOptions(addonOptions);
 }
 

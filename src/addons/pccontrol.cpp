@@ -1,8 +1,10 @@
 #include "addons/pccontrol.h"
+#include "addons/z680.h"
 #include "storagemanager.h"
 
 bool PcControlAddon::available() {
 	AddonOptions options = Storage::getInstance().getAddonOptions();
+    return (options.pcControlAddonEnabled);
     return (options.pcControlAddonEnabled);
 }
 

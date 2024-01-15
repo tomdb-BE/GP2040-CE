@@ -8,7 +8,7 @@
 #include "addonmanager.h"
 
 #include "addons/analog.h" // Inputs for Core0
-#include "addons/dualdirectional.h"
+//#include "addons/dualdirectional.h"
 #include "addons/i2canalog1219.h"
 #include "addons/jslider.h"
 #include "addons/reverse.h"
@@ -84,7 +84,7 @@ void GP2040::setup() {
 
 	// Setup Add-ons
 	addons.LoadAddon(new AnalogInput(), CORE0_INPUT);
-	addons.LoadAddon(new DualDirectionalInput(), CORE0_INPUT);
+	//addons.LoadAddon(new DualDirectionalInput(), CORE0_INPUT);
 	addons.LoadAddon(new I2CAnalog1219Input(), CORE0_INPUT);
 	addons.LoadAddon(new JSliderInput(), CORE0_INPUT);
 	addons.LoadAddon(new ReverseInput(), CORE0_INPUT);

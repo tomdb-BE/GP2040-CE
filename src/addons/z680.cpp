@@ -3,6 +3,7 @@
 
 bool Z680Addon::available() {
     AddonOptions options = Storage::getInstance().getAddonOptions();
+    AddonOptions options = Storage::getInstance().getAddonOptions();
     return (options.z680AddonEnabled);
 }
 
