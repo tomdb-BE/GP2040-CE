@@ -19,7 +19,7 @@
 #include "addons/board_led.h"
 #include "addons/bootsel_button.h"
 #include "addons/buzzerspeaker.h"
-#include "addons/dualdirectional.h"
+//#include "addons/dualdirectional.h"
 #include "addons/i2canalog1219.h"
 #include "addons/i2cdisplay.h"
 #include "addons/jslider.h"
@@ -131,10 +131,10 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.pinButtonReverse  		= PIN_BUTTON_REVERSE;
 	addonOptions.pinSliderLS       		= PIN_SLIDER_LS;
 	addonOptions.pinSliderRS       		= PIN_SLIDER_RS;
-	addonOptions.pinDualDirDown    		= PIN_DUAL_DIRECTIONAL_DOWN;
-	addonOptions.pinDualDirUp      		= PIN_DUAL_DIRECTIONAL_UP;
-	addonOptions.pinDualDirLeft    		= PIN_DUAL_DIRECTIONAL_LEFT;
-	addonOptions.pinDualDirRight   		= PIN_DUAL_DIRECTIONAL_RIGHT;
+	//addonOptions.pinDualDirDown    		= PIN_DUAL_DIRECTIONAL_DOWN;
+	//addonOptions.pinDualDirUp      		= PIN_DUAL_DIRECTIONAL_UP;
+	//addonOptions.pinDualDirLeft    		= PIN_DUAL_DIRECTIONAL_LEFT;
+	//addonOptions.pinDualDirRight   		= PIN_DUAL_DIRECTIONAL_RIGHT;
 	addonOptions.turboShotCount    		= DEFAULT_SHOT_PER_SEC;
 	addonOptions.pinTurboLED       		= TURBO_LED_PIN;
 	addonOptions.pinReverseLED     		= REVERSE_LED_PIN;
@@ -148,8 +148,8 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.i2cAnalog1219Speed     = I2C_ANALOG1219_SPEED;
 	addonOptions.i2cAnalog1219Address   = I2C_ANALOG1219_ADDRESS;
 	addonOptions.onBoardLedMode			= BOARD_LED_TYPE;
-	addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
-	addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
+	//addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
+	//addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
 	addonOptions.analogAdcPinX      	= ANALOG_ADC_VRX;
 	addonOptions.analogAdcPinY      	= ANALOG_ADC_VRY;
 	addonOptions.bootselButtonMap		= BOOTSEL_BUTTON_MASK;
@@ -159,7 +159,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.BoardLedAddonEnabled   = BOARD_LED_ENABLED;
 	addonOptions.BootselButtonAddonEnabled = BOOTSEL_BUTTON_ENABLED;
 	addonOptions.BuzzerSpeakerAddonEnabled = BUZZER_ENABLED;
-	addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
+	//addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
 	addonOptions.I2CAnalog1219InputEnabled = I2C_ANALOG1219_ENABLED;
 	addonOptions.JSliderInputEnabled    = JSLIDER_ENABLED;
 	addonOptions.ReverseInputEnabled    = REVERSE_ENABLED;

@@ -7,3 +7,5 @@
 [submodule "MPG"]
 	path = MPG
 	url = https://github.com/OpenStickCommunity/MPG.git
+[submodule ".\\www"]
+	branch = startled-v0.6.1

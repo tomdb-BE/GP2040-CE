@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Copyright (c) 2022 Tom De Backer
  */
 
-#include "gpaddon.h"
+#include <gpaddon.h>
 
 #ifndef _PCCONTROL_H_
 #define _PCCONTROL_H_
