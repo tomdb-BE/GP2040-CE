@@ -1319,6 +1319,26 @@ std::string setAddonOptions()
 	XBOnePassthroughOptions& xbonePassthroughOptions = Storage::getInstance().getAddonOptions().xbonePassthroughOptions;
 	docToValue(xbonePassthroughOptions.enabled, doc, "XBOnePassthroughAddonEnabled");
 
+	CoinLedsOptions& coinLedsOptions = Storage::getInstance().getAddonOptions().coinLedsOptions;
+	docToValue(coinLedsOptions.enabled, doc, "coinLedsAddonEnabled");	
+
+/*
+	optional bool enabled = 1;
+	optional int32 coinLedsStartPin1 = 2 [default = -1];
+	optional int32 coinLedsStartPin2 = 3 [default = -1];
+	optional int32 coinLedsStartPin3 = 4 [default = -1];
+	optional int32 coinLedsStartPin4 = 5 [default = -1];
+	optional int32 coinLedsCoinPin1 = 6 [default = -1];
+	optional int32 coinLedsCoinPin2 = 7 [default = -1];
+	optional int32 coinLedsCoinPin3 = 8 [default = -1];
+	optional int32 coinLedsCoinPin4 = 9 [default = -1];
+	optional int32 coinLedsMarqueePin = 10 [default = -1];
+	optional int32 coinLedsExtStartPin = 11 [default = -1];
+	optional int32 coinLedsExtCoinPin = 12 [default = -1];
+	optional uint32 coinLedsStartBrightness = 13 [default = 100, (nanopb).max_count = 100];
+	optional uint32 coinLedsCoinBrightness = 14 [default = 100, (nanopb).max_count = 100];
+	optional uint32 coinLedsMarqueeBrightness = 15 [default = 100, (nanopb).max_count = 100];
+*/
 	Storage::getInstance().save();
 
 	return serialize_json(doc);
@@ -1719,6 +1739,8 @@ std::string getAddonOptions()
 	writeDoc(doc, "focusModeButtonLockEnabled", focusModeOptions.buttonLockEnabled);
 	writeDoc(doc, "focusModeMacroLockEnabled", focusModeOptions.macroLockEnabled);
 	writeDoc(doc, "FocusModeAddonEnabled", focusModeOptions.enabled);
+
+	CoinLedsOptions& coinLedsOptions = Storage::getInstance().getAddonOptions().coinLedsOptions;
 
 	return serialize_json(doc);
 }

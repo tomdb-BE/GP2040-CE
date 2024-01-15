@@ -14,6 +14,7 @@
 #include "addons/board_led.h"
 #include "addons/bootsel_button.h"
 #include "addons/buzzerspeaker.h"
+#include "addons/coinleds.h"
 #include "addons/dualdirectional.h"
 #include "addons/tilt.h"
 #include "addons/focus_mode.h"
@@ -585,6 +586,9 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     INIT_UNSET_PROPERTY(config.addonOptions.macroOptions, pin, INPUT_MACRO_PIN);
     INIT_UNSET_PROPERTY(config.addonOptions.macroOptions, macroBoardLedEnabled, INPUT_MACRO_BOARD_LED_ENABLED);
     config.addonOptions.macroOptions.macroList_count = 6;
+
+    // Coin Leds
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, enabled, COINLEDS_ENABLED);
 }
 
 

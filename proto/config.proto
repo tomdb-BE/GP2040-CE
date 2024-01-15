@@ -509,6 +509,25 @@ message XBOnePassthroughOptions
 	optional bool enabled = 1;
 }
 
+message CoinLedsOptions
+{
+	optional bool enabled = 1;
+	optional int32 coinLedsStartPin1 = 2 [default = -1];
+	optional int32 coinLedsStartPin2 = 3 [default = -1];
+	optional int32 coinLedsStartPin3 = 4 [default = -1];
+	optional int32 coinLedsStartPin4 = 5 [default = -1];
+	optional int32 coinLedsCoinPin1 = 6 [default = -1];
+	optional int32 coinLedsCoinPin2 = 7 [default = -1];
+	optional int32 coinLedsCoinPin3 = 8 [default = -1];
+	optional int32 coinLedsCoinPin4 = 9 [default = -1];
+	optional int32 coinLedsMarqueePin = 10 [default = -1];
+	optional int32 coinLedsExtStartPin = 11 [default = -1];
+	optional int32 coinLedsExtCoinPin = 12 [default = -1];
+	optional uint32 coinLedsStartBrightness = 13 [default = 100, (nanopb).max_count = 100];
+	optional uint32 coinLedsCoinBrightness = 14 [default = 100, (nanopb).max_count = 100];
+	optional uint32 coinLedsMarqueeBrightness = 15 [default = 100, (nanopb).max_count = 100];
+}
+
 message WiiOptions
 {
     message AnalogAxis
@@ -716,6 +735,7 @@ message AddonOptions
 	optional MacroOptions macroOptions = 20;
 	optional InputHistoryOptions inputHistoryOptions = 21;
 	optional XBOnePassthroughOptions xbonePassthroughOptions = 22;
+	optional CoinLedsOptions coinLedsOptions = 23;
 }
 
 message MigrationHistory
