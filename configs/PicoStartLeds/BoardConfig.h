@@ -18,22 +18,23 @@
 
 #define PIN_DPAD_UP     3           // UP
 #define PIN_DPAD_DOWN   2           // DOWN
-#define PIN_DPAD_RIGHT  1           // RIGHT
 #define PIN_DPAD_LEFT   0           // LEFT
-#define PIN_BUTTON_B1   12          // B1 / A / B / Cross / 2 / K1
-#define PIN_BUTTON_B2   11          // B2 / B / A / Circle / 3 / K2
-#define PIN_BUTTON_R2   6           // R2 / RT / ZR / R2 / 8 / K3
-#define PIN_BUTTON_L2   13          // L2 / LT / ZL / L2 / 7 / K4
-#define PIN_BUTTON_B3   9           // B3 / X / Y / Square / 1 / P1
-#define PIN_BUTTON_B4   8           // B4 / Y / X / Triangle / 4 / P2
-#define PIN_BUTTON_R1   10          // R1 / RB / R / R1 / 6 / P3
+#define PIN_DPAD_RIGHT  1           // RIGHT
+#define PIN_BUTTON_B1   11          // B1 / A / B / Cross / 2 / K1
+#define PIN_BUTTON_B2   8           // B2 / B / A / Circle / 3 / K2
+#define PIN_BUTTON_B3   12          // B3 / X / Y / Square / 1 / P1
+#define PIN_BUTTON_B4   9           // B4 / Y / X / Triangle / 4 / P2
 #define PIN_BUTTON_L1   7           // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_R1   10          // R1 / RB / R / R1 / 6 / P3
+#define PIN_BUTTON_L2   5           // L2 / LT / ZL / L2 / 7 / K4
+#define PIN_BUTTON_R2   6           // R2 / RT / ZR / R2 / 8 / K3
 #define PIN_BUTTON_S1   16          // S1 / Back / Minus / Select / 9 / Coin
 #define PIN_BUTTON_S2   20          // S2 / Start / Plus / Start / 10 / Start
-#define PIN_BUTTON_L3   4           // L3 / LS / LS / L3 / 11 / LS
-#define PIN_BUTTON_R3   5           // R3 / RS / RS / R3 / 12 / RS
-#define PIN_BUTTON_A1   14          // A1 / Guide / Home / PS / 13 / ~
-#define PIN_BUTTON_A2   15          // A2 / ~ / Capture / ~ / 14 / ~
+#define PIN_BUTTON_L3   19          // L3 / LS / LS / L3 / 11 / LS
+#define PIN_BUTTON_R3   26          // R3 / RS / RS / R3 / 12 / RS
+#define PIN_BUTTON_A1   4           // A1 / Guide / Home / PS / 13 / ~
+#define PIN_BUTTON_A2   13          // A2 / ~ / Capture / ~ / 14 / ~
+
 #define PIN_BUTTON_TURBO -1         // Turbo
 #define PIN_BUTTON_REVERSE -1       // UDLR Reverse
 #define PIN_SLIDER_LS    -1         // Left Stick Slider
@@ -215,6 +216,10 @@
 // BOOTSEL Button Add-on setting
 #define BOOTSEL_BUTTON_MASK 0 // 0 means none, get other mask from GamepadState.h
 
+// Extra Button Add-on setting
+#define EXTRA_BUTTON_MASK 0 // 0 means none, get other mask from GamepadState.h
+#define EXTRA_BUTTON_PIN -1
+
 // This is the Buzzer Speaker section.  
 // In this section you can specify if Buzzer Speaker will be active, and, if active, which pin will be used for them.
 // The default is `BUZZER_ENABLED` which will turn the Buzzer Speaker off.
@@ -223,5 +228,10 @@
 #define BUZZER_ENABLED 0
 #define BUZZER_PIN -1
 #define BUZZER_VOLUME 100
+
+// Player Number Add-on setting
+
+#define PLAYERNUM_ADDON_ENABLED 0
+#define PLAYER_NUMBER 1
 
 #endif
