@@ -512,20 +512,30 @@ message XBOnePassthroughOptions
 message CoinLedsOptions
 {
 	optional bool enabled = 1;
-	optional int32 coinLedsStartPin1 = 2 [default = -1];
-	optional int32 coinLedsStartPin2 = 3 [default = -1];
-	optional int32 coinLedsStartPin3 = 4 [default = -1];
-	optional int32 coinLedsStartPin4 = 5 [default = -1];
-	optional int32 coinLedsCoinPin1 = 6 [default = -1];
-	optional int32 coinLedsCoinPin2 = 7 [default = -1];
-	optional int32 coinLedsCoinPin3 = 8 [default = -1];
-	optional int32 coinLedsCoinPin4 = 9 [default = -1];
-	optional int32 coinLedsMarqueePin = 10 [default = -1];
-	optional int32 coinLedsExtStartPin = 11 [default = -1];
-	optional int32 coinLedsExtCoinPin = 12 [default = -1];
-	optional uint32 coinLedsStartBrightness = 13 [default = 100, (nanopb).max_count = 100];
-	optional uint32 coinLedsCoinBrightness = 14 [default = 100, (nanopb).max_count = 100];
-	optional uint32 coinLedsMarqueeBrightness = 15 [default = 100, (nanopb).max_count = 100];
+	optional int32 coinLedsStartPin1 = 2;
+	optional int32 coinLedsStartPin2 = 3;
+	optional int32 coinLedsStartPin3 = 4;
+	optional int32 coinLedsStartPin4 = 5;
+	optional int32 coinLedsCoinPin1 = 6;
+	optional int32 coinLedsCoinPin2 = 7;
+	optional int32 coinLedsCoinPin3 = 8;
+	optional int32 coinLedsCoinPin4 = 9;	
+	optional int32 coinLedsExtStartPinOut = 10;
+	optional int32 coinLedsExtCoinPinOut = 11;
+	optional int32 coinLedsMarqueePin = 12;
+	optional uint32 coinLedsStartMask1 = 13;
+	optional uint32 coinLedsStartMask2 = 14;
+	optional uint32 coinLedsStartMask3 = 15;
+	optional uint32 coinLedsStartMask4 = 16;
+	optional uint32 coinLedsCoinMask1 = 17;
+	optional uint32 coinLedsCoinMask2 = 18;
+	optional uint32 coinLedsCoinMask3 = 19;
+	optional uint32 coinLedsCoinMask4 = 20;
+	optional uint32 coinLedsExtStartMask = 21;
+	optional uint32 coinLedsExtCoinMask = 22;	
+	optional uint32 coinLedsStartBrightness = 23;
+	optional uint32 coinLedsCoinBrightness = 24;
+	optional uint32 coinLedsMarqueeBrightness = 25;
 }
 
 message WiiOptions

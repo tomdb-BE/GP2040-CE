@@ -6,12 +6,14 @@ import * as yup from 'yup';
 import Section from '../Components/Section';
 
 import FormControl from '../Components/FormControl';
+import FormSelect from '../Components/FormSelect';
+import { BUTTON_MASKS } from '../Data/Buttons';
 
 export const coinLedsScheme = {
 	CoinLedsAddonEnabled: yup
 		.number()
 		.required()
-		.label('Coin Leds Add-On Enabled'),
+		.label('Coin Leds Enabled'),
 	coinLedsStartPin1: yup
 		.number()
 		.label('Start P1 LED Pin')
@@ -48,14 +50,54 @@ export const coinLedsScheme = {
 		.number()
 		.label('Marquee LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
-	coinLedsExtStartPin: yup
+	coinLedsExtStartPinOut: yup
 		.number()
-		.label('External Start Pin')
+		.label('External Start Pin Out')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
-	coinLedsExtCoinPin: yup
+	coinLedsExtCoinPinOut: yup
 		.number()
-		.label('External Coin Pin')
-		.validatePinWhenValue('CoinLedsAddonEnabled'),		
+		.label('External Coin Pin Out')
+		.validatePinWhenValue('CoinLedsAddonEnabled'),
+	coinLedsStartMask1: yup
+		.number()
+		.label('Start Mask 1')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsStartMask2: yup
+		.number()
+		.label('Start Mask 2')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsStartMask3: yup
+		.number()
+		.label('Start Mask 3')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsStartMask4: yup
+		.number()
+		.label('Start Mask 4')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),						
+	coinLedsExtStartMask: yup
+		.number()
+		.label('External Start Mask')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsCoinMask1: yup
+		.number()
+		.label('Coin Mask 1')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsCoinMask2: yup
+		.number()
+		.label('Coin Mask 2')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsCoinMask3: yup
+		.number()
+		.label('Coin Mask 3')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+	coinLedsCoinMask4: yup
+		.number()
+		.label('Coin Mask 4')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),				
+	coinLedsExtCoinMask: yup
+		.number()
+		.label('External Coin Mask')
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsStartBrightness: yup
 		.number()
 		.label('Start LED Brightness')
@@ -80,9 +122,19 @@ export const coinLedsState = {
 	coinLedsCoinPin2: -1,
 	coinLedsCoinPin3: -1,
 	coinLedsCoinPin4: -1,
-	coinLedsMarqueePin: -1,
-	coinLedsExtStartPin: -1,
-	coinLedsExtCoinPin: -1,
+	coinLedsMarqueePin: -1,	
+	coinLedsExtStartPinOut: -1,	
+	coinLedsExtCoinPinOut: -1,
+	coinLedsExtStartMask: 0,
+	coinLedsExtCoinMask: 0,
+	coinLedsStartMask1: 0,
+	coinLedsStartMask2: 0,
+	coinLedsStartMask3: 0,
+	coinLedsStartMask4: 0,
+	coinLedsCoinMask1: 0,
+	coinLedsCoinMask2: 0,
+	coinLedsCoinMask3: 0,
+	coinLedsCoinMask4: 0,
 	coinLedsStartBrightness: 100,
 	coinLedsCoinBrightness: 100,
 	coinLedsMarqueeBrightness: 100,
@@ -97,6 +149,23 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 				hidden={!values.CoinLedsAddonEnabled}
 			>
 				<Row className="mb-3">
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-mask-1-label')}
+						name="coinLedsStartMask1"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartMask1}
+						error={errors.coinLedsStartMask1}
+						isInvalid={errors.coinLedsStartMask1}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsStartMask1-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>			
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-start-pin-1-label')}
@@ -110,62 +179,23 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						min={-1}
 						max={29}
 					/>
-					<FormControl
+					<FormSelect
 						type="number"
-						label={t('AddonsConfig:coin-leds-start-pin-2-label')}
-						name="coinLedsStartPin2"
+						label={t('AddonsConfig:coin-leds-coin-mask-1-label')}
+						name="coinLedsCoinMask1"
 						className="form-control-sm"
 						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsStartPin2}
-						error={errors.coinLedsStartPin2}
-						isInvalid={errors.coinLedsStartPin2}
+						value={values.coinLedsCoinMask1}
+						error={errors.coinLedsCoinMask1}
+						isInvalid={errors.coinLedsCoinMask1}
 						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:coin-leds-start-pin-3-label')}
-						name="coinLedsStartPin3"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsStartPin3}
-						error={errors.coinLedsStartPin3}
-						isInvalid={errors.coinLedsStartPin3}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:coin-leds-start-pin-4-label')}
-						name="coinLedsStartPin4"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsStartPin4}
-						error={errors.coinLedsStartPin4}
-						isInvalid={errors.coinLedsStartPin4}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>
-				</Row>
-				<Row className="mb-3">					
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:coin-leds-start-brightness-label')}
-						name="coinLedsStartBrightness"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsStartBrightness}
-						error={errors.coinLedsStartBrightness}
-						isInvalid={errors.coinLedsStartBrightness}
-						onChange={handleChange}
-						min={0}
-						max={100}
-					/>							
-				</Row>
-				<Row className="mb-3">
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsCoinMask1-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}					
+					</FormSelect>					
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-coin-pin-1-label')}
@@ -179,6 +209,55 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						min={-1}
 						max={29}
 					/>
+				</Row>
+				<Row className="mb-3">
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-mask-2-label')}
+						name="coinLedsStartMask2"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartMask2}
+						error={errors.coinLedsStartMask2}
+						isInvalid={errors.coinLedsStartMask2}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsStartMask2-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>			
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-pin-2-label')}
+						name="coinLedsStartPin2"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartPin2}
+						error={errors.coinLedsStartPin2}
+						isInvalid={errors.coinLedsStartPin2}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-coin-mask-2-label')}
+						name="coinLedsCoinMask2"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsCoinMask2}
+						error={errors.coinLedsCoinMask2}
+						isInvalid={errors.coinLedsCoinMask2}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsCoinMask2-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}					
+					</FormSelect>					
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-coin-pin-2-label')}
@@ -192,6 +271,55 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						min={-1}
 						max={29}
 					/>
+				</Row>
+				<Row className="mb-3">
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-mask-3-label')}
+						name="coinLedsStartMask3"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartMask3}
+						error={errors.coinLedsStartMask3}
+						isInvalid={errors.coinLedsStartMask3}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsStartMask3-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>			
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-pin-3-label')}
+						name="coinLedsStartPin3"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartPin3}
+						error={errors.coinLedsStartPin3}
+						isInvalid={errors.coinLedsStartPin3}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-coin-mask-3-label')}
+						name="coinLedsCoinMask3"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsCoinMask3}
+						error={errors.coinLedsCoinMask3}
+						isInvalid={errors.coinLedsCoinMask3}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsCoinMask3-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}					
+					</FormSelect>					
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-coin-pin-3-label')}
@@ -205,6 +333,55 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						min={-1}
 						max={29}
 					/>
+				</Row>
+				<Row className="mb-3">
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-mask-4-label')}
+						name="coinLedsStartMask4"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartMask4}
+						error={errors.coinLedsStartMask4}
+						isInvalid={errors.coinLedsStartMask4}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsStartMask4-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>			
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-pin-4-label')}
+						name="coinLedsStartPin4"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartPin4}
+						error={errors.coinLedsStartPin4}
+						isInvalid={errors.coinLedsStartPin4}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-coin-mask-4-label')}
+						name="coinLedsCoinMask4"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsCoinMask4}
+						error={errors.coinLedsCoinMask4}
+						isInvalid={errors.coinLedsCoinMask4}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsCoinMask4-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}					
+					</FormSelect>					
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-coin-pin-4-label')}
@@ -218,8 +395,85 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						min={-1}
 						max={29}
 					/>
-				</Row>
+				</Row>								
 				<Row className="mb-3">					
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-ext-start-mask-label')}
+						name="coinLedsExtStartMask"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsExtStartMask}
+						error={errors.coinLedsExtStartMask}
+						isInvalid={errors.coinLedsExtStartMask}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsExtStartMask-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>					
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:coin-leds-ext-start-pin-out-label')}
+						name="coinLedsExtStartPinOut"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsExtStartPinOut}
+						error={errors.coinLedsExtStartPinOut}
+						isInvalid={errors.coinLedsExtStartPinOut}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>					
+				</Row>								
+				<Row className="mb-3">					
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:coin-leds-ext-coin-mask-label')}
+						name="coinLedsExtCoinMask"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsExtCoinMask}
+						error={errors.coinLedsExtCoinMask}
+						isInvalid={errors.coinLedsExtCoinMask}
+						onChange={handleChange}
+						>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`coinLedsExtCoinMask-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:coin-leds-ext-coin-pin-out-label')}
+						name="coinLedsExtCoinPinOut"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsExtCoinPinOut}
+						error={errors.coinLedsExtCoinPinOut}
+						isInvalid={errors.coinLedsExtCoinPinOut}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>					
+				</Row>				
+				<Row className="mb-3">					
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:coin-leds-start-brightness-label')}
+						name="coinLedsStartBrightness"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.coinLedsStartBrightness}
+						error={errors.coinLedsStartBrightness}
+						isInvalid={errors.coinLedsStartBrightness}
+						onChange={handleChange}
+						min={0}
+						max={100}
+					/>
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-coin-brightness-label')}
@@ -232,22 +486,9 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						onChange={handleChange}
 						min={0}
 						max={100}
-					/>							
+					/>					
 				</Row>				
 				<Row className="mb-3">
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:coin-leds-marquee-pin-label')}
-						name="coinLedsMarqueePin"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsMarqueePin}
-						error={errors.coinLedsMarqueePin}
-						isInvalid={errors.coinLedsMarqueePin}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:coin-leds-marquee-brightness-label')}
@@ -261,35 +502,20 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						min={0}
 						max={100}
 					/>					
-				</Row>								
-				<Row className="mb-3">					
 					<FormControl
 						type="number"
-						label={t('AddonsConfig:coin-leds-ext-start-pin-label')}
-						name="coinLedsExtStartPin"
+						label={t('AddonsConfig:coin-leds-marquee-pin-label')}
+						name="coinLedsMarqueePin"
 						className="form-control-sm"
 						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsExtStartPin}
-						error={errors.coinLedsExtStartPin}
-						isInvalid={errors.coinLedsExtStartPin}
+						value={values.coinLedsMarqueePin}
+						error={errors.coinLedsMarqueePin}
+						isInvalid={errors.coinLedsMarqueePin}
 						onChange={handleChange}
 						min={-1}
 						max={29}
-					/>
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:coin-leds-ext-coin-pin-label')}
-						name="coinLedsExtCoinPin"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.coinLedsExtCoinPin}
-						error={errors.coinLedsExtCoinPin}
-						isInvalid={errors.coinLedsExtCoinPin}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>					
-				</Row>	
+					/>			
+				</Row>
 			</div>
 			<FormCheck
 				label={t('Common:switch-enabled')}

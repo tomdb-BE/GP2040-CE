@@ -48,6 +48,10 @@ import XBOnePassthrough, {
 	xbonePassthroughScheme,
 	xbonePassthroughState,
 } from '../Addons/XBOnePassthrough';
+import CoinLeds, {
+	coinLedsScheme,
+	coinLedsState,
+} from '../Addons/CoinLeds';
 
 const schema = yup.object().shape({
 	...analogScheme,
@@ -69,6 +73,7 @@ const schema = yup.object().shape({
 	...focusModeScheme,
 	...keyboardScheme,
 	...inputHistoryScheme,
+	...coinLedsScheme,
 });
 
 const defaultValues = {
@@ -92,9 +97,10 @@ const defaultValues = {
 	...focusModeState,
 	...keyboardState,
 	...inputHistoryState,
+	...coinLedsState,
 };
 
-const ADDONS = [
+const ADDONS = [	
 	Bootsel,
 	OnBoardLed,
 	Analog,
@@ -114,7 +120,8 @@ const ADDONS = [
 	SNES,
 	FocusMode,
 	Keyboard,
-	InputHistory
+	InputHistory,
+	CoinLeds,
 ];
 
 const FormContext = ({ setStoredData }) => {

@@ -79,29 +79,17 @@
 #ifndef COINLEDS_MARQUEE_PIN
 #define COINLEDS_MARQUEE_PIN -1
 #endif
-#ifndef COINLEDS_EXT_START_PIN
-#define COINLEDS_EXT_START_PIN -1
+#ifndef COINLEDS_EXT_START_PIN_OUT
+#define COINLEDS_EXT_START_PIN_OUT -1
 #endif
-#ifndef COINLEDS_EXT_COIN_PIN
-#define COINLEDS_EXT_COIN_PIN -1
+#ifndef COINLEDS_EXT_COIN_PIN_OUT
+#define COINLEDS_EXT_COIN_PIN_OUT -1
 #endif
 #ifndef COINLEDS_EXT_START_MASK
-#define COINLEDS_EXT_START_MASK GAMEPAD_MASK_A1
+#define COINLEDS_EXT_START_MASK 0
 #endif
 #ifndef COINLEDS_EXT_COIN_MASK
-#define COINLEDS_EXT_COIN_MASK GAMEPAD_MASK_A2
-#endif
-#ifndef COINLEDS_EXT_MASKS
-#define COINLEDS_EXT_MASKS COINLEDS_EXT_START_MASK | COINLEDS_EXT_COIN_MASK
-#endif
-#ifndef COINLEDS_START_BRIGHTNESS
-#define COINLEDS_START_BRIGHTNESS 50
-#endif
-#ifndef COINLEDS_COIN_BRIGHTNESS
-#define COINLEDS_COIN_BRIGHTNESS 50
-#endif
-#ifndef COINLEDS_MARQUEE_BRIGHTNESS
-#define COINLEDS_MARQUEE_BRIGHTNESS 50
+#define COINLEDS_EXT_COIN_MASK 0
 #endif
 #ifndef COINLEDS_BRIGHTNESS_STEP
 #define COINLEDS_BRIGHTNESS_STEP 5
@@ -196,11 +184,11 @@ private:
 	absolute_time_t nextAnimationTime = make_timeout_time_ms(0);
 	uint16_t ledLevels[COINLEDS_COUNT];
 	int32_t ledPins[COINLEDS_COUNT];
-	uint8_t brightness;
-	uint8_t maxBrightness;
+	uint8_t brightness = 0;
+	uint8_t maxBrightness = 0;
 	CoinLedsAnimation animation;
-	bool fadeIn;
-	bool ready;
+	bool fadeIn = false;
+	bool ready = false;
 };
 
 class CoinLedsAddon : public GPAddon
@@ -216,12 +204,19 @@ private:
 	CoinLeds ledsCoin;
 	CoinLeds ledsMarquee;
 	bool debounce(uint32_t * ptrDebounceTime);
-	uint8_t creditCount = 0;
-	uint16_t lastButtonsPressed;	
-	uint32_t debounceMarqueeBrightness;
-	int32_t externalStartPin = -1;
-	int32_t externalCoinPin	= -1;
-	bool ready;
+	bool externalStartButtonEnabled = false;
+	bool externalCoinButtonEnabled = false;
+	uint8_t creditCount = 0;	
+	uint32_t debounceMarqueeBrightness = 0;	
+	uint32_t lastButtonsPressed = 0;
+	uint32_t allMasks = 0;
+	uint32_t startMasks = 0;
+	uint32_t coinMasks = 0;	
+	uint32_t externalStartMask = COINLEDS_EXT_START_MASK;
+	uint32_t externalCoinMask = COINLEDS_EXT_COIN_MASK;
+	int32_t externalStartPinOut = COINLEDS_EXT_START_PIN_OUT;	
+	int32_t externalCoinPinOut = COINLEDS_EXT_COIN_PIN_OUT;
+	bool ready = false;
 };
 
 #endif

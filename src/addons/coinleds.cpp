@@ -134,8 +134,6 @@ void CoinLedsAddon::setup() {
 	int32_t startPins[] = {options.coinLedsStartPin1, options.coinLedsStartPin2, options.coinLedsStartPin3, options.coinLedsStartPin4};
 	int32_t coinPins[] = {options.coinLedsCoinPin1, options.coinLedsCoinPin2, options.coinLedsCoinPin3, options.coinLedsCoinPin4};
 	int32_t marqueePins[] = {options.coinLedsMarqueePin, -1, -1, -1};
-	int32_t extStartPin = options.coinLedsExtStartPin;
-	int32_t extCoinPin = options.coinLedsExtCoinPin;
 	uint8_t startBrightness = (options.coinLedsStartBrightness >= 100) ? 255 : (float)options.coinLedsStartBrightness / 100 * 255;	
 	uint8_t coinBrightness = (options.coinLedsCoinBrightness >= 100) ? 255 : (float)options.coinLedsCoinBrightness / 100 * 255;	
 	uint8_t marqueeBrightness = (options.coinLedsMarqueeBrightness >= 100) ? 255 : (float)options.coinLedsMarqueeBrightness / 100 * 255;
@@ -152,21 +150,28 @@ void CoinLedsAddon::setup() {
 	for (auto sliceNum : sliceNums)
 		pwm_set_enabled(sliceNum, true);
 	
-	if (extStartPin > 0)
+	if (options.coinLedsExtStartPinOut > 0)
 	{
-		gpio_init(extStartPin);
-    	gpio_set_dir(extStartPin, GPIO_OUT);
-		gpio_put(extStartPin, 1);
-		this->externalStartPin = extStartPin;
+		this->externalStartPinOut = options.coinLedsExtStartPinOut;
+		this->externalStartMask = options.coinLedsExtStartMask;
+		gpio_init(this->externalStartPinOut);
+    	gpio_set_dir(this->externalStartPinOut, GPIO_OUT);
+		gpio_put(this->externalStartPinOut, 1);		
 	}
 
-	if (extCoinPin > 0)
+	if (options.coinLedsExtCoinPinOut > 0)
 	{
-		gpio_init(extCoinPin);
-    	gpio_set_dir(extCoinPin, GPIO_OUT);
-		gpio_put(extCoinPin, 1);
-		this->externalCoinPin = extCoinPin;
+		this->externalCoinPinOut = options.coinLedsExtCoinPinOut;
+		this->externalCoinMask = options.coinLedsExtCoinMask;
+		gpio_init(this->externalCoinPinOut);
+    	gpio_set_dir(this->externalCoinPinOut, GPIO_OUT);
+		gpio_put(this->externalCoinPinOut, 1);		
 	}
+
+	this->startMasks = options.coinLedsStartMask1 | options.coinLedsStartMask2 | options.coinLedsStartMask3 | options.coinLedsStartMask4;
+	this->coinMasks = options.coinLedsCoinMask1 | options.coinLedsCoinMask2 | options.coinLedsCoinMask3 | options.coinLedsCoinMask4;
+	this->allMasks = this->startMasks | this->coinMasks | this->externalStartMask | this->externalCoinMask;
+
 	this->ready = true;
 }
 
@@ -174,8 +179,9 @@ void CoinLedsAddon::process()
 {
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (START_BUTTON_MASKS | COIN_BUTTON_MASKS | COINLEDS_EXT_MASKS);
-	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
+	uint32_t buttonsPressed = gamepad->state.buttons & this->allMasks;
+	uint32_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
+	uint32_t newButtonsPressed;
 
 	this->ledsStart.display();
 	this->ledsCoin.display();
@@ -184,7 +190,7 @@ void CoinLedsAddon::process()
 	if (!(buttonsPressed && this->ready))
 		return;
 
-	if ((buttonsPressed & COIN_BUTTON_MASKS) && dpadPressed)
+	if (dpadPressed && (buttonsPressed & this->coinMasks))
 	{
 		if (this->debounce(&this->debounceMarqueeBrightness) || !this->ledsMarquee.isReady())
 			return;
@@ -195,21 +201,28 @@ void CoinLedsAddon::process()
 		return;
 	}
 
-	if (buttonsPressed == this->lastButtonsPressed)
+	newButtonsPressed = buttonsPressed ^ this->lastButtonsPressed;
+	if (!newButtonsPressed)
 		return;
-	
+
 	this->lastButtonsPressed = buttonsPressed;
+	
+	if ((newButtonsPressed & this->externalStartMask))
+	{
+		this->externalStartButtonEnabled = true;
+		gpio_put(this->externalStartPinOut, 1);
+		
+	}
+	else if (this->externalStartButtonEnabled)
+	{
+		this->externalStartButtonEnabled = false;
+		gpio_put(this->externalStartPinOut, 0);		
+	}
 
-	if ((buttonsPressed & COINLEDS_EXT_MASKS))
-		if (this->externalStartPin != 0xFF)
-			(buttonsPressed & COINLEDS_EXT_START_MASK) ?  gpio_put(this->externalStartPin, 1) : gpio_put(this->externalStartPin, 0);
-		if (this->externalCoinPin != 0xFF)
-			(buttonsPressed & COINLEDS_EXT_COIN_MASK) ?  gpio_put(this->externalCoinPin, 1) : gpio_put(this->externalCoinPin, 0);			
-
-	if (!this->ledsStart.isReady() || !this->ledsCoin.isReady() || dpadPressed)
+	if (dpadPressed || !this->ledsStart.isReady() || !this->ledsCoin.isReady())
 		return;
 
-	if (buttonsPressed & COIN_BUTTON_MASKS)
+	if ((buttonsPressed & this->coinMasks))
 	{				
 		if (this->creditCount == 0)
 		{
@@ -219,7 +232,7 @@ void CoinLedsAddon::process()
 		if (this->creditCount < 0xFF)
 			this->creditCount++;
 	}
-	else if (buttonsPressed & START_BUTTON_MASKS) 
+	else if ((buttonsPressed & this->startMasks))
 	{
 		if (this->creditCount > 0)
 			this->creditCount--;				

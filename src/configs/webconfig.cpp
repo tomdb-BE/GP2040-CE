@@ -1320,25 +1320,32 @@ std::string setAddonOptions()
 	docToValue(xbonePassthroughOptions.enabled, doc, "XBOnePassthroughAddonEnabled");
 
 	CoinLedsOptions& coinLedsOptions = Storage::getInstance().getAddonOptions().coinLedsOptions;
-	docToValue(coinLedsOptions.enabled, doc, "coinLedsAddonEnabled");	
+	docToValue(coinLedsOptions.enabled, doc, "CoinLedsAddonEnabled");
+	docToPin(coinLedsOptions.coinLedsStartPin1, doc, "coinLedsStartPin1");
+	docToPin(coinLedsOptions.coinLedsStartPin2, doc, "coinLedsStartPin2");
+	docToPin(coinLedsOptions.coinLedsStartPin3, doc, "coinLedsStartPin3");
+	docToPin(coinLedsOptions.coinLedsStartPin4, doc, "coinLedsStartPin4");
+	docToPin(coinLedsOptions.coinLedsCoinPin1, doc, "coinLedsCoinPin1");
+	docToPin(coinLedsOptions.coinLedsCoinPin2, doc, "coinLedsCoinPin2");
+	docToPin(coinLedsOptions.coinLedsCoinPin3, doc, "coinLedsCoinPin3");
+	docToPin(coinLedsOptions.coinLedsCoinPin4, doc, "coinLedsCoinPin4");
+	docToPin(coinLedsOptions.coinLedsExtStartPinOut, doc, "coinLedsExtStartPinOut");
+	docToPin(coinLedsOptions.coinLedsExtCoinPinOut, doc, "coinLedsExtCoinPinOut");
+	docToPin(coinLedsOptions.coinLedsMarqueePin, doc, "coinLedsMarqueePin");
+	docToValue(coinLedsOptions.coinLedsStartMask1, doc, "coinLedsStartMask1");
+	docToValue(coinLedsOptions.coinLedsStartMask2, doc, "coinLedsStartMask2");
+	docToValue(coinLedsOptions.coinLedsStartMask3, doc, "coinLedsStartMask3");
+	docToValue(coinLedsOptions.coinLedsStartMask4, doc, "coinLedsStartMask4");
+	docToValue(coinLedsOptions.coinLedsCoinMask1, doc, "coinLedsCoinMask1");
+	docToValue(coinLedsOptions.coinLedsCoinMask2, doc, "coinLedsCoinMask2");
+	docToValue(coinLedsOptions.coinLedsCoinMask3, doc, "coinLedsCoinMask3");
+	docToValue(coinLedsOptions.coinLedsCoinMask4, doc, "coinLedsCoinMask4");
+	docToValue(coinLedsOptions.coinLedsExtStartMask, doc, "coinLedsExtStartMask");	
+	docToValue(coinLedsOptions.coinLedsExtCoinMask, doc, "coinLedsExtCoinMask");	
+	docToValue(coinLedsOptions.coinLedsStartBrightness, doc, "coinLedsStartBrightness");
+	docToValue(coinLedsOptions.coinLedsCoinBrightness, doc, "coinLedsCoinBrightness");
+	docToValue(coinLedsOptions.coinLedsMarqueeBrightness, doc, "coinLedsMarqueeBrightness");
 
-/*
-	optional bool enabled = 1;
-	optional int32 coinLedsStartPin1 = 2 [default = -1];
-	optional int32 coinLedsStartPin2 = 3 [default = -1];
-	optional int32 coinLedsStartPin3 = 4 [default = -1];
-	optional int32 coinLedsStartPin4 = 5 [default = -1];
-	optional int32 coinLedsCoinPin1 = 6 [default = -1];
-	optional int32 coinLedsCoinPin2 = 7 [default = -1];
-	optional int32 coinLedsCoinPin3 = 8 [default = -1];
-	optional int32 coinLedsCoinPin4 = 9 [default = -1];
-	optional int32 coinLedsMarqueePin = 10 [default = -1];
-	optional int32 coinLedsExtStartPin = 11 [default = -1];
-	optional int32 coinLedsExtCoinPin = 12 [default = -1];
-	optional uint32 coinLedsStartBrightness = 13 [default = 100, (nanopb).max_count = 100];
-	optional uint32 coinLedsCoinBrightness = 14 [default = 100, (nanopb).max_count = 100];
-	optional uint32 coinLedsMarqueeBrightness = 15 [default = 100, (nanopb).max_count = 100];
-*/
 	Storage::getInstance().save();
 
 	return serialize_json(doc);
@@ -1741,6 +1748,31 @@ std::string getAddonOptions()
 	writeDoc(doc, "FocusModeAddonEnabled", focusModeOptions.enabled);
 
 	CoinLedsOptions& coinLedsOptions = Storage::getInstance().getAddonOptions().coinLedsOptions;
+	writeDoc(doc, "CoinLedsAddonEnabled", coinLedsOptions.enabled);
+	writeDoc(doc, "coinLedsStartPin1", cleanPin(coinLedsOptions.coinLedsStartPin1));
+	writeDoc(doc, "coinLedsStartPin2", cleanPin(coinLedsOptions.coinLedsStartPin2));
+	writeDoc(doc, "coinLedsStartPin3", cleanPin(coinLedsOptions.coinLedsStartPin3));
+	writeDoc(doc, "coinLedsStartPin4", cleanPin(coinLedsOptions.coinLedsStartPin4));
+	writeDoc(doc, "coinLedsCoinPin1", cleanPin(coinLedsOptions.coinLedsCoinPin1));
+	writeDoc(doc, "coinLedsCoinPin2", cleanPin(coinLedsOptions.coinLedsCoinPin2));
+	writeDoc(doc, "coinLedsCoinPin3", cleanPin(coinLedsOptions.coinLedsCoinPin3));
+	writeDoc(doc, "coinLedsCoinPin4", cleanPin(coinLedsOptions.coinLedsCoinPin4));
+	writeDoc(doc, "coinLedsExtStartPinOut", cleanPin(coinLedsOptions.coinLedsExtStartPinOut));
+	writeDoc(doc, "coinLedsExtCoinPinOut", cleanPin(coinLedsOptions.coinLedsExtCoinPinOut));
+	writeDoc(doc, "coinLedsMarqueePin", cleanPin(coinLedsOptions.coinLedsMarqueePin));
+	writeDoc(doc, "coinLedsStartMask1", coinLedsOptions.coinLedsStartMask1);
+	writeDoc(doc, "coinLedsStartMask2", coinLedsOptions.coinLedsStartMask2);
+	writeDoc(doc, "coinLedsStartMask3", coinLedsOptions.coinLedsStartMask3);
+	writeDoc(doc, "coinLedsStartMask4", coinLedsOptions.coinLedsStartMask4);
+	writeDoc(doc, "coinLedsCoinMask1", coinLedsOptions.coinLedsCoinMask1);
+	writeDoc(doc, "coinLedsCoinMask2", coinLedsOptions.coinLedsCoinMask2);
+	writeDoc(doc, "coinLedsCoinMask3", coinLedsOptions.coinLedsCoinMask3);
+	writeDoc(doc, "coinLedsCoinMask4", coinLedsOptions.coinLedsCoinMask4);
+	writeDoc(doc, "coinLedsExtStartMask", coinLedsOptions.coinLedsExtStartMask);
+	writeDoc(doc, "coinLedsExtCoinMask", coinLedsOptions.coinLedsExtCoinMask);	
+	writeDoc(doc, "coinLedsStartBrightness", coinLedsOptions.coinLedsStartBrightness);
+	writeDoc(doc, "coinLedsCoinBrightness", coinLedsOptions.coinLedsCoinBrightness);
+	writeDoc(doc, "coinLedsMarqueeBrightness", coinLedsOptions.coinLedsMarqueeBrightness);
 
 	return serialize_json(doc);
 }
