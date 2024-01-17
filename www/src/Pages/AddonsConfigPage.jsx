@@ -52,6 +52,14 @@ import CoinLeds, {
 	coinLedsScheme,
 	coinLedsState,
 } from '../Addons/CoinLeds';
+import PcControl, {
+	pcControlScheme,
+	pcControlState,
+} from '../Addons/PcControl';
+import Z680, {
+	z680Scheme,
+	z680State,
+} from '../Addons/Z680';
 
 const schema = yup.object().shape({
 	...analogScheme,
@@ -74,6 +82,8 @@ const schema = yup.object().shape({
 	...keyboardScheme,
 	...inputHistoryScheme,
 	...coinLedsScheme,
+	...pcControlScheme,
+	...z680Scheme,
 });
 
 const defaultValues = {
@@ -98,6 +108,8 @@ const defaultValues = {
 	...keyboardState,
 	...inputHistoryState,
 	...coinLedsState,
+	...pcControlState,
+	...z680State,
 };
 
 const ADDONS = [	
@@ -122,6 +134,8 @@ const ADDONS = [
 	Keyboard,
 	InputHistory,
 	CoinLeds,
+	PcControl,
+	Z680,
 ];
 
 const FormContext = ({ setStoredData }) => {

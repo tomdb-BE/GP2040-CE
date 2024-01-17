@@ -1346,6 +1346,21 @@ std::string setAddonOptions()
 	docToValue(coinLedsOptions.coinLedsCoinBrightness, doc, "coinLedsCoinBrightness");
 	docToValue(coinLedsOptions.coinLedsMarqueeBrightness, doc, "coinLedsMarqueeBrightness");
 
+	PcControlOptions& pcControlOptions = Storage::getInstance().getAddonOptions().pcControlOptions;
+	docToValue(pcControlOptions.enabled, doc, "PcControlAddonEnabled");
+	docToPin(pcControlOptions.pcControlPowerPin, doc, "pcControlPowerPin");
+	docToPin(pcControlOptions.pcControlPowerSwitchPin, doc, "pcControlPowerSwitchPin");
+	docToValue(pcControlOptions.pcControlButtonMask, doc, "pcControlButtonMask");
+
+	Z680Options& z680Options = Storage::getInstance().getAddonOptions().z680Options;
+	docToValue(z680Options.enabled, doc, "Z680AddonEnabled");
+	docToPin(z680Options.z680PowerPin, doc, "z680PowerPin");
+	docToPin(z680Options.z680VolumeUpPin, doc, "z680VolumeUpPin");
+	docToPin(z680Options.z680VolumeDownPin, doc, "z680VolumeDownPin");
+	docToPin(z680Options.z680MutePin, doc, "z680MutePin");
+	docToPin(z680Options.z680PowerStatePin, doc, "z680PowerStatePin");	
+	docToValue(z680Options.z680ButtonMask, doc, "z680ButtonMask");
+
 	Storage::getInstance().save();
 
 	return serialize_json(doc);
@@ -1773,6 +1788,21 @@ std::string getAddonOptions()
 	writeDoc(doc, "coinLedsStartBrightness", coinLedsOptions.coinLedsStartBrightness);
 	writeDoc(doc, "coinLedsCoinBrightness", coinLedsOptions.coinLedsCoinBrightness);
 	writeDoc(doc, "coinLedsMarqueeBrightness", coinLedsOptions.coinLedsMarqueeBrightness);
+
+	PcControlOptions& pcControlOptions = Storage::getInstance().getAddonOptions().pcControlOptions;
+	writeDoc(doc, "PcControlAddonEnabled", pcControlOptions.enabled);
+	writeDoc(doc, "pcControlPowerPin", cleanPin(pcControlOptions.pcControlPowerPin));
+	writeDoc(doc, "pcControlPowerSwitchPin", cleanPin(pcControlOptions.pcControlPowerSwitchPin));	
+	writeDoc(doc, "pcControlButtonMask", pcControlOptions.pcControlButtonMask);
+
+	Z680Options& z680Options = Storage::getInstance().getAddonOptions().z680Options;
+	writeDoc(doc, "Z680AddonEnabled", z680Options.enabled);
+	writeDoc(doc, "z680PowerPin", cleanPin(z680Options.z680PowerPin));
+	writeDoc(doc, "z680VolumeUpPin", cleanPin(z680Options.z680VolumeUpPin));
+	writeDoc(doc, "z680VolumeDownPin", cleanPin(z680Options.z680VolumeDownPin));
+	writeDoc(doc, "z680MutePin", cleanPin(z680Options.z680MutePin));
+	writeDoc(doc, "z680PowerStatePin", cleanPin(z680Options.z680PowerStatePin));
+	writeDoc(doc, "z680ButtonMask", z680Options.z680ButtonMask);
 
 	return serialize_json(doc);
 }

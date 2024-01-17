@@ -538,6 +538,25 @@ message CoinLedsOptions
 	optional uint32 coinLedsMarqueeBrightness = 25;
 }
 
+message PcControlOptions
+{
+		optional bool enabled = 1;
+		optional int32 pcControlPowerPin = 2;
+		optional int32 pcControlPowerSwitchPin = 3;
+		optional uint32 pcControlButtonMask = 4;
+}
+
+message Z680Options
+{
+		optional bool enabled = 1;
+		optional int32 z680PowerPin = 2;
+		optional int32 z680VolumeUpPin = 3;
+		optional int32 z680VolumeDownPin = 4;
+		optional int32 z680MutePin = 5;
+		optional int32 z680PowerStatePin = 6;
+		optional uint32 z680ButtonMask = 7;
+}
+
 message WiiOptions
 {
     message AnalogAxis
@@ -746,6 +765,8 @@ message AddonOptions
 	optional InputHistoryOptions inputHistoryOptions = 21;
 	optional XBOnePassthroughOptions xbonePassthroughOptions = 22;
 	optional CoinLedsOptions coinLedsOptions = 23;
+	optional PcControlOptions pcControlOptions = 24;
+	optional Z680Options z680Options = 25;
 }
 
 message MigrationHistory

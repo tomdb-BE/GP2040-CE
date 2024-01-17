@@ -25,6 +25,7 @@
 #include "addons/neopicoleds.h"
 #include "addons/playernum.h"
 #include "addons/pleds.h"
+#include "addons/pccontrol.h"
 #include "addons/ps4mode.h"
 #include "addons/pspassthrough.h"
 #include "addons/reverse.h"
@@ -34,6 +35,7 @@
 #include "addons/snes_input.h"
 #include "addons/input_macro.h"
 #include "addons/xbonepassthrough.h"
+#include "addons/z680.h"
 
 #include "CRC32.h"
 #include "FlashPROM.h"
@@ -589,6 +591,13 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
 
     // Coin Leds
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, enabled, COINLEDS_ENABLED);
+
+    // PC Control
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, enabled, PCCONTROL_ENABLED);
+
+    //Z680
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, enabled, Z680_ENABLED);
+    
 }
 
 
