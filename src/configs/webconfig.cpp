@@ -1253,7 +1253,6 @@ std::string setAddonOptions()
 	docToValue(onBoardLedOptions.enabled, doc, "BoardLedAddonEnabled");
 
     TurboOptions& turboOptions = Storage::getInstance().getAddonOptions().turboOptions;
-	docToPin(turboOptions.buttonPin, doc, "turboPin");
 	docToPin(turboOptions.ledPin, doc, "turboPinLED");
 	docToValue(turboOptions.shotCount, doc, "turboShotCount");
 	docToValue(turboOptions.shmupModeEnabled, doc, "shmupMode");
@@ -1689,7 +1688,6 @@ std::string getAddonOptions()
 	writeDoc(doc, "BoardLedAddonEnabled", onBoardLedOptions.enabled);
 
     const TurboOptions& turboOptions = Storage::getInstance().getAddonOptions().turboOptions;
-	writeDoc(doc, "turboPin", cleanPin(turboOptions.buttonPin));
 	writeDoc(doc, "turboPinLED", cleanPin(turboOptions.ledPin));
 	writeDoc(doc, "turboShotCount", turboOptions.shotCount);
 	writeDoc(doc, "shmupMode", turboOptions.shmupModeEnabled);
