@@ -22,17 +22,22 @@ export const pcControlScheme = {
 		.number()
 		.label('PC Control Power Switch Pin')
 		.validatePinWhenValue('PcControlAddonEnabled'),
-	pcControlButtonMask: yup
+	pcControlButtonMask1: yup
 		.number()
-		.label('PC Control Button Mask')
-		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),			
+		.label('PC Control Button Mask 1')
+		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),
+	pcControlButtonMask2: yup
+		.number()
+		.label('PC Control Button Mask 2')
+		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),		
 };
 
 export const pcControlState = {
 	PcControlAddonEnabled: 0,		
 	pcControlPowerPin: -1,
 	pcControlPowerSwitchPin: -1,
-	pcControlButtonMask: 0,
+	pcControlButtonMask1: 0,
+	pcControlButtonMask2: 0,
 };
 
 const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
@@ -46,21 +51,40 @@ const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
 				<Row className="mb-3">
 					<FormSelect
 						type="number"
-						label={t('AddonsConfig:pc-control-button-mask-label')}
-						name="pcControlButtonMask"
+						label={t('AddonsConfig:pc-control-button-mask-1-label')}
+						name="pcControlButtonMask1"
 						className="form-control-sm"
 						groupClassName="col-sm-3 mb-3"
-						value={values.pcControlButtonMask}
-						error={errors.pcControlButtonMask}
-						isInvalid={errors.pcControlButtonMask}
+						value={values.pcControlButtonMask1}
+						error={errors.pcControlButtonMask1}
+						isInvalid={errors.pcControlButtonMask1}
 						onChange={handleChange}
 					>
 						{BUTTON_MASKS.map((o, i) => (
-							<option key={`pcControlButtonMask-option-${i}`} value={o.value}>
+							<option key={`pcControlButtonMask-1-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
 						))}
-					</FormSelect>			
+					</FormSelect>
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:pc-control-button-mask-2-label')}
+						name="pcControlButtonMask2"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.pcControlButtonMask2}
+						error={errors.pcControlButtonMask2}
+						isInvalid={errors.pcControlButtonMask2}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`pcControlButtonMask-2-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>
+				</Row>
+				<Row className="mb-3">
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:pc-control-power-pin-label')}

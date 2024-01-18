@@ -88,7 +88,35 @@ const Z680 = ({ values, errors, handleChange, handleCheckbox }) => {
 						onChange={handleChange}
 						min={-1}
 						max={29}
-					/>								
+					/>
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:z680-power-state-pin-label')}
+						name="z680PowerStatePin"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.z680PowerStatePin}
+						error={errors.z680PowerStatePin}
+						isInvalid={errors.z680PowerStatePin}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>
+				</Row>
+				<Row className="mb-3">
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:z680-mute-pin-label')}
+						name="z680MutePin"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.z680MutePin}
+						error={errors.z680MutePin}
+						isInvalid={errors.z680MutePin}
+						onChange={handleChange}
+						min={-1}
+						max={29}
+					/>					
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:z680-volume-up-pin-label')}
@@ -114,33 +142,7 @@ const Z680 = ({ values, errors, handleChange, handleCheckbox }) => {
 						onChange={handleChange}
 						min={-1}
 						max={29}
-					/>
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:z680-mute-pin-label')}
-						name="z680MutePin"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.z680MutePin}
-						error={errors.z680MutePin}
-						isInvalid={errors.z680MutePin}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:z680-power-state-pin-label')}
-						name="z680PowerStatePin"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.z680PowerStatePin}
-						error={errors.z680PowerStatePin}
-						isInvalid={errors.z680PowerStatePin}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>										
+					/>							
 				</Row>		
 			</div>
 			<FormCheck

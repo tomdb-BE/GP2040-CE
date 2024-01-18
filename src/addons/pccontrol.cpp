@@ -1,26 +1,35 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: Copyright (c) 2024 Tom De Backer
+ */
+
 #include "addons/pccontrol.h"
 #include "storagemanager.h"
+#include "hardware/gpio.h"
+#include "helper.h"
 
 bool PcControlAddon::available() {
-	return Storage::getInstance().getAddonOptions().pcControlOptions.enabled;
+	const PcControlOptions& options = Storage::getInstance().getAddonOptions().pcControlOptions;
+	return options.enabled;	
 }
 
 void PcControlAddon::setup()
 {
-    PcControlOptions options = Storage::getInstance().getAddonOptions().pcControlOptions;
-    this->pinPower = options.pcControlPowerPin;
-    this->pinSwitch = options.pcControlPowerSwitchPin;
-    this->triggerButtonMask = options.pcControlButtonMask;
-    if (this->pinPower > 0) {
+    const PcControlOptions& options = Storage::getInstance().getAddonOptions().pcControlOptions;     
+    
+    if (isValidPin(options.pcControlPowerPin)) {
+        this->pinPower = options.pcControlPowerPin;
         gpio_init(this->pinPower);
         gpio_set_dir(this->pinPower, GPIO_OUT);
         gpio_put(this->pinPower, 1);
-        if (this->pinSwitch > 0) {
+        if (isValidPin(options.pcControlPowerSwitchPin)) {
+            this->pinSwitch = options.pcControlPowerSwitchPin;
             gpio_init(this->pinSwitch);
             gpio_set_dir(this->pinSwitch, GPIO_IN);
             gpio_pull_up(this->pinSwitch); 
         }
-        this->ready=true;
+        this->triggerButtonMask = options.pcControlButtonMask1 | options.pcControlButtonMask2;
+        this->ready=true;        
     }
 }
 
@@ -31,7 +40,7 @@ void PcControlAddon::process()
 
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (PCCONTROL_POWER_OFF_MASK);
+	uint16_t buttonsPressed = gamepad->state.buttons & this->triggerButtonMask;
 
     if (!buttonsPressed && this->triggeredButton) {
         this->triggeredButton = false;        

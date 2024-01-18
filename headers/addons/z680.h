@@ -11,26 +11,9 @@
 #ifndef Z680_ENABLED
 #define Z680_ENABLED 0
 #endif
-#ifndef Z680_POWER_PIN
-#define Z680_POWER_PIN -1
-#endif
-#ifndef Z680_STATE_PIN
-#define Z680_STATE_PIN -1
-#endif
-#ifndef Z680_VOLUME_UP_PIN
-#define Z680_VOLUME_UP_PIN -1
-#endif
-#ifndef Z680_VOLUME_DOWN_PIN
-#define Z680_VOLUME_DOWN_PIN -1
-#endif
-#ifndef Z680_MUTE_PIN
-#define Z680_MUTE_PIN -1
-#endif
+
 #ifndef Z680_VOLUME_STEP
 #define Z680_VOLUME_STEP 5
-#endif
-#ifndef Z680_CONTROL_TRIGGER
-#define Z680_CONTROL_TRIGGER GAMEPAD_MASK_S1
 #endif
 #ifndef Z680_CONTROL_POWER
 #define Z680_CONTROL_POWER GAMEPAD_MASK_LEFT
@@ -74,8 +57,8 @@ protected:
     void handeVolume(uint8_t amount, bool up = false);
     bool debounce(uint32_t * ptrDebounceTime);    
 	int32_t pinPower = -1;
-    int32_t pinVolumeA = -1;
-    int32_t pinVolumeB = -1;
+    int32_t pinVolumeUp = -1;
+    int32_t pinVolumeDown = -1;
     int32_t pinMute = -1;
     int32_t pinPowerState = -1;
     uint32_t triggerButtonMask = 0;   

@@ -6,12 +6,10 @@
 #ifndef _COINLEDS_H_
 #define _COINLEDS_H_
 
+#include <vector>
 #include "gpaddon.h"
-#include "BoardConfig.h"
-#include <stdint.h>
-#include "AnimationStation.hpp"
-#include "helper.h"
-#include "GamepadState.h"
+
+#define CoinLedsName "CoinLeds"
 
 #ifndef COINLEDS_ENABLED
 #define COINLEDS_ENABLED 0
@@ -22,75 +20,6 @@
 #ifndef COINLEDS_PWM_MAXLEVEL
 #define COINLEDS_PWM_MAXLEVEL 0xFFFF
 #endif
-#ifndef START1_BUTTON_MASK
-#define START1_BUTTON_MASK GAMEPAD_MASK_S2
-#endif
-#ifndef COIN1_BUTTON_MASK
-#define COIN1_BUTTON_MASK GAMEPAD_MASK_S1
-#endif
-#ifndef START2_BUTTON_MASK
-#define START2_BUTTON_MASK 0
-#endif
-#ifndef COIN2_BUTTON_MASK
-#define COIN2_BUTTON_MASK 0
-#endif
-#ifndef START3_BUTTON_MASK
-#define START3_BUTTON_MASK 0
-#endif
-#ifndef COIN3_BUTTON_MASK
-#define COIN3_BUTTON_MASK 0
-#endif
-#ifndef START4_BUTTON_MASK
-#define START4_BUTTON_MASK 0
-#endif
-#ifndef COIN4_BUTTON_MASK
-#define COIN4_BUTTON_MASK 0
-#endif
-#ifndef START_BUTTON_MASKS
-#define START_BUTTON_MASKS START1_BUTTON_MASK | START2_BUTTON_MASK | START3_BUTTON_MASK | START4_BUTTON_MASK
-#endif
-#ifndef COIN_BUTTON_MASKS
-#define COIN_BUTTON_MASKS COIN1_BUTTON_MASK | COIN2_BUTTON_MASK | COIN3_BUTTON_MASK | COIN4_BUTTON_MASK
-#endif
-#ifndef COINLEDS_START_PIN1
-#define COINLEDS_START_PIN1 -1
-#endif
-#ifndef COINLEDS_COIN_PIN1
-#define COINLEDS_COIN_PIN1 -1
-#endif
-#ifndef COINLEDS_START_PIN2
-#define COINLEDS_START_PIN2 -1
-#endif
-#ifndef COINLEDS_COIN_PIN2
-#define COINLEDS_COIN_PIN2 -1
-#endif
-#ifndef COINLEDS_START_PIN3
-#define COINLEDS_START_PIN3 -1
-#endif
-#ifndef COINLEDS_COIN_PIN3
-#define COINLEDS_COIN_PIN3 -1
-#endif
-#ifndef COINLEDS_START_PIN4
-#define COINLEDS_START_PIN4 -1
-#endif
-#ifndef COINLEDS_COIN_PIN4
-#define COINLEDS_COIN_PIN4 -1
-#endif
-#ifndef COINLEDS_MARQUEE_PIN
-#define COINLEDS_MARQUEE_PIN -1
-#endif
-#ifndef COINLEDS_EXT_START_PIN_OUT
-#define COINLEDS_EXT_START_PIN_OUT -1
-#endif
-#ifndef COINLEDS_EXT_COIN_PIN_OUT
-#define COINLEDS_EXT_COIN_PIN_OUT -1
-#endif
-#ifndef COINLEDS_EXT_START_MASK
-#define COINLEDS_EXT_START_MASK 0
-#endif
-#ifndef COINLEDS_EXT_COIN_MASK
-#define COINLEDS_EXT_COIN_MASK 0
-#endif
 #ifndef COINLEDS_BRIGHTNESS_STEP
 #define COINLEDS_BRIGHTNESS_STEP 5
 #endif
@@ -98,12 +27,8 @@
 #define COINLEDS_DEBOUNCE_MILLIS 50
 #endif
 
-static const uint8_t COINLEDS_STATE_LED1 = (1 << 0);
-static const uint8_t COINLEDS_STATE_LED2 = (1 << 1);
-static const uint8_t COINLEDS_STATE_LED3 = (1 << 2);
-static const uint8_t COINLEDS_STATE_LED4 = (1 << 3);
-static const uint8_t COINLEDS_STATE_ALL_ON  = 0xFF;
-static const uint8_t COINLEDS_STATE_ALL_OFF = 0;
+#define COINLEDS_STATE_ALL_ON  0xFF
+#define COINLEDS_STATE_ALL_OFF 0
 
 typedef enum : uint8_t
 {
@@ -157,13 +82,10 @@ static const CoinLedsAnimation COINLEDS_FADE_ALL {
 	speed: COINLEDS_SPEED_LUDICROUS
 };
 
-
-#define CoinLedsAddonName "COINLEDSADDON"
-
 class CoinLeds
 {
 public:	
-	std::vector<uint> initialize(std::vector<uint> slices, int32_t * pins, uint8_t mBrightness, CoinLedsAnimation initAnimation);
+	CoinLeds(int32_t * pins, uint8_t mBrightness, CoinLedsAnimation initAnimation);
 	void display();
 	void update() {this->nextAnimationTime = make_timeout_time_ms(0);}
 	void setAnimation(CoinLedsAnimation newAnimation) { this->animation = newAnimation; this->update(); }
@@ -198,12 +120,12 @@ public:
 	virtual void setup();
 	virtual void preprocess() {}
 	virtual void process();
-	virtual std::string name() { return CoinLedsAddonName; }	
+	virtual std::string name() { return CoinLedsName; }	
 private:	
-	CoinLeds ledsStart;
-	CoinLeds ledsCoin;
-	CoinLeds ledsMarquee;
-	bool debounce(uint32_t * ptrDebounceTime);
+	CoinLeds* ledsStart = nullptr;
+	CoinLeds* ledsCoin = nullptr;;
+	CoinLeds* ledsMarquee = nullptr;
+	bool debounce(uint32_t* ptrDebounceTime);
 	bool externalStartButtonEnabled = false;
 	bool externalCoinButtonEnabled = false;
 	uint8_t creditCount = 0;	
@@ -212,10 +134,10 @@ private:
 	uint32_t allMasks = 0;
 	uint32_t startMasks = 0;
 	uint32_t coinMasks = 0;	
-	uint32_t externalStartMask = COINLEDS_EXT_START_MASK;
-	uint32_t externalCoinMask = COINLEDS_EXT_COIN_MASK;
-	int32_t externalStartPinOut = COINLEDS_EXT_START_PIN_OUT;	
-	int32_t externalCoinPinOut = COINLEDS_EXT_COIN_PIN_OUT;
+	uint32_t externalStartMask = 0;
+	uint32_t externalCoinMask = 0;
+	int32_t externalStartPinOut = -1;	
+	int32_t externalCoinPinOut = -1;
 	bool ready = false;
 };
 

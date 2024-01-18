@@ -1,40 +1,50 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: Copyright (c) 2024 Tom De Backer
+ */
+
 #include "addons/z680.h"
 #include "storagemanager.h"
+#include "hardware/gpio.h"
+#include "helper.h"
 
 bool Z680Addon::available() {
-    return Storage::getInstance().getAddonOptions().z680Options.enabled;
+    const Z680Options& options = Storage::getInstance().getAddonOptions().z680Options;
+    return options.enabled;
 }
 
 void Z680Addon::setup()
 {
-    Z680Options options = Storage::getInstance().getAddonOptions().z680Options;
-    this->pinPower = options.z680PowerPin;
-    this->pinVolumeA = options.z680VolumeUpPin;
-    this->pinVolumeB = options.z680VolumeDownPin;
-    this->pinMute = options.z680MutePin;
-    this->pinPowerState = options.z680PowerStatePin;
-    this->triggerButtonMask = options.z680ButtonMask;
-    if (this->pinPower > 0) {
+    const Z680Options& options = Storage::getInstance().getAddonOptions().z680Options;            
+    
+    if (isValidPin(options.z680PowerPin)) {
+        this->pinPower = options.z680PowerPin;
         gpio_init(this->pinPower);
         gpio_set_dir(this->pinPower, GPIO_OUT);
     }
-    if (this->pinVolumeA > 0) {
-        gpio_init(this->pinVolumeA);
-        gpio_set_dir(this->pinVolumeA, GPIO_OUT);
+    if (isValidPin(options.z680VolumeUpPin)) {
+        this->pinVolumeUp = options.z680VolumeUpPin;
+        gpio_init(this->pinVolumeUp);
+        gpio_set_dir(this->pinVolumeUp, GPIO_OUT);
     }
-    if (this->pinVolumeB > 0) {
-        gpio_init(this->pinVolumeB);
-        gpio_set_dir(this->pinVolumeB, GPIO_OUT);
+    if (isValidPin(options.z680VolumeDownPin)) {
+        this->pinVolumeDown = options.z680VolumeDownPin;
+        gpio_init(this->pinVolumeDown);
+        gpio_set_dir(this->pinVolumeDown, GPIO_OUT);
     }
-    if (this->pinMute > 0) {
+    if (isValidPin(options.z680MutePin)) {
+        this->pinMute = options.z680MutePin;
         gpio_init(this->pinMute);
         gpio_set_dir(this->pinMute, GPIO_OUT);
     }
-    if (this->pinPowerState > 0) {
+    if (isValidPin(options.z680PowerStatePin)) {
+        this->pinPowerState = options.z680PowerStatePin;
         gpio_init(this->pinPowerState);
         gpio_set_dir(this->pinPowerState, GPIO_IN);
         gpio_pull_up(this->pinPowerState);
     }
+
+    this->triggerButtonMask = options.z680ButtonMask;
     this->ready = true;
 }
 
@@ -45,19 +55,19 @@ void Z680Addon::process()
 
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & (Z680_CONTROL_TRIGGER);
-	uint16_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
+	uint32_t buttonsPressed = gamepad->state.buttons & this->triggerButtonMask;
+	uint32_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
-    if (!(buttonsPressed && dpadPressed))
-        return;
+    if (!(buttonsPressed && dpadPressed)) return;
 
-	if ((dpadPressed & Z680_CONTROL_VOLUME))
-	{
+	if ((dpadPressed) & (Z680_CONTROL_VOLUME))
+    {
 		if (this->debounce(&this->debounceVolume))
 			return;
 		(dpadPressed & Z680_CONTROL_VOLUME_UP) ? this->volumeUp() : this->volumeDown();
 		return;
 	}
+
 
     if (this->lastDpadPressed == dpadPressed)
         return;
@@ -116,7 +126,7 @@ void Z680Addon::mute()
 
 void Z680Addon::handeVolume(uint8_t amount, bool up)
 {
-    if (this->pinVolumeA == 0xFF || this->pinVolumeB == 0xFF)
+    if (this->pinVolumeUp < 0 || this->pinVolumeDown < 0)
         return;
 
     if (!this->powerOn())
@@ -125,8 +135,8 @@ void Z680Addon::handeVolume(uint8_t amount, bool up)
     bool pinValue = true; 
 
     for (uint8_t i = 0; i < amount; i++) {
-		gpio_put(this->pinVolumeA, pinValue);	        
-		gpio_put(this->pinVolumeB, pinValue^up);
+		gpio_put(this->pinVolumeUp, pinValue);	        
+		gpio_put(this->pinVolumeDown, pinValue^up);
         pinValue ^= true;
         sleep_ms(10);
     }

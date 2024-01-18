@@ -11,15 +11,7 @@
 #ifndef PCCONTROL_ENABLED
 #define PCCONTROL_ENABLED 0
 #endif
-#ifndef PCCONTROL_POWER_PIN
-#define PCCONTROL_POWER_PIN -1
-#endif
-#ifndef PCCONTROL_SWITCH_PIN
-#define PCCONTROL_SWITCH_PIN -1
-#endif
-#ifndef PCCONTROL_POWER_OFF_MASK
-#define PCCONTROL_POWER_OFF_MASK GAMEPAD_MASK_S1 & GAMEPAD_MASK_S2
-#endif
+
 #ifndef PCCONTROL_POWER_TOGGLE_MILLIS
 #define PCCONTROL_POWER_TOGGLE_MILLIS 100
 #endif
@@ -29,7 +21,6 @@
 #ifndef PCCONTROL_TIMEOUT_SWITCH_MILLIS
 #define PCCONTROL_TIMEOUT_SWITCH_MILLIS 5000
 #endif
-
 
 #define PcControlName "PcControl"
 
@@ -48,11 +39,11 @@ protected:
 	void setPower(uint16_t pressLength);
 	absolute_time_t timeoutButtons;
 	absolute_time_t timeoutButtonsForce;
-	absolute_time_t timeoutSwitch;	    
-	uint32_t lastButtonsPressed = 0;
+	absolute_time_t timeoutSwitch;	    	
     int32_t pinPower = -1;
     int32_t pinSwitch = -1;
 	uint32_t triggerButtonMask = 0;
+	uint32_t lastButtonsPressed = 0;
 	bool triggeredButton = false;
 	bool triggeredSwitch = false;
 	bool timedOutSwitch = false;

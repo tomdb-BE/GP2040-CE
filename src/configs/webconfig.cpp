@@ -1349,7 +1349,8 @@ std::string setAddonOptions()
 	docToValue(pcControlOptions.enabled, doc, "PcControlAddonEnabled");
 	docToPin(pcControlOptions.pcControlPowerPin, doc, "pcControlPowerPin");
 	docToPin(pcControlOptions.pcControlPowerSwitchPin, doc, "pcControlPowerSwitchPin");
-	docToValue(pcControlOptions.pcControlButtonMask, doc, "pcControlButtonMask");
+	docToValue(pcControlOptions.pcControlButtonMask1, doc, "pcControlButtonMask1");
+	docToValue(pcControlOptions.pcControlButtonMask2, doc, "pcControlButtonMask2");
 
 	Z680Options& z680Options = Storage::getInstance().getAddonOptions().z680Options;
 	docToValue(z680Options.enabled, doc, "Z680AddonEnabled");
@@ -1791,7 +1792,8 @@ std::string getAddonOptions()
 	writeDoc(doc, "PcControlAddonEnabled", pcControlOptions.enabled);
 	writeDoc(doc, "pcControlPowerPin", cleanPin(pcControlOptions.pcControlPowerPin));
 	writeDoc(doc, "pcControlPowerSwitchPin", cleanPin(pcControlOptions.pcControlPowerSwitchPin));	
-	writeDoc(doc, "pcControlButtonMask", pcControlOptions.pcControlButtonMask);
+	writeDoc(doc, "pcControlButtonMask1", pcControlOptions.pcControlButtonMask1);
+	writeDoc(doc, "pcControlButtonMask2", pcControlOptions.pcControlButtonMask2);
 
 	Z680Options& z680Options = Storage::getInstance().getAddonOptions().z680Options;
 	writeDoc(doc, "Z680AddonEnabled", z680Options.enabled);
