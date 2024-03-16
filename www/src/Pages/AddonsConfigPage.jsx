@@ -11,6 +11,7 @@ import { AppContext } from '../Contexts/AppContext';
 
 import WebApi from '../Services/WebApi';
 import Analog, { analogScheme, analogState } from '../Addons/Analog';
+import Analog1256, { analog1256Scheme, analog1256State } from '../Addons/Analog1256';
 import Bootsel, { bootselScheme, bootselState } from '../Addons/Bootsel';
 import Buzzer, { buzzerScheme, buzzerState } from '../Addons/Buzzer';
 import DualDirection, {
@@ -63,6 +64,7 @@ import Z680, {
 
 const schema = yup.object().shape({
 	...analogScheme,
+	...analog1256Scheme,
 	...bootselScheme,
 	...onBoardLedScheme,
 	...turboScheme,
@@ -88,6 +90,7 @@ const schema = yup.object().shape({
 
 const defaultValues = {
 	...analogState,
+	...analog1256State,
 	...bootselState,
 	...onBoardLedState,
 	...turboState,
@@ -120,6 +123,7 @@ const ADDONS = [
 	Joystick,
 	Reverse,
 	I2CAnalog1219,
+	Analog1256,
 	DualDirection,
 	Tilt,
 	Buzzer,

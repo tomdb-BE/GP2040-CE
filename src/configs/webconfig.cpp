@@ -890,6 +890,10 @@ std::string setCustomTheme()
 	options.customThemeA1Pressed	= readDocDefaultToZero("A1", "d");
 	options.customThemeA2Pressed	= readDocDefaultToZero("A2", "d");
 
+	uint32_t pressCooldown = 0;
+	readDoc(pressCooldown, doc, "buttonPressColorCooldownTimeInMs");
+	options.buttonPressColorCooldownTimeInMs = pressCooldown;
+
 	AnimationStation::SetOptions(options);
 	AnimationStore.save();
 
@@ -938,6 +942,7 @@ std::string getCustomTheme()
 	writeDoc(doc, "L3", "d", options.customThemeL3Pressed);
 	writeDoc(doc, "R3", "u", options.customThemeR3);
 	writeDoc(doc, "R3", "d", options.customThemeR3Pressed);
+	writeDoc(doc, "buttonPressColorCooldownTimeInMs", options.buttonPressColorCooldownTimeInMs);
 
 	return serialize_json(doc);
 }
@@ -1317,6 +1322,14 @@ std::string setAddonOptions()
 
 	XBOnePassthroughOptions& xbonePassthroughOptions = Storage::getInstance().getAddonOptions().xbonePassthroughOptions;
 	docToValue(xbonePassthroughOptions.enabled, doc, "XBOnePassthroughAddonEnabled");
+
+	AnalogADS1256Options& ads1256Options = Storage::getInstance().getAddonOptions().analogADS1256Options;
+	docToValue(ads1256Options.enabled, doc, "Analog1256Enabled");
+	docToValue(ads1256Options.spiBlock, doc, "analog1256Block");
+	docToValue(ads1256Options.csPin, doc, "analog1256CsPin");
+	docToValue(ads1256Options.drdyPin, doc, "analog1256DrdyPin");
+	docToValue(ads1256Options.avdd, doc, "analog1256AnalogMax");
+	docToValue(ads1256Options.enableTriggers, doc, "analog1256EnableTriggers");
 
 	CoinLedsOptions& coinLedsOptions = Storage::getInstance().getAddonOptions().coinLedsOptions;
 	docToValue(coinLedsOptions.enabled, doc, "CoinLedsAddonEnabled");
@@ -1753,6 +1766,14 @@ std::string getAddonOptions()
 
 	XBOnePassthroughOptions& xbonePassthroughOptions = Storage::getInstance().getAddonOptions().xbonePassthroughOptions;
 	writeDoc(doc, "XBOnePassthroughAddonEnabled", xbonePassthroughOptions.enabled);
+
+	AnalogADS1256Options& ads1256Options = Storage::getInstance().getAddonOptions().analogADS1256Options;
+	writeDoc(doc, "Analog1256Enabled", ads1256Options.enabled);
+	writeDoc(doc, "analog1256Block", ads1256Options.spiBlock);
+	writeDoc(doc, "analog1256CsPin", ads1256Options.csPin);
+	writeDoc(doc, "analog1256DrdyPin", ads1256Options.drdyPin);
+	writeDoc(doc, "analog1256AnalogMax", ads1256Options.avdd);
+	writeDoc(doc, "analog1256EnableTriggers", ads1256Options.enableTriggers);
 
 	const FocusModeOptions& focusModeOptions = Storage::getInstance().getAddonOptions().focusModeOptions;
 	writeDoc(doc, "focusModePin", cleanPin(focusModeOptions.pin));
