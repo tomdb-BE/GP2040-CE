@@ -778,9 +778,9 @@ message AddonOptions
 	optional InputHistoryOptions inputHistoryOptions = 21;
 	optional XBOnePassthroughOptions xbonePassthroughOptions = 22;
 	optional AnalogADS1256Options analogADS1256Options = 23;
-	optional CoinLedsOptions coinLedsOptions = 23;
-	optional PcControlOptions pcControlOptions = 24;
-	optional Z680Options z680Options = 25;
+	optional CoinLedsOptions coinLedsOptions = 24;
+	optional PcControlOptions pcControlOptions = 25;
+	optional Z680Options z680Options = 26;
 }
 
 message MigrationHistory

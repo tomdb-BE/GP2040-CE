@@ -728,8 +728,7 @@ void gpioMappingsMigrationCore(Config& config)
     PeripheralOptions& peripheralOptions = config.peripheralOptions;
     TiltOptions& tiltOptions = config.addonOptions.tiltOptions;
     KeyboardHostOptions& keyboardHostOptions = config.addonOptions.keyboardHostOptions;
-    PSPassthroughOptions& psPassthroughOptions = config.addonOptions.psPassthroughOptions;
-    TurboOptions& turboOptions = config.addonOptions.turboOptions;
+    PSPassthroughOptions& psPassthroughOptions = config.addonOptions.psPassthroughOptions;    
 
     const auto gamepadMaskToGpioAction = [&](Mask_t gpMask) -> GpioAction
     {
@@ -949,7 +948,7 @@ void gpioMappingsMigrationCore(Config& config)
                                                GPIO_PIN_27, GPIO_PIN_28, GPIO_PIN_29};
     
     // If we didn't import from protobuf, import from boardconfig
-    for(int i = 0; i < NUM_BANK0_GPIOS; i++) {
+    for(unsigned int i = 0; i < NUM_BANK0_GPIOS; i++) {
         fromBoardConfig(i, boardConfig[i]);
     }
 
