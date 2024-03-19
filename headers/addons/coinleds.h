@@ -126,8 +126,6 @@ private:
 	CoinLeds* ledsCoin = nullptr;;
 	CoinLeds* ledsMarquee = nullptr;
 	bool debounce(uint32_t* ptrDebounceTime);
-	bool externalStartButtonEnabled = false;
-	bool externalCoinButtonEnabled = false;
 	uint8_t creditCount = 0;	
 	uint32_t debounceMarqueeBrightness = 0;	
 	uint32_t lastButtonsPressed = 0;
