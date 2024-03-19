@@ -51,6 +51,7 @@ void PcControlAddon::process()
                             && !(gamepad->state.buttons & this->pcControlSwitchMask)) {    
         if (this->triggered && time_reached(this->timeoutButtons))
             this->togglePower();
+        else this->triggered = false;
         return;
     }
   
