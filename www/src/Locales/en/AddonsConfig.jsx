@@ -183,7 +183,7 @@ export default {
 	'coin-leds-marquee-brightness-label': 'Marquee LED Brightness',
 	'pc-control-header-text': 'PC Power Control',
 	'pc-control-power-pin-label': 'Power Pin',
-	'pc-control-power-switch-pin-label': 'Power Switch Pin',
+	'pc-control-switch-mask-label': 'Power Switch Button',
 	'pc-control-button-mask-1-label': 'Trigger Button 1',
 	'pc-control-button-mask-2-label': 'Trigger Button 2',
 	'z680-header-text': 'Z680',

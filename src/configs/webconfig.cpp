@@ -1361,7 +1361,7 @@ std::string setAddonOptions()
 	PcControlOptions& pcControlOptions = Storage::getInstance().getAddonOptions().pcControlOptions;
 	docToValue(pcControlOptions.enabled, doc, "PcControlAddonEnabled");
 	docToPin(pcControlOptions.pcControlPowerPin, doc, "pcControlPowerPin");
-	docToPin(pcControlOptions.pcControlPowerSwitchPin, doc, "pcControlPowerSwitchPin");
+	docToValue(pcControlOptions.pcControlSwitchMask, doc, "pcControlSwitchMask");
 	docToValue(pcControlOptions.pcControlButtonMask1, doc, "pcControlButtonMask1");
 	docToValue(pcControlOptions.pcControlButtonMask2, doc, "pcControlButtonMask2");
 
@@ -1812,7 +1812,7 @@ std::string getAddonOptions()
 	PcControlOptions& pcControlOptions = Storage::getInstance().getAddonOptions().pcControlOptions;
 	writeDoc(doc, "PcControlAddonEnabled", pcControlOptions.enabled);
 	writeDoc(doc, "pcControlPowerPin", cleanPin(pcControlOptions.pcControlPowerPin));
-	writeDoc(doc, "pcControlPowerSwitchPin", cleanPin(pcControlOptions.pcControlPowerSwitchPin));	
+	writeDoc(doc, "pcControlSwitchMask", pcControlOptions.pcControlSwitchMask);	
 	writeDoc(doc, "pcControlButtonMask1", pcControlOptions.pcControlButtonMask1);
 	writeDoc(doc, "pcControlButtonMask2", pcControlOptions.pcControlButtonMask2);
 

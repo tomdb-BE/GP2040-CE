@@ -509,7 +509,7 @@ app.get('/api/getAddonsOptions', (req, res) => {
 		coinLedsMarqueeBrightness: 100,
 		PcControlAddonEnabled: 0,		
 		pcControlPowerPin: -1,
-		pcControlPowerSwitchPin: -1,
+		pcControlSwitchMask: 0,
 		pcControlButtonMask1: 0,
 		pcControlButtonMask2: 0,
 		Z680AddonEnabled: 0,		

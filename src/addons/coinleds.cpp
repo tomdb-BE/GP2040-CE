@@ -170,22 +170,22 @@ void CoinLedsAddon::setup() {
 }
 
 void CoinLedsAddon::process()
-{
-    Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
+{	
+	if (!this->ready)
+		return;
     
+	Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();
 	uint32_t buttonsPressed = gamepad->state.buttons & this->allMasks;
+	uint32_t newButtonsPressed = buttonsPressed ^ this->lastButtonsPressed;
 	uint32_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
-	uint32_t newButtonsPressed;
 
 	this->ledsStart->display();
 	this->ledsCoin->display();
 	this->ledsMarquee->display();
 
-	if (!this->ready)
-		return;
-
 	if (dpadPressed && (buttonsPressed & this->coinMasks))
 	{
+		this->lastButtonsPressed = buttonsPressed;
 		if (this->debounce(&this->debounceMarqueeBrightness) || !this->ledsMarquee->isReady())
 			return;
 		if (dpadPressed & GAMEPAD_MASK_UP)
@@ -195,29 +195,27 @@ void CoinLedsAddon::process()
 		return;
 	}
 
-	newButtonsPressed = buttonsPressed ^ this->lastButtonsPressed;
-	if (!newButtonsPressed)
-		return;
-
-	if (buttonsPressed & this->externalStartMask)
+	if (!this->externalStartButtonPressed && (newButtonsPressed & this->externalStartMask))
 	{
-		if (newButtonsPressed & this->externalStartMask)		
-			gpio_put(this->externalStartPinOut, 0);		
+		this->externalStartButtonPressed = true;
+		gpio_put(this->externalStartPinOut, 0);		
 	}					
-	else if (this->lastButtonsPressed & this->externalStartMask)
-	{		
+	else if (this->externalStartButtonPressed && !(buttonsPressed & this->externalStartMask))
+	{
+		this->externalStartButtonPressed = false;		
 		gpio_put(this->externalStartPinOut, 1);		
 	}
 
-	if (buttonsPressed & this->externalCoinMask)
+	if (!this->externalCoinButtonPressed && (newButtonsPressed & this->externalCoinMask))
 	{
-		if (newButtonsPressed & this->externalCoinMask)
-			gpio_put(this->externalCoinPinOut, 0);		
+		this->externalCoinButtonPressed = true;
+		gpio_put(this->externalCoinPinOut, 0);
 	}					
-	else if (this->lastButtonsPressed & this->externalCoinMask)
+	else if (this->externalCoinButtonPressed && !(buttonsPressed & this->externalCoinMask))
 	{		
+		this->externalCoinButtonPressed = false;
 		gpio_put(this->externalCoinPinOut, 1);		
-	}	
+	}
 
 	this->lastButtonsPressed = buttonsPressed;
 

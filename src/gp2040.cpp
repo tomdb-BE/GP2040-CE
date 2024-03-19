@@ -1,5 +1,6 @@
 // GP2040 includes
 #include "gp2040.h"
+#include "coinleds.h"
 #include "helper.h"
 #include "system.h"
 #include "enums.pb.h"
@@ -29,6 +30,9 @@
 #include "addons/wiiext.h"
 #include "addons/input_macro.h"
 #include "addons/snes_input.h"
+#include "addons/coinleds.h"
+#include "addons/pccontrol.h"
+#include "addons/z680.h"
 
 // Pico includes
 #include "pico/bootrom.h"
@@ -100,6 +104,9 @@ void GP2040::setup() {
 	addons.LoadAddon(new PlayerNumAddon(), CORE0_USBREPORT);
 	addons.LoadAddon(new SliderSOCDInput(), CORE0_INPUT);
 	addons.LoadAddon(new TiltInput(), CORE0_INPUT);
+	addons.LoadAddon(new CoinLedsAddon(), CORE0_INPUT);
+	addons.LoadAddon(new PcControlAddon(), CORE0_INPUT);
+	addons.LoadAddon(new Z680Addon(), CORE0_INPUT);
 
 	// Input override addons
 	addons.LoadAddon(new ReverseInput(), CORE0_INPUT);

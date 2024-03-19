@@ -7,6 +7,7 @@
 #include "storagemanager.h"
 #include "hardware/gpio.h"
 #include "helper.h"
+#include <cstdint>
 
 bool PcControlAddon::available() {
 	const PcControlOptions& options = Storage::getInstance().getAddonOptions().pcControlOptions;
@@ -21,15 +22,10 @@ void PcControlAddon::setup()
         this->pinPower = options.pcControlPowerPin;
         gpio_init(this->pinPower);
         gpio_set_dir(this->pinPower, GPIO_OUT);
-        gpio_put(this->pinPower, 1);
-        if (isValidPin(options.pcControlPowerSwitchPin)) {
-            this->pinSwitch = options.pcControlPowerSwitchPin;
-            gpio_init(this->pinSwitch);
-            gpio_set_dir(this->pinSwitch, GPIO_IN);
-            gpio_pull_up(this->pinSwitch); 
-        }
-        this->triggerButtonMask = options.pcControlButtonMask1 | options.pcControlButtonMask2;
-        this->ready=true;        
+        gpio_put(this->pinPower, 0);
+        this->pcControlButtonMask = options.pcControlButtonMask1 | options.pcControlButtonMask2;        
+        this->pcControlSwitchMask = options.pcControlSwitchMask;
+        this->ready = true;
     }
 }
 
@@ -40,56 +36,40 @@ void PcControlAddon::process()
 
     Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();	
     
-	uint16_t buttonsPressed = gamepad->state.buttons & this->triggerButtonMask;
+    if (this->triggeredSwitchActive)
+    {
+        if (!time_reached(this->timeoutSwitchActive))
+            return;
+        gpio_put(this->pinPower, 0);
+        this->triggered = false;            
+        this->triggeredSwitchActive = false;        
+        return;
+    }   
 
-    if (!buttonsPressed && this->triggeredButton) {
-        this->triggeredButton = false;        
-        if (time_reached(this->timeoutButtons))
+    // If assigned buttons and switch NOT active
+	if (((gamepad->state.buttons & this->pcControlButtonMask) != this->pcControlButtonMask) 
+                            && !(gamepad->state.buttons & this->pcControlSwitchMask)) {    
+        if (this->triggered && time_reached(this->timeoutButtons))
             this->togglePower();
         return;
     }
-    if (buttonsPressed) {      
-        if (!this->triggeredButton) {
-            this->timeoutButtons = make_timeout_time_ms(PCCONTROL_POWER_TOGGLE_MILLIS);
-            this->timeoutButtonsForce = make_timeout_time_ms(PCCONTROL_POWER_FORCE_OFF_MILLIS);
-            this->triggeredButton = true;
-            return;
-        }
-        if (time_reached(this->timeoutButtons))
-            this->forcePowerOff();
-        return;  
-    }
-
-    
-    if (this->pinSwitch == 0xFF)
-        return;
-
-    if (!gpio_get(this->pinSwitch)) {                
-        if (this->triggeredSwitch) {        
-            if (time_reached(this->timeoutSwitch) && !this->timedOutSwitch) {
-                gpio_put(this->pinPower, 1);
-                this->timedOutSwitch = true;
-            }
-			return;
-        }
-        this->triggeredSwitch = true;
-        this->timeoutSwitch = make_timeout_time_ms(PCCONTROL_TIMEOUT_SWITCH_MILLIS);
-        gpio_put(this->pinPower, 0);
+  
+    if (!this->triggered) {
+        this->triggered = true;
+        this->timeoutButtons = make_timeout_time_ms(PCCONTROL_BUTTONS_TOGGLE_MILLIS);
+        this->timeoutButtonsForce = make_timeout_time_ms(PCCONTROL_BUTTONS_FORCE_MILLIS);            
         return;
     }
 
-    if (this->triggeredSwitch)
-    {
-        this->triggeredSwitch = false;
-        this->timedOutSwitch = false;
-        gpio_put(this->pinPower, 1);
-    }   
+    if (time_reached(this->timeoutButtonsForce))
+        this->forcePowerOff();             
 }
 
-void PcControlAddon::setPower(uint16_t pressLength) {
-    if (!this->ready || this->triggeredSwitch)
+void PcControlAddon::setPower(uint32_t pressLength) {
+    if (!this->ready || this->triggeredSwitchActive)
         return;    
-    gpio_put(this->pinPower, 0);
-    sleep_ms(pressLength);
-    gpio_put(this->pinPower, 1);    
+    this->triggeredSwitchActive = true;
+    this->triggered = false;
+    gpio_put(this->pinPower, 1);
+    this->timeoutSwitchActive = make_timeout_time_ms(pressLength);
 }

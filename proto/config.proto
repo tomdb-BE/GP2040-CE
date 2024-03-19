@@ -554,7 +554,7 @@ message PcControlOptions
 {
 		optional bool enabled = 1;
 		optional int32 pcControlPowerPin = 2;
-		optional int32 pcControlPowerSwitchPin = 3;
+		optional uint32 pcControlSwitchMask = 3;
 		optional uint32 pcControlButtonMask1 = 4;
 		optional uint32 pcControlButtonMask2 = 5;
 }

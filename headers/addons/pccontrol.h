@@ -13,13 +13,16 @@
 #endif
 
 #ifndef PCCONTROL_POWER_TOGGLE_MILLIS
-#define PCCONTROL_POWER_TOGGLE_MILLIS 100
+#define PCCONTROL_POWER_TOGGLE_MILLIS 700
 #endif
 #ifndef PCCONTROL_POWER_FORCE_OFF_MILLIS
-#define PCCONTROL_POWER_FORCE_OFF_MILLIS 5000
+#define PCCONTROL_POWER_FORCE_OFF_MILLIS 7000
 #endif
-#ifndef PCCONTROL_TIMEOUT_SWITCH_MILLIS
-#define PCCONTROL_TIMEOUT_SWITCH_MILLIS 5000
+#ifndef PCCONTROL_BUTTONS_TOGGLE_MILLIS
+#define PCCONTROL_BUTTONS_TOGGLE_MILLIS 4000
+#endif
+#ifndef PCCONTROL_BUTTONS_FORCE_MILLIS
+#define PCCONTROL_BUTTONS_FORCE_MILLIS 10000
 #endif
 
 #define PcControlName "PcControl"
@@ -36,17 +39,15 @@ public:
 	void togglePower() {this->setPower(PCCONTROL_POWER_TOGGLE_MILLIS); }
 	void forcePowerOff() {this->setPower(PCCONTROL_POWER_FORCE_OFF_MILLIS); }
 protected:
-	void setPower(uint16_t pressLength);
-	absolute_time_t timeoutButtons;
-	absolute_time_t timeoutButtonsForce;
-	absolute_time_t timeoutSwitch;	    	
-    int32_t pinPower = -1;
-    int32_t pinSwitch = -1;
-	uint32_t triggerButtonMask = 0;
-	uint32_t lastButtonsPressed = 0;
-	bool triggeredButton = false;
-	bool triggeredSwitch = false;
-	bool timedOutSwitch = false;
+	void setPower(uint32_t pressLength);
+	absolute_time_t timeoutButtons = make_timeout_time_ms(0);
+	absolute_time_t timeoutButtonsForce = make_timeout_time_ms(0);
+	absolute_time_t timeoutSwitchActive = make_timeout_time_ms(0);
+    int32_t pinPower = -1;    
+	uint32_t pcControlButtonMask = 0;	
+	uint32_t pcControlSwitchMask = 0;
+	bool triggered = false;
+	bool triggeredSwitchActive = false;
 	bool ready = false;
 };
 

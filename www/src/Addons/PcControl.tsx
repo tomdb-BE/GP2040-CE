@@ -18,10 +18,10 @@ export const pcControlScheme = {
 		.number()
 		.label('PC Control Power Pin')
 		.validatePinWhenValue('PcControlAddonEnabled'),
-	pcControlPowerSwitchPin: yup
+	pcControlSwitchMask: yup
 		.number()
-		.label('PC Control Power Switch Pin')
-		.validatePinWhenValue('PcControlAddonEnabled'),
+		.label('PC Control Power Switch Mask')
+		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),
 	pcControlButtonMask1: yup
 		.number()
 		.label('PC Control Button Mask 1')
@@ -35,7 +35,7 @@ export const pcControlScheme = {
 export const pcControlState = {
 	PcControlAddonEnabled: 0,		
 	pcControlPowerPin: -1,
-	pcControlPowerSwitchPin: -1,
+	pcControlSwitchMask: 0,
 	pcControlButtonMask1: 0,
 	pcControlButtonMask2: 0,
 };
@@ -84,7 +84,24 @@ const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
 						))}
 					</FormSelect>
 				</Row>
-				<Row className="mb-3">
+				<Row className="mb-3">							
+					<FormSelect
+						type="number"
+						label={t('AddonsConfig:pc-control-switch-mask-label')}
+						name="pcControlSwitchMask"
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.pcControlSwitchMask}
+						error={errors.pcControlSwitchMask}
+						isInvalid={errors.pcControlSwitchMask}
+						onChange={handleChange}
+					>
+						{BUTTON_MASKS.map((o, i) => (
+							<option key={`pcControlSwitchMask-option-${i}`} value={o.value}>
+								{o.label}
+							</option>
+						))}
+					</FormSelect>
 					<FormControl
 						type="number"
 						label={t('AddonsConfig:pc-control-power-pin-label')}
@@ -97,20 +114,7 @@ const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
 						onChange={handleChange}
 						min={-1}
 						max={29}
-					/>								
-					<FormControl
-						type="number"
-						label={t('AddonsConfig:pc-control-power-switch-pin-label')}
-						name="pcControlPowerSwitchPin"
-						className="form-control-sm"
-						groupClassName="col-sm-3 mb-3"
-						value={values.pcControlPowerSwitchPin}
-						error={errors.pcControlPowerSwitchPin}
-						isInvalid={errors.pcControlPowerSwitchPin}
-						onChange={handleChange}
-						min={-1}
-						max={29}
-					/>
+					/>						
 				</Row>		
 			</div>
 			<FormCheck
