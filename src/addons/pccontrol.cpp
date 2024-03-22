@@ -57,8 +57,10 @@ void PcControlAddon::process()
   
     if (!this->triggered) {
         this->triggered = true;
-        this->timeoutButtons = make_timeout_time_ms(PCCONTROL_BUTTONS_TOGGLE_MILLIS);
-        this->timeoutButtonsForce = make_timeout_time_ms(PCCONTROL_BUTTONS_FORCE_MILLIS);            
+        if (gamepad->state.buttons & this->pcControlSwitchMask)
+            this->timeoutButtons = make_timeout_time_ms(PCCONTROL_SWITCH_TOGGLE_MILLIS);
+        else this->timeoutButtons = make_timeout_time_ms(PCCONTROL_BUTTONS_TOGGLE_MILLIS);
+        this->timeoutButtonsForce = make_timeout_time_ms(PCCONTROL_BUTTONS_FORCE_OFF_MILLIS);            
         return;
     }
 
