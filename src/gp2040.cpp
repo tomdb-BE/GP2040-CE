@@ -107,14 +107,11 @@ void GP2040::setup() {
 	addons.LoadAddon(new PlayerNumAddon(), CORE0_USBREPORT);
 	addons.LoadAddon(new SliderSOCDInput(), CORE0_INPUT);
 	addons.LoadAddon(new TiltInput(), CORE0_INPUT);
-<<<<<<< HEAD
-	addons.LoadAddon(new CoinLedsAddon(), CORE0_INPUT);
-	addons.LoadAddon(new PcControlAddon(), CORE0_INPUT);
-	addons.LoadAddon(new Z680Addon(), CORE0_INPUT);
-=======
 	addons.LoadAddon(new RotaryEncoderInput(), CORE0_INPUT);
 	addons.LoadAddon(new PCF8575Addon(), CORE0_INPUT);
->>>>>>> origin
+        addons.LoadAddon(new CoinLedsAddon(), CORE0_INPUT);
+        addons.LoadAddon(new PcControlAddon(), CORE0_INPUT);
+        addons.LoadAddon(new Z680Addon(), CORE0_INPUT);	
 
 	// Input override addons
 	addons.LoadAddon(new ReverseInput(), CORE0_INPUT);
