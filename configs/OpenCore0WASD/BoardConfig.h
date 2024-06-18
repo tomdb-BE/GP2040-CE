@@ -7,6 +7,7 @@
 #define PICO_BOARD_CONFIG_H_
 
 #include "enums.pb.h"
+#include "class/hid/hid.h"
 
 #define BOARD_CONFIG_LABEL "Open_Core0 WASD"
 
@@ -31,6 +32,15 @@
 #define GPIO_PIN_05 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_04 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
 
+// Setting GPIO pins to assigned by add-on
+//
+#define GPIO_PIN_00 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_01 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_08 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_22 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_28 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_29 GpioAction::ASSIGNED_TO_ADDON
+
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
 #define KEY_DPAD_UP     HID_KEY_ARROW_UP      // UP     | UP     | UP      | UP       | UP     | UP     |
@@ -53,9 +63,13 @@
 #define KEY_BUTTON_A2   HID_KEY_F2            // A2     | ~      | Capture | ~        | 14     | ~      |
 #define KEY_BUTTON_FN   -1                    // Hotkey Function                                        |
 
-#define DEFAULT_PS4CONTROLLER_TYPE PS4_ARCADESTICK
+
+#define USB_PERIPHERAL_ENABLED 1
+#define USB_PERIPHERAL_PIN_DPLUS 28
 
 #define DEFAULT_INPUT_MODE_R1 INPUT_MODE_XBONE
+#define DEFAULT_INPUT_MODE_B4 INPUT_MODE_PS5
+#define DEFAULT_PS5AUTHENTICATION_TYPE INPUT_MODE_AUTH_TYPE_USB
 
 #define TURBO_ENABLED 1
 #define GPIO_PIN_27 GpioAction::BUTTON_PRESS_TURBO
@@ -96,14 +110,15 @@
 
 #define HAS_I2C_DISPLAY 1
 #define I2C0_ENABLED 1
-#define I2C0_SDA 0
-#define I2C0_SCL 1
+#define I2C0_PIN_SDA 0
+#define I2C0_PIN_SCL 1
 #define DISPLAY_I2C_BLOCK i2c0
-#define DISPLAY_FLIP 3
+#define DISPLAY_FLIP 1
 
 #define BUTTON_LAYOUT BUTTON_LAYOUT_OPENCORE0WASDA
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_OPENCORE0WASDB
 #define SPLASH_MODE SPLASH_MODE_STATIC
+#define SPLASH_DURATION 3000
 
 #define GPIO_PIN_13 GpioAction::BUTTON_PRESS_UP
 
@@ -112,9 +127,5 @@
 #define FOCUS_MODE_PIN 22
 #define FOCUS_MODE_BUTTON_LOCK_ENABLED 1
 
-#define PSPASSTHROUGH_ENABLED 1
-#define PSPASSTHROUGH_PIN_DPLUS 28
-
-#define XBONEPASSTHROUGH_ENABLED 1
 
 #endif

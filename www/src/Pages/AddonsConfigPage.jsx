@@ -11,14 +11,20 @@ import { AppContext } from '../Contexts/AppContext';
 
 import WebApi from '../Services/WebApi';
 import Analog, { analogScheme, analogState } from '../Addons/Analog';
-import Analog1256, { analog1256Scheme, analog1256State } from '../Addons/Analog1256';
+import Analog1256, {
+	analog1256Scheme,
+	analog1256State,
+} from '../Addons/Analog1256';
 import Bootsel, { bootselScheme, bootselState } from '../Addons/Bootsel';
 import Buzzer, { buzzerScheme, buzzerState } from '../Addons/Buzzer';
 import DualDirection, {
 	dualDirectionScheme,
 	dualDirectionState,
 } from '../Addons/DualDirection';
-import I2CAnalog1219, { i2cAnalogScheme, i2cAnalogState } from '../Addons/I2CAnalog1219';
+import I2CAnalog1219, {
+	i2cAnalogScheme,
+	i2cAnalogState,
+} from '../Addons/I2CAnalog1219';
 import Joystick, { joystickScheme, joystickState } from '../Addons/Joystick';
 import OnBoardLed, {
 	onBoardLedScheme,
@@ -32,11 +38,6 @@ import Reverse, { reverseScheme, reverseState } from '../Addons/Reverse';
 import SOCD, { socdScheme, socdState } from '../Addons/SOCD';
 import Tilt, { tiltScheme, tiltState } from '../Addons/Tilt';
 import Turbo, { turboScheme, turboState } from '../Addons/Turbo';
-import Ps4, { ps4Scheme, ps4State } from '../Addons/Ps4';
-import PSPassthrough, {
-	psPassthroughScheme,
-	psPassthroughState,
-} from '../Addons/PSPassthrough';
 import Wii, { wiiScheme, wiiState } from '../Addons/Wii';
 import SNES, { snesState } from '../Addons/SNES';
 import FocusMode, {
@@ -44,22 +45,23 @@ import FocusMode, {
 	focusModeState,
 } from '../Addons/FocusMode';
 import Keyboard, { keyboardScheme, keyboardState } from '../Addons/Keyboard';
-import InputHistory, { inputHistoryScheme, inputHistoryState } from '../Addons/InputHistory';
-import XBOnePassthrough, {
-	xbonePassthroughScheme,
-	xbonePassthroughState,
-} from '../Addons/XBOnePassthrough';
+import InputHistory, {
+	inputHistoryScheme,
+	inputHistoryState,
+} from '../Addons/InputHistory';
+import Rotary, { rotaryScheme, rotaryState } from '../Addons/Rotary';
+import PCF8575, { pcf8575Scheme, pcf8575State } from '../Addons/PCF8575';
 import CoinLeds, {
-	coinLedsScheme,
-	coinLedsState,
+        coinLedsScheme,
+        coinLedsState,
 } from '../Addons/CoinLeds';
 import PcControl, {
-	pcControlScheme,
-	pcControlState,
+        pcControlScheme,
+        pcControlState,
 } from '../Addons/PcControl';
 import Z680, {
-	z680Scheme,
-	z680State,
+        z680Scheme,
+        z680State,
 } from '../Addons/Z680';
 
 const schema = yup.object().shape({
@@ -76,16 +78,15 @@ const schema = yup.object().shape({
 	...buzzerScheme,
 	...playerNumberScheme,
 	...socdScheme,
-	...ps4Scheme,
-	...psPassthroughScheme,
-	...xbonePassthroughScheme,
 	...wiiScheme,
 	...focusModeScheme,
 	...keyboardScheme,
 	...inputHistoryScheme,
-	...coinLedsScheme,
-	...pcControlScheme,
-	...z680Scheme,
+	...rotaryScheme,
+	...pcf8575Scheme,
+        ...coinLedsScheme,
+        ...pcControlScheme,
+        ...z680Scheme,	
 });
 
 const defaultValues = {
@@ -102,17 +103,16 @@ const defaultValues = {
 	...buzzerState,
 	...playerNumberState,
 	...socdState,
-	...ps4State,
-	...psPassthroughState,
-	...xbonePassthroughState,
 	...wiiState,
 	...snesState,
 	...focusModeState,
 	...keyboardState,
 	...inputHistoryState,
-	...coinLedsState,
-	...pcControlState,
-	...z680State,
+	...rotaryState,
+	...pcf8575State,
+        ...coinLedsState,
+        ...pcControlState,
+        ...z680State,	
 };
 
 const ADDONS = [	
@@ -129,17 +129,16 @@ const ADDONS = [
 	Buzzer,
 	PlayerNumber,
 	SOCD,
-	Ps4,
-	PSPassthrough,
-	XBOnePassthrough,
 	Wii,
 	SNES,
 	FocusMode,
 	Keyboard,
 	InputHistory,
-	CoinLeds,
-	PcControl,
-	Z680,
+	Rotary,
+	PCF8575,
+        CoinLeds,
+        PcControl,
+        Z680,	
 ];
 
 const FormContext = ({ setStoredData }) => {
@@ -198,9 +197,9 @@ export default function AddonsConfigPage() {
 
 	const { t } = useTranslation();
 
-    useEffect(() => {
-        updatePeripherals();
-    }, []);
+	useEffect(() => {
+		updatePeripherals();
+	}, []);
 
 	const onSuccess = async (values) => {
 		const flattened = flattenObject(storedData);
@@ -237,31 +236,34 @@ export default function AddonsConfigPage() {
 			onSubmit={onSuccess}
 			initialValues={defaultValues}
 		>
-			{({ handleSubmit, handleChange, values, errors, setFieldValue }) => 
-			console.log('errors', errors) || (
-				<Form noValidate onSubmit={handleSubmit}>
-					<h1>{t('AddonsConfig:header-text')}</h1>
-					<p>{t('AddonsConfig:sub-header-text')}</p>
-					{ADDONS.map((Addon, index) => (
-						<Addon
-							key={`addon-${index}`}
-							values={values}
-							errors={errors}
-							handleChange={handleChange}
-							handleCheckbox={handleCheckbox}
-							setFieldValue={setFieldValue}
-						/>
-					))}
+			{({ handleSubmit, handleChange, values, errors, setFieldValue }) =>
+				console.log('errors', errors) || (
+					<Form noValidate onSubmit={handleSubmit}>
+						<h1>{t('AddonsConfig:header-text')}</h1>
+						<p>{t('AddonsConfig:sub-header-text')}</p>
+						{ADDONS.map((Addon, index) => (
+							<Addon
+								key={`addon-${index}`}
+								values={values}
+								errors={errors}
+								handleChange={handleChange}
+								handleCheckbox={handleCheckbox}
+								setFieldValue={setFieldValue}
+							/>
+						))}
 
-					<div className="mt-3">
-						<Button type="submit" id="save">
-							{t('Common:button-save-label')}
-						</Button>
-						{saveMessage ? <span className="alert">{saveMessage}</span> : null}
-					</div>
-					<FormContext setStoredData={setStoredData} />
-				</Form>
-			)}
+						<div className="mt-3">
+							<Button type="submit" id="save">
+								{t('Common:button-save-label')}
+							</Button>
+							{saveMessage ? (
+								<span className="alert">{saveMessage}</span>
+							) : null}
+						</div>
+						<FormContext setStoredData={setStoredData} />
+					</Form>
+				)
+			}
 		</Formik>
 	);
 }

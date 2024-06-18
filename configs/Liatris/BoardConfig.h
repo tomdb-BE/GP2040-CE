@@ -2,6 +2,7 @@
 #define PICO_BOARD_CONFIG_H_
 
 #include "enums.pb.h"
+#include "class/hid/hid.h"
 
 #define BOARD_CONFIG_LABEL "Liatris"
 
@@ -25,6 +26,13 @@
 #define GPIO_PIN_16 GpioAction::BUTTON_PRESS_R3     // R3     | RS     | RS      | R3       | 12     | RS     |
 #define GPIO_PIN_07 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_08 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
+
+// Setting GPIO pins to assigned by add-on
+//
+#define GPIO_PIN_09 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_12 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_13 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_14 GpioAction::ASSIGNED_TO_ADDON
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -67,8 +75,8 @@
 
 #define HAS_I2C_DISPLAY 1
 #define I2C0_ENABLED 1
-#define I2C0_SDA 12
-#define I2C0_SCL 13
+#define I2C0_PIN_SDA 12
+#define I2C0_PIN_SCL 13
 #define DISPLAY_I2C_BLOCK i2c0
 
 #define BUZZER_ENABLED 1

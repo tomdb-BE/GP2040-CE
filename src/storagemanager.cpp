@@ -15,39 +15,16 @@
 #include "CRC32.h"
 #include "types.h"
 
-#include "addons/analog.h"
-#include "addons/board_led.h"
-#include "addons/bootsel_button.h"
-#include "addons/buzzerspeaker.h"
-#include "addons/dualdirectional.h"
-#include "addons/i2canalog1219.h"
-#include "addons/display.h"
-#include "addons/jslider.h"
-#include "addons/neopicoleds.h"
-#include "addons/playernum.h"
-#include "addons/ps4mode.h"
-#include "addons/pleds.h"
-#include "addons/reverse.h"
-#include "addons/turbo.h"
-#include "addons/slider_socd.h"
-#include "addons/wiiext.h"
-#include "addons/input_macro.h"
-#include "addons/snes_input.h"
-#include "addons/tilt.h"
-
 #include "config_utils.h"
 
 #include "bitmaps.h"
 
 #include "helper.h"
 
-Storage::Storage()
-{
+void Storage::init() {
 	EEPROM.start();
 	critical_section_init(&animationOptionsCs);
 	ConfigUtils::load(config);
-
-	setFunctionalPinMappings();
 }
 
 bool Storage::save()
@@ -142,6 +119,11 @@ void Storage::setProfile(const uint32_t profileNum)
 	this->config.gamepadOptions.profileNumber = (profileNum < 1 || profileNum > 4) ? 1 : profileNum;
 }
 
+void Storage::nextProfile()
+{
+    this->config.gamepadOptions.profileNumber = (this->config.gamepadOptions.profileNumber % 4) + 1;
+}
+
 void Storage::setFunctionalPinMappings()
 {
 	GpioMappingInfo* alts = nullptr;
@@ -159,9 +141,9 @@ void Storage::setFunctionalPinMappings()
 				alts[pin].action != GpioAction::ASSIGNED_TO_ADDON &&
 				this->config.gpioMappings.pins[pin].action != GpioAction::RESERVED &&
 				this->config.gpioMappings.pins[pin].action != GpioAction::ASSIGNED_TO_ADDON) {
-			functionalPinMappings[pin] = alts[pin].action;
+			functionalPinMappings[pin] = alts[pin];
 		} else {
-			functionalPinMappings[pin] = this->config.gpioMappings.pins[pin].action;
+			functionalPinMappings[pin] = this->config.gpioMappings.pins[pin];
 		}
 	}
 }

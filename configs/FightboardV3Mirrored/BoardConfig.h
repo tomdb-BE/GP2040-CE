@@ -7,6 +7,7 @@
 #define PICO_BOARD_CONFIG_H_
 
 #include "enums.pb.h"
+#include "class/hid/hid.h"
 
 #define BOARD_CONFIG_LABEL "Fightboard V3 Mirrored"
 
@@ -30,6 +31,12 @@
 #define GPIO_PIN_04 GpioAction::BUTTON_PRESS_R3     // R3     | RS     | RS      | R3       | 12     | RS     |
 #define GPIO_PIN_06 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_17 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
+
+// Setting GPIO pins to assigned by add-on
+//
+#define GPIO_PIN_10 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_11 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_29 GpioAction::ASSIGNED_TO_ADDON
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -78,8 +85,8 @@
 
 #define HAS_I2C_DISPLAY 1
 #define I2C1_ENABLED 1
-#define I2C1_SDA 10
-#define I2C1_SCL 11
+#define I2C1_PIN_SDA 10
+#define I2C1_PIN_SCL 11
 #define DISPLAY_I2C_BLOCK i2c1
 
 #define BUTTON_LAYOUT BUTTON_LAYOUT_FIGHTBOARD_MIRRORED

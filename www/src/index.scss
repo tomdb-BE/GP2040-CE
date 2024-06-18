@@ -1,6 +1,7 @@
 // Override default variables before the import
 $primary: #495057;
 $danger: #7b2d26;
+$enable-cssgrid: true;
 
 @import "~bootstrap/scss/bootstrap";
 
@@ -68,7 +69,6 @@ button {
 }
 
 .popover {
-	position: fixed !important;
 	z-index: 2;
 
 	.cover {

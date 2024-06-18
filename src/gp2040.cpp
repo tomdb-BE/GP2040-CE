@@ -30,6 +30,8 @@
 #include "addons/wiiext.h"
 #include "addons/input_macro.h"
 #include "addons/snes_input.h"
+#include "addons/rotaryencoder.h"
+#include "addons/i2c_gpio_pcf8575.h"
 #include "addons/coinleds.h"
 #include "addons/pccontrol.h"
 #include "addons/z680.h"
@@ -48,30 +50,31 @@
 static const uint32_t REBOOT_HOTKEY_ACTIVATION_TIME_MS = 50;
 static const uint32_t REBOOT_HOTKEY_HOLD_TIME_MS = 4000;
 
-GP2040::GP2040() {
-	Storage::getInstance().SetGamepad(new Gamepad());
-	Storage::getInstance().SetProcessedGamepad(new Gamepad());
-}
-
-GP2040::~GP2040() {
-}
-
 void GP2040::setup() {
+	Storage::getInstance().init();
+
 	PeripheralManager::getInstance().initI2C();
 	PeripheralManager::getInstance().initSPI();
 	PeripheralManager::getInstance().initUSB();
 
-	// Reduce CPU if any USB host add-on is enabled
-	const AddonOptions & addonOptions = Storage::getInstance().getAddonOptions();
-	if ( addonOptions.keyboardHostOptions.enabled ||
-			addonOptions.psPassthroughOptions.enabled ||
-			addonOptions.xbonePassthroughOptions.enabled ){
-	    set_sys_clock_khz(120000, true); // Set Clock to 120MHz to avoid potential USB timing issues
+	// Reduce CPU if USB host is enabled
+	if ( PeripheralManager::getInstance().isUSBEnabled(0) ) {
+		set_sys_clock_khz(120000, true); // Set Clock to 120MHz to avoid potential USB timing issues
 	}
 
-    // Setup Gamepad and Gamepad Storage
-    Gamepad * gamepad = Storage::getInstance().GetGamepad();
-    gamepad->setup();
+	Gamepad * gamepad = new Gamepad();
+	Gamepad * processedGamepad = new Gamepad();
+	Storage::getInstance().SetGamepad(gamepad);
+	Storage::getInstance().SetProcessedGamepad(processedGamepad);
+
+	// Set pin mappings for all GPIO functions
+	Storage::getInstance().setFunctionalPinMappings();
+
+	// Setup Gamepad
+	gamepad->setup();
+	
+	// now we can load the latest configured profile, which will map the
+	// new set of GPIOs to use...
     this->initializeStandardGpio();
 
     const GamepadOptions& gamepadOptions = Storage::getInstance().getGamepadOptions();
@@ -104,9 +107,14 @@ void GP2040::setup() {
 	addons.LoadAddon(new PlayerNumAddon(), CORE0_USBREPORT);
 	addons.LoadAddon(new SliderSOCDInput(), CORE0_INPUT);
 	addons.LoadAddon(new TiltInput(), CORE0_INPUT);
+<<<<<<< HEAD
 	addons.LoadAddon(new CoinLedsAddon(), CORE0_INPUT);
 	addons.LoadAddon(new PcControlAddon(), CORE0_INPUT);
 	addons.LoadAddon(new Z680Addon(), CORE0_INPUT);
+=======
+	addons.LoadAddon(new RotaryEncoderInput(), CORE0_INPUT);
+	addons.LoadAddon(new PCF8575Addon(), CORE0_INPUT);
+>>>>>>> origin
 
 	// Input override addons
 	addons.LoadAddon(new ReverseInput(), CORE0_INPUT);
@@ -119,21 +127,20 @@ void GP2040::setup() {
 		case BootAction::ENTER_WEBCONFIG_MODE:
 			// Move this to the Net driver initialize
 			Storage::getInstance().SetConfigMode(true);
-			//initialize_driver(INPUT_MODE_CONFIG);
 			DriverManager::getInstance().setup(INPUT_MODE_CONFIG);
 			ConfigManager::getInstance().setup(CONFIG_TYPE_WEB);
 			return;
 		case BootAction::ENTER_USB_MODE:
 			reset_usb_boot(0, 0);
 			return;
-		case BootAction::SET_INPUT_MODE_HID: // HID drivers
-			inputMode = INPUT_MODE_HID;
-			break;
 		case BootAction::SET_INPUT_MODE_SWITCH:
 			inputMode = INPUT_MODE_SWITCH;
 			break;
 		case BootAction::SET_INPUT_MODE_KEYBOARD:
 			inputMode = INPUT_MODE_KEYBOARD;
+			break;
+		case BootAction::SET_INPUT_MODE_GENERIC:
+			inputMode = INPUT_MODE_GENERIC;
 			break;
 		case BootAction::SET_INPUT_MODE_NEOGEO:
 			inputMode = INPUT_MODE_NEOGEO;
@@ -156,8 +163,14 @@ void GP2040::setup() {
 		case BootAction::SET_INPUT_MODE_XINPUT: // X-Input Driver
 			inputMode = INPUT_MODE_XINPUT;
 			break;
+		case BootAction::SET_INPUT_MODE_PS3: // PS3 (HID with quirks) driver
+			inputMode = INPUT_MODE_PS3;
+			break;
 		case BootAction::SET_INPUT_MODE_PS4: // PS4 / PS5 Driver
 			inputMode = INPUT_MODE_PS4;
+			break;
+		case BootAction::SET_INPUT_MODE_PS5: // PS4 / PS5 Driver
+			inputMode = INPUT_MODE_PS5;
 			break;
 		case BootAction::SET_INPUT_MODE_XBONE: // Xbox One Driver
 			inputMode = INPUT_MODE_XBONE;
@@ -184,12 +197,12 @@ void GP2040::setup() {
  * @brief Initialize standard input button GPIOs that are present in the currently loaded profile.
  */
 void GP2040::initializeStandardGpio() {
-	GpioAction* pinMappings = Storage::getInstance().getProfilePinMappings();
+	GpioMappingInfo* pinMappings = Storage::getInstance().getProfilePinMappings();
 	buttonGpios = 0;
 	for (Pin_t pin = 0; pin < (Pin_t)NUM_BANK0_GPIOS; pin++)
 	{
 		// (NONE=-10, RESERVED=-5, ASSIGNED_TO_ADDON=0, everything else is ours)
-		if (pinMappings[pin] > 0)
+		if (pinMappings[pin].action > 0)
 		{
 			gpio_init(pin);             // Initialize pin
 			gpio_set_dir(pin, GPIO_IN); // Set as INPUT
@@ -203,11 +216,11 @@ void GP2040::initializeStandardGpio() {
  * @brief Deinitialize standard input button GPIOs that are present in the currently loaded profile.
  */
 void GP2040::deinitializeStandardGpio() {
-	GpioAction* pinMappings = Storage::getInstance().getProfilePinMappings();
+	GpioMappingInfo* pinMappings = Storage::getInstance().getProfilePinMappings();
 	for (Pin_t pin = 0; pin < (Pin_t)NUM_BANK0_GPIOS; pin++)
 	{
 		// (NONE=-10, RESERVED=-5, ASSIGNED_TO_ADDON=0, everything else is ours)
-		if (pinMappings[pin] > 0)
+		if (pinMappings[pin].action > 0)
 		{
 			gpio_deinit(pin);
 		}
@@ -377,12 +390,16 @@ GP2040::BootAction GP2040::getBootAction() {
                                     return BootAction::SET_INPUT_MODE_XINPUT;
                                 case INPUT_MODE_SWITCH: 
                                     return BootAction::SET_INPUT_MODE_SWITCH;
-                                case INPUT_MODE_HID: 
-                                    return BootAction::SET_INPUT_MODE_HID;
                                 case INPUT_MODE_KEYBOARD: 
                                     return BootAction::SET_INPUT_MODE_KEYBOARD;
+                                case INPUT_MODE_GENERIC:
+                                    return BootAction::SET_INPUT_MODE_GENERIC;
+                                case INPUT_MODE_PS3:
+                                    return BootAction::SET_INPUT_MODE_PS3;
                                 case INPUT_MODE_PS4: 
                                     return BootAction::SET_INPUT_MODE_PS4;
+                                case INPUT_MODE_PS5: 
+                                    return BootAction::SET_INPUT_MODE_PS5;
                                 case INPUT_MODE_NEOGEO: 
                                     return BootAction::SET_INPUT_MODE_NEOGEO;
                                 case INPUT_MODE_MDMINI: 
@@ -397,8 +414,8 @@ GP2040::BootAction GP2040::getBootAction() {
                                     return BootAction::SET_INPUT_MODE_PSCLASSIC;
                                 case INPUT_MODE_XBOXORIGINAL: 
                                     return BootAction::SET_INPUT_MODE_XBOXORIGINAL;
-								case INPUT_MODE_XBONE:
-										return BootAction::SET_INPUT_MODE_XBONE;
+                                case INPUT_MODE_XBONE:
+                                    return BootAction::SET_INPUT_MODE_XBONE;
                                 default:
                                     return BootAction::NONE;
                             }

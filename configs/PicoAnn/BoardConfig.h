@@ -7,6 +7,7 @@
 #define PICOANN_CONFIG_H_
 
 #include "enums.pb.h"
+#include "class/hid/hid.h"
 
 #define BOARD_CONFIG_LABEL "Pico Ann"
 
@@ -30,6 +31,16 @@
 #define GPIO_PIN_22 GpioAction::BUTTON_PRESS_R3     // R3     | RS     | RS      | R3       | 12     | RS     |
 #define GPIO_PIN_04 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
 #define GPIO_PIN_20 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
+
+// Setting GPIO pins to assigned by add-on
+//
+#define GPIO_PIN_15 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_16 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_17 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_18 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_19 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_26 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_27 GpioAction::ASSIGNED_TO_ADDON
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -83,9 +94,10 @@
 #define PLED4_PIN 19
 
 #define HAS_I2C_DISPLAY 0
-#define I2C_SDA_PIN 26
-#define I2C_SCL_PIN 27
-#define I2C_BLOCK i2c1
+#define I2C1_ENABLED 1
+#define I2C1_PIN_SDA 26
+#define I2C1_PIN_SCL 27
+#define DISPLAY_I2C_BLOCK i2c1
 
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICK
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_VEWLIX

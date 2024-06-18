@@ -73,6 +73,7 @@ export default {
 		'load-profile-2': 'Carregar Perfil #2',
 		'load-profile-3': 'Carregar Perfil #3',
 		'load-profile-4': 'Carregar Perfil #4',
+		'next-profile': 'Próximo Perfil',
 		'reboot-default': 'Reiniciar GP2040-CE',
 	},
 	'forced-setup-mode-label': 'Modo de Configuração Forçada',
@@ -87,4 +88,7 @@ export default {
 		'Se você reiniciar para o modo Controlador após salvar, não terá mais acesso à configuração web. Digite "<strong>{{warningCheckText}}</strong>" abaixo para desbloquear o botão Salvar se você estiver ciente disso e tiver a intenção de fazê-lo. Clicar em Descartar reverterá essa configuração, que deverá então ser salva.',
 	'4-way-joystick-mode-label': 'Modo de Joystick de 4 Vias',
 	'lock-hotkeys-label': 'Travar Teclas de Atalho',
+	'keyboard-mapping-header-text': 'Mapeamento de Teclado',
+	'keyboard-mapping-sub-header-text':
+		'Utilize o formulário abaixo para reconfigurar o mapeamento de botões para teclas.',
 };
