@@ -748,13 +748,47 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     INIT_UNSET_PROPERTY(config.addonOptions.focusModeOptions, macroLockEnabled, !!FOCUS_MODE_MACRO_LOCK_ENABLED);
 
     // addonOptions.coinLedsOptions
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, enabled, COINLEDS_ENABLED);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, enabled, !!COINLEDS_ENABLED);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartPin1, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartPin2, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartPin3, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartPin4, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinPin1, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinPin2, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinPin3, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinPin4, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsMarqueePin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtStartPinOut, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtCoinPinOut, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtStartMask, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtCoinMask, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask1, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask2, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask3, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask4, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask1, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask2, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask3, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask4, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartBrightness, 100);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinBrightness, 100);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsMarqueeBrightness, 100);
 
     // addonOptions.pcControlOptions
-    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, enabled, PCCONTROL_ENABLED);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, enabled, !!PCCONTROL_ENABLED);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlPowerPin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlSwitchMask, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlButtonMask1, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlButtonMask2, 32768);
 
     // addonOptions.z680Options
-    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, enabled, Z680_ENABLED);    
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, enabled, !!Z680_ENABLED);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680PowerPin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680VolumeUpPin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680VolumeDownPin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680MutePin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680PowerStatePin, -1);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680ButtonMask, 32768);
 
     // Macro options (always on)
     INIT_UNSET_PROPERTY(config.addonOptions.macroOptions, enabled, true);
@@ -1196,7 +1230,19 @@ void gpioMappingsMigrationCore(Config& config)
     markAddonPinIfUsed(config.addonOptions.analogOptions.analogAdc2PinY);
     markAddonPinIfUsed(config.addonOptions.buzzerOptions.pin);
     markAddonPinIfUsed(config.addonOptions.buzzerOptions.enablePin);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsStartPin1);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsStartPin2);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsStartPin3);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsStartPin4);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsCoinPin1);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsCoinPin2);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsCoinPin3);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsCoinPin4);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsMarqueePin);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsExtStartPinOut);
+    markAddonPinIfUsed(config.addonOptions.coinLedsOptions.coinLedsExtCoinPinOut);
     markAddonPinIfUsed(config.addonOptions.focusModeOptions.pin);
+    markAddonPinIfUsed(config.addonOptions.pcControlOptions.pcControlPowerPin);
     markAddonPinIfUsed(config.addonOptions.turboOptions.ledPin);
     markAddonPinIfUsed(config.addonOptions.turboOptions.shmupDialPin);
     markAddonPinIfUsed(config.addonOptions.turboOptions.shmupBtn1Pin);
@@ -1218,6 +1264,12 @@ void gpioMappingsMigrationCore(Config& config)
     markAddonPinIfUsed(config.addonOptions.snesOptions.clockPin);
     markAddonPinIfUsed(config.addonOptions.snesOptions.latchPin);
     markAddonPinIfUsed(config.addonOptions.snesOptions.dataPin);
+    markAddonPinIfUsed(config.addonOptions.z680Options.z680PowerPin);
+    markAddonPinIfUsed(config.addonOptions.z680Options.z680VolumeUpPin);
+    markAddonPinIfUsed(config.addonOptions.z680Options.z680VolumeDownPin);
+    markAddonPinIfUsed(config.addonOptions.z680Options.z680MutePin);
+    markAddonPinIfUsed(config.addonOptions.z680Options.z680PowerStatePin);
+
 
     for (Pin_t pin = 0; pin < (Pin_t)NUM_BANK0_GPIOS; pin++) {
         config.gpioMappings.pins[pin].action = actions[pin];

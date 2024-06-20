@@ -11,23 +11,27 @@ import { BUTTON_MASKS } from '../Data/Buttons';
 
 export const pcControlScheme = {
 	PcControlAddonEnabled: yup
-		.number()
+		.boolean()
 		.required()
 		.label('PC Control Enabled'),		
 	pcControlPowerPin: yup
 		.number()
+		.required()
 		.label('PC Control Power Pin')
 		.validatePinWhenValue('PcControlAddonEnabled'),
 	pcControlSwitchMask: yup
 		.number()
+		.required()
 		.label('PC Control Power Switch Mask')
 		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),
 	pcControlButtonMask1: yup
 		.number()
+		.required()
 		.label('PC Control Button Mask 1')
 		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),
 	pcControlButtonMask2: yup
 		.number()
+		.required()
 		.label('PC Control Button Mask 2')
 		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),		
 };
@@ -35,9 +39,9 @@ export const pcControlScheme = {
 export const pcControlState = {
 	PcControlAddonEnabled: 0,		
 	pcControlPowerPin: -1,
-	pcControlSwitchMask: 0,
-	pcControlButtonMask1: 0,
-	pcControlButtonMask2: 0,
+	pcControlSwitchMask: 1,
+	pcControlButtonMask1: 1,
+	pcControlButtonMask2: 1,
 };
 
 const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {

@@ -11,103 +11,127 @@ import { BUTTON_MASKS } from '../Data/Buttons';
 
 export const coinLedsScheme = {
 	CoinLedsAddonEnabled: yup
-		.number()
+		.boolean()
 		.required()
 		.label('Coin Leds Enabled'),
 	coinLedsStartPin1: yup
 		.number()
+		.required()
 		.label('Start P1 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartPin2: yup
 		.number()
+		.required()
 		.label('Start P2 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartPin3: yup
 		.number()
+		.required()
 		.label('Start P3 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartPin4: yup
 		.number()
+		.required()
 		.label('Start P4 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin1: yup
 		.number()
+		.required()
 		.label('Coin P1 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin2: yup
 		.number()
+		.required()
 		.label('Coin P2 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin3: yup
 		.number()
+		.required()
 		.label('Coin P3 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin4: yup
 		.number()
+		.required()
 		.label('Coin P4 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsMarqueePin: yup
 		.number()
+		.required()
 		.label('Marquee LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsExtStartPinOut: yup
 		.number()
+		.required()
 		.label('External Start Pin Out')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsExtCoinPinOut: yup
 		.number()
+		.required()
 		.label('External Coin Pin Out')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartMask1: yup
 		.number()
+		.required()
 		.label('Start Mask 1')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsStartMask2: yup
 		.number()
+		.required()
 		.label('Start Mask 2')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsStartMask3: yup
 		.number()
+		.required()
 		.label('Start Mask 3')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsStartMask4: yup
 		.number()
+		.required()
 		.label('Start Mask 4')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),						
 	coinLedsExtStartMask: yup
 		.number()
+		.required()
 		.label('External Start Mask')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsCoinMask1: yup
 		.number()
+		.required()
 		.label('Coin Mask 1')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsCoinMask2: yup
 		.number()
+		.required()
 		.label('Coin Mask 2')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsCoinMask3: yup
 		.number()
+		.required()
 		.label('Coin Mask 3')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsCoinMask4: yup
 		.number()
+		.required()
 		.label('Coin Mask 4')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),				
 	coinLedsExtCoinMask: yup
 		.number()
+		.required()
 		.label('External Coin Mask')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
 	coinLedsStartBrightness: yup
 		.number()
+		.required()
 		.label('Start LED Brightness')
 		.validateRangeWhenValue('CoinLedsAddonEnabled', 0, 100),
 	coinLedsCoinBrightness: yup
 		.number()
+		.required()
 		.label('Coin LED Brightness')
 		.validateRangeWhenValue('CoinLedsAddonEnabled', 0, 100),
 	coinLedsMarqueeBrightness: yup
 		.number()
+		.required()
 		.label('Marquee LED Brightness')
 		.validateRangeWhenValue('CoinLedsAddonEnabled', 0, 100),				
 };
@@ -125,16 +149,16 @@ export const coinLedsState = {
 	coinLedsMarqueePin: -1,	
 	coinLedsExtStartPinOut: -1,	
 	coinLedsExtCoinPinOut: -1,
-	coinLedsExtStartMask: 0,
-	coinLedsExtCoinMask: 0,
-	coinLedsStartMask1: 0,
-	coinLedsStartMask2: 0,
-	coinLedsStartMask3: 0,
-	coinLedsStartMask4: 0,
-	coinLedsCoinMask1: 0,
-	coinLedsCoinMask2: 0,
-	coinLedsCoinMask3: 0,
-	coinLedsCoinMask4: 0,
+	coinLedsExtStartMask: 1,
+	coinLedsExtCoinMask: 1,
+	coinLedsStartMask1: 1,
+	coinLedsStartMask2: 1,
+	coinLedsStartMask3: 1,
+	coinLedsStartMask4: 1,
+	coinLedsCoinMask1: 1,
+	coinLedsCoinMask2: 1,
+	coinLedsCoinMask3: 1,
+	coinLedsCoinMask4: 1,
 	coinLedsStartBrightness: 100,
 	coinLedsCoinBrightness: 100,
 	coinLedsMarqueeBrightness: 100,

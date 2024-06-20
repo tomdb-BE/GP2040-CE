@@ -61,11 +61,11 @@
 #define KEY_BUTTON_A2   HID_KEY_F2            // A2     | ~      | Capture | ~        | 14     | ~      |
 #define KEY_BUTTON_FN   -1                    // Hotkey Function                                        |
 
-#define TURBO_ENABLED 1
+#define TURBO_ENABLED 0
 #define GPIO_PIN_14 GpioAction::BUTTON_PRESS_TURBO
-#define TURBO_LED_PIN 15
+#define TURBO_LED_PIN -1
 
-#define BOARD_LEDS_PIN 28
+#define BOARD_LEDS_PIN -1
 #define LED_BRIGHTNESS_MAXIMUM 100
 #define LED_BRIGHTNESS_STEPS 5
 #define LED_FORMAT LED_FORMAT_GRB
@@ -89,9 +89,9 @@
 #define LEDS_BUTTON_A2   15
 
 #define HAS_I2C_DISPLAY 1
-#define I2C0_ENABLED 1
-#define I2C0_PIN_SDA 0
-#define I2C0_PIN_SCL 1
+#define I2C0_ENABLED 0
+#define I2C0_PIN_SDA -1
+#define I2C0_PIN_SCL -1
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESSB
 
