@@ -7,7 +7,7 @@ import Section from '../Components/Section';
 
 import FormControl from '../Components/FormControl';
 import FormSelect from '../Components/FormSelect';
-import { BUTTON_MASKS } from '../Data/Buttons';
+import { BUTTON_MASKS_OPTIONS } from '../Data/Buttons';
 
 export const z680Scheme = {
 	Z680AddonEnabled: yup
@@ -43,7 +43,7 @@ export const z680Scheme = {
 		.number()
 		.required()
 		.label('Z680 Button Mask')
-		.validateSelectionWhenValue('Z680AddonEnabled', BUTTON_MASKS),			
+		.validateSelectionWhenValue('Z680AddonEnabled', BUTTON_MASKS_OPTIONS),
 };
 
 export const z680State = {
@@ -53,7 +53,7 @@ export const z680State = {
 	z680VolumeDownPin: -1,
 	z680MutePin: -1,
 	z680PowerStatePin: -1,
-	z680ButtonMask: 1,
+	z680ButtonMask: 0,
 };
 
 const Z680 = ({ values, errors, handleChange, handleCheckbox }) => {
@@ -76,7 +76,7 @@ const Z680 = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.z680ButtonMask}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`z680ButtonMask-option-${i}`} value={o.value}>
 								{o.label}
 							</option>

@@ -7,7 +7,7 @@ import Section from '../Components/Section';
 
 import FormControl from '../Components/FormControl';
 import FormSelect from '../Components/FormSelect';
-import { BUTTON_MASKS } from '../Data/Buttons';
+import { BUTTON_MASKS_OPTIONS } from '../Data/Buttons';
 
 export const coinLedsScheme = {
 	CoinLedsAddonEnabled: yup
@@ -73,52 +73,52 @@ export const coinLedsScheme = {
 		.number()
 		.required()
 		.label('Start Mask 1')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartMask2: yup
 		.number()
 		.required()
 		.label('Start Mask 2')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartMask3: yup
 		.number()
 		.required()
 		.label('Start Mask 3')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartMask4: yup
 		.number()
 		.required()
 		.label('Start Mask 4')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),						
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),						
 	coinLedsExtStartMask: yup
 		.number()
 		.required()
 		.label('External Start Mask')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask1: yup
 		.number()
 		.required()
 		.label('Coin Mask 1')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask2: yup
 		.number()
 		.required()
 		.label('Coin Mask 2')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask3: yup
 		.number()
 		.required()
 		.label('Coin Mask 3')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask4: yup
 		.number()
 		.required()
 		.label('Coin Mask 4')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),				
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),				
 	coinLedsExtCoinMask: yup
 		.number()
 		.required()
 		.label('External Coin Mask')
-		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartBrightness: yup
 		.number()
 		.required()
@@ -149,16 +149,16 @@ export const coinLedsState = {
 	coinLedsMarqueePin: -1,	
 	coinLedsExtStartPinOut: -1,	
 	coinLedsExtCoinPinOut: -1,
-	coinLedsExtStartMask: 1,
-	coinLedsExtCoinMask: 1,
-	coinLedsStartMask1: 1,
-	coinLedsStartMask2: 1,
-	coinLedsStartMask3: 1,
-	coinLedsStartMask4: 1,
-	coinLedsCoinMask1: 1,
-	coinLedsCoinMask2: 1,
-	coinLedsCoinMask3: 1,
-	coinLedsCoinMask4: 1,
+	coinLedsExtStartMask: 0,
+	coinLedsExtCoinMask: 0,
+	coinLedsStartMask1: 0,
+	coinLedsStartMask2: 0,
+	coinLedsStartMask3: 0,
+	coinLedsStartMask4: 0,
+	coinLedsCoinMask1: 0,
+	coinLedsCoinMask2: 0,
+	coinLedsCoinMask3: 0,
+	coinLedsCoinMask4: 0,
 	coinLedsStartBrightness: 100,
 	coinLedsCoinBrightness: 100,
 	coinLedsMarqueeBrightness: 100,
@@ -184,7 +184,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsStartMask1}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsStartMask1-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -214,7 +214,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsCoinMask1}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsCoinMask1-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -246,7 +246,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsStartMask2}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsStartMask2-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -276,7 +276,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsCoinMask2}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsCoinMask2-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -308,7 +308,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsStartMask3}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsStartMask3-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -338,7 +338,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsCoinMask3}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsCoinMask3-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -370,7 +370,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsStartMask4}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsStartMask4-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -400,7 +400,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsCoinMask4}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsCoinMask4-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -432,7 +432,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsExtStartMask}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsExtStartMask-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -464,7 +464,7 @@ const CoinLeds = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.coinLedsExtCoinMask}
 						onChange={handleChange}
 						>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`coinLedsExtCoinMask-option-${i}`} value={o.value}>
 								{o.label}
 							</option>

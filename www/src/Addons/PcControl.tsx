@@ -7,7 +7,7 @@ import Section from '../Components/Section';
 
 import FormControl from '../Components/FormControl';
 import FormSelect from '../Components/FormSelect';
-import { BUTTON_MASKS } from '../Data/Buttons';
+import { BUTTON_MASKS_OPTIONS } from '../Data/Buttons';
 
 export const pcControlScheme = {
 	PcControlAddonEnabled: yup
@@ -23,25 +23,25 @@ export const pcControlScheme = {
 		.number()
 		.required()
 		.label('PC Control Power Switch Mask')
-		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS_OPTIONS),
 	pcControlButtonMask1: yup
 		.number()
 		.required()
 		.label('PC Control Button Mask 1')
-		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),
+		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS_OPTIONS),
 	pcControlButtonMask2: yup
 		.number()
 		.required()
 		.label('PC Control Button Mask 2')
-		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS),		
+		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS_OPTIONS),
 };
 
 export const pcControlState = {
 	PcControlAddonEnabled: 0,		
 	pcControlPowerPin: -1,
-	pcControlSwitchMask: 1,
-	pcControlButtonMask1: 1,
-	pcControlButtonMask2: 1,
+	pcControlSwitchMask: 0,
+	pcControlButtonMask1: 0,
+	pcControlButtonMask2: 0,
 };
 
 const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
@@ -64,7 +64,7 @@ const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.pcControlButtonMask1}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`pcControlButtonMask-1-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -81,7 +81,7 @@ const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.pcControlButtonMask2}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`pcControlButtonMask-2-option-${i}`} value={o.value}>
 								{o.label}
 							</option>
@@ -100,7 +100,7 @@ const PcControl = ({ values, errors, handleChange, handleCheckbox }) => {
 						isInvalid={errors.pcControlSwitchMask}
 						onChange={handleChange}
 					>
-						{BUTTON_MASKS.map((o, i) => (
+						{BUTTON_MASKS_OPTIONS.map((o, i) => (
 							<option key={`pcControlSwitchMask-option-${i}`} value={o.value}>
 								{o.label}
 							</option>

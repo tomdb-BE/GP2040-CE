@@ -760,16 +760,16 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsMarqueePin, -1);
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtStartPinOut, -1);
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtCoinPinOut, -1);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtStartMask, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtCoinMask, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask1, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask2, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask3, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask4, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask1, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask2, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask3, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask4, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtStartMask, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsExtCoinMask, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask1, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask2, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask3, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartMask4, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask1, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask2, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask3, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinMask4, 0);
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsStartBrightness, 100);
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsCoinBrightness, 100);
     INIT_UNSET_PROPERTY(config.addonOptions.coinLedsOptions, coinLedsMarqueeBrightness, 100);
@@ -777,9 +777,9 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     // addonOptions.pcControlOptions
     INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, enabled, !!PCCONTROL_ENABLED);
     INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlPowerPin, -1);
-    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlSwitchMask, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlButtonMask1, 32768);
-    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlButtonMask2, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlSwitchMask, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlButtonMask1, 0);
+    INIT_UNSET_PROPERTY(config.addonOptions.pcControlOptions, pcControlButtonMask2, 0);
 
     // addonOptions.z680Options
     INIT_UNSET_PROPERTY(config.addonOptions.z680Options, enabled, !!Z680_ENABLED);
@@ -788,7 +788,7 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680VolumeDownPin, -1);
     INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680MutePin, -1);
     INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680PowerStatePin, -1);
-    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680ButtonMask, 32768);
+    INIT_UNSET_PROPERTY(config.addonOptions.z680Options, z680ButtonMask, 0);
 
     // Macro options (always on)
     INIT_UNSET_PROPERTY(config.addonOptions.macroOptions, enabled, true);
