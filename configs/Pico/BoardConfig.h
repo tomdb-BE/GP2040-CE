@@ -34,10 +34,10 @@
 
 // Setting GPIO pins to assigned by add-on
 //
-#define GPIO_PIN_00 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_01 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_15 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_28 GpioAction::ASSIGNED_TO_ADDON
+//#define GPIO_PIN_00 GpioAction::ASSIGNED_TO_ADDON
+//#define GPIO_PIN_01 GpioAction::ASSIGNED_TO_ADDON
+//#define GPIO_PIN_15 GpioAction::ASSIGNED_TO_ADDON
+//#define GPIO_PIN_28 GpioAction::ASSIGNED_TO_ADDON
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -62,7 +62,7 @@
 #define KEY_BUTTON_FN   -1                    // Hotkey Function                                        |
 
 #define TURBO_ENABLED 0
-#define GPIO_PIN_14 GpioAction::BUTTON_PRESS_TURBO
+//#define GPIO_PIN_14 GpioAction::BUTTON_PRESS_TURBO
 #define TURBO_LED_PIN -1
 
 #define BOARD_LEDS_PIN -1
@@ -88,7 +88,7 @@
 #define LEDS_BUTTON_R3   14
 #define LEDS_BUTTON_A2   15
 
-#define HAS_I2C_DISPLAY 1
+#define HAS_I2C_DISPLAY 0
 #define I2C0_ENABLED 0
 #define I2C0_PIN_SDA -1
 #define I2C0_PIN_SCL -1
