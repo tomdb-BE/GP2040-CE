@@ -61,6 +61,10 @@
 #define KEY_BUTTON_A2   HID_KEY_F2            // A2     | ~      | Capture | ~        | 14     | ~      |
 #define KEY_BUTTON_FN   -1                    // Hotkey Function                                        |
 
+#define BOOTSEL_BUTTON_ENABLED 1
+#define BOOTSEL_BUTTON_MASK GAMEPAD_MASK_A4
+
+
 #define TURBO_ENABLED 0
 #define TURBO_LED_PIN -1
 
