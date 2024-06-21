@@ -25,21 +25,19 @@
 #define GPIO_PIN_11 GpioAction::BUTTON_PRESS_R3     // R3     | RS     | RS      | R3       | 12     | RS     |
 #define GPIO_PIN_12 GpioAction::BUTTON_PRESS_B3     // B3     | X      | Y       | Square   | 1      | P1     |
 #define GPIO_PIN_13 GpioAction::BUTTON_PRESS_B4     // B4     | Y      | X       | Triangle | 4      | P2     |
-#define GPIO_PIN_16 GpioAction::BUTTON_PRESS_S2     // S2     | Start  | Plus    | Start    | 10     | Start  |
-#define GPIO_PIN_19 GpioAction::BUTTON_PRESS_A2     // A2     | ~      | Capture | ~        | 14     | ~      |
-#define GPIO_PIN_20 GpioAction::BUTTON_PRESS_S1     // S1     | Back   | Minus   | Select   | 9      | Coin   |
-#define GPIO_PIN_26 GpioAction::BUTTON_PRESS_A1     // A1     | Guide  | Home    | PS       | 13     | ~      |
-#define GPIO_PIN_27 GpioAction::BUTTON_PRESS_A4     // A4     | ~      | ~       | ~        | 16     | ~      |
+#define GPIO_PIN_14 GpioAction::BUTTON_PRESS_S2     // S2     | Start  | Plus    | Start    | 10     | Start  |
+#define GPIO_PIN_15 GpioAction::BUTTON_PRESS_S1     // S1     | Back   | Minus   | Select   | 9      | Coin   |
+#define GPIO_PIN_22 GpioAction::BUTTON_PRESS_A4     // A4     | ~      | ~       | ~        | 16     | ~      |
+#define GPIO_PIN_28 GpioAction::BUTTON_PRESS_A3     // A3     | ~      | ~       | ~        | 15     | ~      |
 
 // Setting GPIO pins to assigned by add-on
 //
-#define GPIO_PIN_14 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_15 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_16 GpioAction::ASSIGNED_TO_ADDON
 #define GPIO_PIN_17 GpioAction::ASSIGNED_TO_ADDON
 #define GPIO_PIN_18 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_21 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_22 GpioAction::ASSIGNED_TO_ADDON
-#define GPIO_PIN_28 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_19 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_20 GpioAction::ASSIGNED_TO_ADDON
+#define GPIO_PIN_27 GpioAction::ASSIGNED_TO_ADDON
 
 // Keyboard Mapping Configuration
 //                                            // GP2040 | Xinput | Switch  | PS3/4/5  | Dinput | Arcade |
@@ -123,19 +121,19 @@
 #define COINLEDS_COIN_BRIGHTNESS 100
 #define COINLEDS_MARQUEE_BRIGHTNESS 100
 
-#define PCCONTROL_ENABLED 0
-#define PCCONTROL_POWER_PIN -1
-#define PCCONTROL_SWITCH_MASK 0
-#define PCCONTROL_BUTTON_MASK_1 0
-#define PCCONTROL_BUTTON_MASK_2 0
+#define PCCONTROL_ENABLED 1
+#define PCCONTROL_POWER_PIN 27
+#define PCCONTROL_SWITCH_MASK 16384
+#define PCCONTROL_BUTTON_MASK_1 256
+#define PCCONTROL_BUTTON_MASK_2 512
 
-#define Z680_ENABLED 0
-#define Z680_POWER_PIN -1
-#define Z680_VOLUME_UP_PIN -1
-#define Z680_VOLUME_DOWN_PIN -1
-#define Z680_MUTE_PIN -1
-#define Z680_POWER_STATE_PIN -1
-#define Z680_BUTTON_MASK 0
+#define Z680_ENABLED 1
+#define Z680_POWER_PIN 17
+#define Z680_VOLUME_UP_PIN 19
+#define Z680_VOLUME_DOWN_PIN 20
+#define Z680_MUTE_PIN 18
+#define Z680_POWER_STATE_PIN 16
+#define Z680_BUTTON_MASK 256
 
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICKLESS
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_STICKLESSB
