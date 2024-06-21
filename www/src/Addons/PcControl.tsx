@@ -4,34 +4,28 @@ import { FormCheck, Row } from 'react-bootstrap';
 import * as yup from 'yup';
 
 import Section from '../Components/Section';
-
-import FormControl from '../Components/FormControl';
 import FormSelect from '../Components/FormSelect';
+import FormControl from '../Components/FormControl';
 import { BUTTON_MASKS_OPTIONS } from '../Data/Buttons';
 
 export const pcControlScheme = {
 	PcControlAddonEnabled: yup
-		.boolean()
-		.required()
+		.number()
 		.label('PC Control Enabled'),		
 	pcControlPowerPin: yup
 		.number()
-		.required()
 		.label('PC Control Power Pin')
 		.validatePinWhenValue('PcControlAddonEnabled'),
 	pcControlSwitchMask: yup
 		.number()
-		.required()
 		.label('PC Control Power Switch Mask')
 		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS_OPTIONS),
 	pcControlButtonMask1: yup
 		.number()
-		.required()
 		.label('PC Control Button Mask 1')
 		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS_OPTIONS),
 	pcControlButtonMask2: yup
 		.number()
-		.required()
 		.label('PC Control Button Mask 2')
 		.validateSelectionWhenValue('PcControlAddonEnabled', BUTTON_MASKS_OPTIONS),
 };

@@ -11,6 +11,24 @@
 #ifndef Z680_ENABLED
 #define Z680_ENABLED 0
 #endif
+#ifndef Z680_POWER_PIN
+#define Z680_POWER_PIN -1
+#endif
+#ifndef Z680_VOLUME_UP_PIN
+#define Z680_VOLUME_UP_PIN -1
+#endif
+#ifndef Z680_VOLUME_DOWN_PIN
+#define Z680_VOLUME_DOWN_PIN -1
+#endif
+#ifndef Z680_MUTE_PIN
+#define Z680_MUTE_PIN -1
+#endif
+#ifndef Z680_POWER_STATE_PIN
+#define Z680_POWER_STATE_PIN -1
+#endif
+#ifndef Z680_BUTTON_MASK
+#define Z680_BUTTON_MASK 0
+#endif
 
 #ifndef Z680_VOLUME_STEP
 #define Z680_VOLUME_STEP 5

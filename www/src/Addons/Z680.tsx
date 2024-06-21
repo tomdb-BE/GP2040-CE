@@ -5,43 +5,36 @@ import * as yup from 'yup';
 
 import Section from '../Components/Section';
 
-import FormControl from '../Components/FormControl';
 import FormSelect from '../Components/FormSelect';
+import FormControl from '../Components/FormControl';
 import { BUTTON_MASKS_OPTIONS } from '../Data/Buttons';
 
 export const z680Scheme = {
 	Z680AddonEnabled: yup
-		.boolean()
-		.required()
+		.number()
 		.label('Z680 Enabled'),		
 	z680PowerPin: yup
 		.number()
-		.required()
 		.label('Z680 Power Pin')
 		.validatePinWhenValue('Z680AddonEnabled'),
 	z680VolumeUpPin: yup
 		.number()
-		.required()
 		.label('Z680 Volume Up Pin')
 		.validatePinWhenValue('Z680AddonEnabled'),
 	z680VolumeDownPin: yup
 		.number()
-		.required()
 		.label('Z680 Volume Down Pin')
 		.validatePinWhenValue('Z680AddonEnabled'),
 	z680MutePin: yup
 		.number()
-		.required()
 		.label('Z680 Mute Pin')
 		.validatePinWhenValue('Z680AddonEnabled'),
 	z680PowerStatePin: yup
 		.number()
-		.required()
 		.label('Z680 Power State Pin')
 		.validatePinWhenValue('Z680AddonEnabled'),
 	z680ButtonMask: yup
 		.number()
-		.required()
 		.label('Z680 Button Mask')
 		.validateSelectionWhenValue('Z680AddonEnabled', BUTTON_MASKS_OPTIONS),
 };

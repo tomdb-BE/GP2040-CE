@@ -4,134 +4,109 @@ import { FormCheck, Row } from 'react-bootstrap';
 import * as yup from 'yup';
 
 import Section from '../Components/Section';
-
-import FormControl from '../Components/FormControl';
 import FormSelect from '../Components/FormSelect';
+import FormControl from '../Components/FormControl';
 import { BUTTON_MASKS_OPTIONS } from '../Data/Buttons';
 
 export const coinLedsScheme = {
 	CoinLedsAddonEnabled: yup
-		.boolean()
+		.number()
 		.required()
 		.label('Coin Leds Enabled'),
 	coinLedsStartPin1: yup
 		.number()
-		.required()
 		.label('Start P1 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartPin2: yup
 		.number()
-		.required()
 		.label('Start P2 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartPin3: yup
 		.number()
-		.required()
 		.label('Start P3 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartPin4: yup
 		.number()
-		.required()
 		.label('Start P4 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin1: yup
 		.number()
-		.required()
 		.label('Coin P1 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin2: yup
 		.number()
-		.required()
 		.label('Coin P2 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin3: yup
 		.number()
-		.required()
 		.label('Coin P3 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsCoinPin4: yup
 		.number()
-		.required()
 		.label('Coin P4 LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsMarqueePin: yup
 		.number()
-		.required()
 		.label('Marquee LED Pin')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsExtStartPinOut: yup
 		.number()
-		.required()
 		.label('External Start Pin Out')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsExtCoinPinOut: yup
 		.number()
-		.required()
 		.label('External Coin Pin Out')
 		.validatePinWhenValue('CoinLedsAddonEnabled'),
 	coinLedsStartMask1: yup
 		.number()
-		.required()
 		.label('Start Mask 1')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartMask2: yup
 		.number()
-		.required()
 		.label('Start Mask 2')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartMask3: yup
 		.number()
-		.required()
 		.label('Start Mask 3')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartMask4: yup
 		.number()
-		.required()
 		.label('Start Mask 4')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),						
 	coinLedsExtStartMask: yup
 		.number()
-		.required()
 		.label('External Start Mask')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask1: yup
 		.number()
-		.required()
 		.label('Coin Mask 1')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask2: yup
 		.number()
-		.required()
 		.label('Coin Mask 2')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask3: yup
 		.number()
-		.required()
 		.label('Coin Mask 3')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsCoinMask4: yup
 		.number()
-		.required()
 		.label('Coin Mask 4')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),				
 	coinLedsExtCoinMask: yup
 		.number()
-		.required()
 		.label('External Coin Mask')
 		.validateSelectionWhenValue('CoinLedsAddonEnabled', BUTTON_MASKS_OPTIONS),
 	coinLedsStartBrightness: yup
 		.number()
-		.required()
 		.label('Start LED Brightness')
 		.validateRangeWhenValue('CoinLedsAddonEnabled', 0, 100),
 	coinLedsCoinBrightness: yup
 		.number()
-		.required()
 		.label('Coin LED Brightness')
 		.validateRangeWhenValue('CoinLedsAddonEnabled', 0, 100),
 	coinLedsMarqueeBrightness: yup
 		.number()
-		.required()
 		.label('Marquee LED Brightness')
 		.validateRangeWhenValue('CoinLedsAddonEnabled', 0, 100),				
 };
