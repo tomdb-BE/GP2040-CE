@@ -234,8 +234,6 @@ void CoinLedsAddon::process()
 	}
 	else if ((buttonsPressed & this->startMasks))
 	{
-		if (this->creditCount > 0)
-			this->creditCount--;				
 		if (this->creditCount == 0)
 		{
 			this->ledsStart->setAnimation(COINLEDS_ALL_OFF);
@@ -243,7 +241,10 @@ void CoinLedsAddon::process()
 		}
 		else
 		{
-			this->ledsStart->setAnimation(COINLEDS_ALL_ON);
+			this->creditCount--;
+			if (this->creditCount == 0)
+				this->ledsStart->setAnimation(COINLEDS_ALL_OFF);
+			else this->ledsStart->setAnimation(COINLEDS_ALL_ON);
 		}
 	}	
 }
