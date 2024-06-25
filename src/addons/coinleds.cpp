@@ -217,10 +217,10 @@ void CoinLedsAddon::process()
 		gpio_put(this->externalCoinPinOut, 1);		
 	}
 
-	this->lastButtonsPressed = buttonsPressed;
-
-	if (dpadPressed || !this->ledsStart->isReady() || !this->ledsCoin->isReady())
+	if (this->lastButtonsPressed == buttonsPressed || dpadPressed || !this->ledsStart->isReady() || !this->ledsCoin->isReady())
 		return;
+
+	this->lastButtonsPressed = buttonsPressed;
 
 	if ((buttonsPressed & this->coinMasks))
 	{				
