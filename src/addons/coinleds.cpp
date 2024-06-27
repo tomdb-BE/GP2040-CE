@@ -177,7 +177,7 @@ void CoinLedsAddon::process()
 	Gamepad * gamepad = Storage::getInstance().GetProcessedGamepad();
 	uint32_t buttonsPressed = gamepad->state.buttons & this->allMasks;
 	uint32_t newButtonsPressed = buttonsPressed ^ this->lastButtonsPressed;
-	uint32_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
+	uint8_t dpadPressed = gamepad->state.dpad & GAMEPAD_MASK_DPAD;
 
 	this->ledsStart->display();
 	this->ledsCoin->display();
