@@ -7,7 +7,7 @@ endif()
 set(sdkVersion 2.1.1)
 set(toolchainVersion 14_2_Rel1)
 set(picotoolVersion 2.1.1)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+set(picoVscode ${PICO_SDK_PATH}/cmake/pico-vscode.cmake)
 if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
@@ -53,7 +53,7 @@ set(CMAKE_CXX_STANDARD 17)
 if(DEFINED ENV{GP2040_BOARDCONFIG})
   set(GP2040_BOARDCONFIG $ENV{GP2040_BOARDCONFIG})
 elseif(NOT DEFINED GP2040_BOARDCONFIG)
-  set(GP2040_BOARDCONFIG Pico)
+  set(GP2040_BOARDCONFIG WaveshareZero)
 endif()
 
 if(DEFINED ENV{SKIP_SUBMODULES})
@@ -230,6 +230,7 @@ src/addons/dualdirectional.cpp
 src/addons/keyboard_host.cpp
 src/addons/keyboard_host_listener.cpp
 src/addons/i2canalog1219.cpp
+src/addons/i2c_mapper.cpp
 src/addons/i2c_gpio_pcf8575.cpp
 src/addons/display.cpp
 src/addons/neopicoleds.cpp
