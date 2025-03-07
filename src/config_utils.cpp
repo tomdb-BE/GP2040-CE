@@ -34,6 +34,7 @@
 #include "addons/rotaryencoder.h"
 #include "addons/i2c_gpio_pcf8575.h"
 #include "addons/drv8833_rumble.h"
+#include "addons/i2c_mapper.h"
 
 #include "CRC32.h"
 #include "FlashPROM.h"
@@ -734,6 +735,14 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     }
     // reminder that this must be set or else nanopb won't retain anything
     config.addonOptions.reactiveLEDOptions.leds_count = REACTIVE_LED_COUNT;
+
+    // addonOptions.i2cMapperOptions
+    INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions, enabled, !!I2C_MAPPER_ENABLED);
+    for (uint16_t map = 0; map < I2C_MAP_COUNT; map++) {
+        INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions.maps[map], buttonMap, 0);
+        INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions.maps[map], command, 0);
+    }    
+    config.addonOptions.i2cMapperOptions.maps_count = I2C_MAP_COUNT;
 
     // keyboardMapping
     INIT_UNSET_PROPERTY(config.addonOptions.keyboardHostOptions, enabled, KEYBOARD_HOST_ENABLED);

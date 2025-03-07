@@ -13,7 +13,7 @@ bool I2CMapper::available() {
 
     if (!options.enabled) return false;
 
-    for (uint8_t i = 0; i < I2C_MAPPER_COUNT; i++) {
+    for (uint8_t i = 0; i < I2C_MAP_COUNT; i++) {
         rawCommand = options.maps[i].command;
         address = (uint8_t) rawCommand;
         command = (uint16_t) (rawCommand >> 16);

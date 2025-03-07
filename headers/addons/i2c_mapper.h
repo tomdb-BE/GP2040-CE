@@ -1,5 +1,5 @@
-#ifndef _I2C_SEND_ADDON_H
-#define _I2C_SEND_ADDON_H
+#ifndef _I2C_MAPPER_H
+#define _I2C_MAPPER_H
 
 #include <string>
 #include <vector>
@@ -9,12 +9,12 @@
 #include "GamepadEnums.h"
 #include "peripheralmanager.h"
 
-#ifndef I2C_INPUT_ENABLED
-#define I2C_INPUT_ENABLED 0
+#ifndef I2C_MAPPER_ENABLED
+#define I2C_MAPPER_ENABLED 0
 #endif
 
-#ifndef I2C_MAPPER_COUNT
-#define I2C_MAPPER_COUNT 12
+#ifndef I2C_MAP_COUNT
+#define I2C_MAP_COUNT 12
 #endif
 
 // IO Module Name
@@ -58,4 +58,4 @@ protected:
 	PeripheralI2C* i2c = nullptr;
 };
 
-#endif  // _I2C_GENERIC_SEND_ADDON_H
+#endif  // _I2C_MAPPER_H
