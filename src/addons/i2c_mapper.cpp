@@ -3,26 +3,39 @@
 #include "config.pb.h"
 
 bool I2CMapper::available() {
+    const I2CMapperOptions& options = Storage::getInstance().getAddonOptions().i2cMapperOptions;
     I2CDevice device = {0, initialValue, initialValue};
+    uint32_t rawCommand = 0;
     uint8_t address = 0;
-    const DisplayOptions& displayOptions = Storage::getInstance().getDisplayOptions();
-    const PCF8575Options& options = Storage::getInstance().getAddonOptions().pcf8575Options;
-    if (options.enabled) {        
-        PeripheralI2CScanResult result = PeripheralManager::getInstance().scanForI2CDevice(getDeviceAddresses(address));
-        if (result.address > -1) {            
-            device.address = result.address;            
-            devices.push_back(device);
-        }
-        if (!devices.empty()) {
-            setI2C(PeripheralManager::getInstance().getI2C(result.block));
-            return true;
+    uint16_t command = 0;
+    std::vector<uint8_t> scanAddress = {0};    
+    PeripheralI2CScanResult result;
+
+    if (!options.enabled) return false;
+
+    for (uint8_t i = 0; i < I2C_MAPPER_COUNT; i++) {
+        rawCommand = options.maps[i].command;
+        address = (uint8_t) rawCommand;
+        command = (uint16_t) (rawCommand >> 16);
+        if (addAddress(address)) {
+            scanAddress.insert(scanAddress.begin(), address);
+            result = PeripheralManager::getInstance().scanForI2CDevice(scanAddress);            
+            if (result.address > -1) {            
+                device.address = result.address;            
+                devices.push_back(device);
+            }
         }
     }
+    if (!devices.empty()) {
+        setI2C(PeripheralManager::getInstance().getI2C(result.block));
+        return true;
+    }
+
     return false;
 }
 
 void I2CMapper::setup() {
-    const PCF8575Options& options = Storage::getInstance().getAddonOptions().pcf8575Options;
+    const I2CMapperOptions& options = Storage::getInstance().getAddonOptions().i2cMapperOptions;
 
 }
 
@@ -38,6 +51,14 @@ void I2CMapper::begin() {
 void I2CMapper::reset(){
     send(initialValue);
 }
+
+bool I2CMapper::addAddress(uint8_t address) {    
+    for (I2CDevice& device : devices) {
+        if (device.address == address)
+            return false;
+    }    
+    return true;
+}	
 
 void I2CMapper::send(uint16_t value) {              
     uc[0] = ((value >> 0) & 0x00FF);

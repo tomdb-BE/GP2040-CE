@@ -13,6 +13,10 @@
 #define I2C_INPUT_ENABLED 0
 #endif
 
+#ifndef I2C_MAPPER_COUNT
+#define I2C_MAPPER_COUNT 12
+#endif
+
 // IO Module Name
 #define I2CMapperAddonName "I2C Mapper"
 
@@ -20,6 +24,12 @@ struct I2CDevice {
     uint8_t address;
     uint16_t dataReceived;	
     uint16_t dataSent;	
+};
+
+struct I2CAction {
+    I2CDevice device;
+    uint32_t mapping;
+    uint16_t command;	
 };
 
 class I2CMapper: public GPAddon {
@@ -35,15 +45,13 @@ public:
 
 	void setI2C(PeripheralI2C *i2cController) { this->i2c = i2cController; }
 
-	std::vector<uint8_t> getDeviceAddresses(uint8_t address) {		
-		return {address};
-	}	
-
+	bool addAddress(uint8_t address);
+		
 	void send(uint16_t value);
 	void receive();
 	    
 private:
-	const uint16_t initialValue = 0xFFFF;    
+	const uint16_t initialValue = 0xFFFF;
 	std::vector<I2CDevice> devices;
 	uint8_t uc[128];
 protected:

@@ -788,6 +788,18 @@ message ReactiveLEDOptions
     repeated ReactiveLEDInfo leds = 2 [(nanopb).max_count = 10];
 }
 
+message I2CMapperMap
+{    
+    optional uint32 buttonMap = 1;    
+    optional uint32 command = 2;
+}
+
+message I2CMapperOptions
+{
+    optional bool enabled = 1;
+    repeated I2CMapperMap maps = 2 [(nanopb).max_count = 12];
+}
+
 message AddonOptions
 {
     optional BootselButtonOptions bootselButtonOptions = 1;
@@ -817,6 +829,7 @@ message AddonOptions
     optional PCF8575Options pcf8575Options = 25;
     optional DRV8833RumbleOptions drv8833RumbleOptions = 26;
     optional ReactiveLEDOptions reactiveLEDOptions = 27;
+    optional I2CMapperOptions i2cMapperOptions = 28;
 }
 
 message MigrationHistory
