@@ -581,6 +581,22 @@ async function setReactiveLEDs(leds) {
 	return Http.post(`${baseUrl}/api/setReactiveLEDs`, leds);
 }
 
+async function getI2CMaps(setLoading) {
+	setLoading(true);
+	try {
+		const response = await Http.get(`${baseUrl}/api/getI2CMaps`);
+		return response.data;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function setI2CMaps(maps) {
+	console.dir(maps);
+
+	return Http.post(`${baseUrl}/api/setI2CMaps`, maps);
+}
+
 async function getPeripheralOptions(setLoading) {
 	setLoading(true);
 	try {
@@ -728,6 +744,8 @@ export default {
 	setExpansionPins,
 	getReactiveLEDs,
 	setReactiveLEDs,
+	getI2CMaps,
+	setI2CMaps,
 	getButtonLayouts,
 	getButtonLayoutDefs,
 	getSplashImage,

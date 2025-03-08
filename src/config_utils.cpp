@@ -738,8 +738,8 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
 
     // addonOptions.i2cMapperOptions
     INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions, enabled, !!I2C_MAPPER_ENABLED);
-    for (uint16_t map = 0; map < I2C_MAP_COUNT; map++) {
-        INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions.maps[map], buttonMap, 0);
+    for (uint16_t map = 0; map < I2C_MAP_COUNT; map++) {        
+        INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions.maps[map], buttonsMask, 0);
         INIT_UNSET_PROPERTY(config.addonOptions.i2cMapperOptions.maps[map], command, 0);
     }    
     config.addonOptions.i2cMapperOptions.maps_count = I2C_MAP_COUNT;

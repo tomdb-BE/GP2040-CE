@@ -55,6 +55,7 @@ import DRV8833Rumble, {
 	drv8833RumbleState,
 } from '../Addons/DRV8833';
 import ReactiveLED, { reactiveLEDScheme, reactiveLEDState } from '../Addons/ReactiveLED';
+import I2CMapper, { i2cMapperScheme, i2cMapperState } from '../Addons/I2CMapper';
 
 const schema = yup.object().shape({
 	...analogScheme,
@@ -77,6 +78,7 @@ const schema = yup.object().shape({
 	...pcf8575Scheme,
 	...drv8833RumbleScheme,
 	...reactiveLEDScheme,
+	...i2cMapperScheme,
 });
 
 const defaultValues = {
@@ -101,6 +103,7 @@ const defaultValues = {
 	...pcf8575State,
 	...drv8833RumbleState,
 	...reactiveLEDState,
+	...i2cMapperState,
 };
 
 const ADDONS = [
@@ -125,6 +128,7 @@ const ADDONS = [
 	PCF8575,
 	DRV8833Rumble,
 	ReactiveLED,
+	I2CMapper,
 ];
 
 const FormContext = ({ setStoredData }) => {

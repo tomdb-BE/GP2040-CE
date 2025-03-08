@@ -7,7 +7,7 @@ bool I2CMapper::available() {
     I2CDevice device = {0, initialValue, initialValue};
     uint32_t rawCommand = 0;
     uint8_t address = 0;
-    uint16_t command = 0;
+    uint32_t commands = 0;
     std::vector<uint8_t> scanAddress = {0};    
     PeripheralI2CScanResult result;
 
@@ -15,8 +15,8 @@ bool I2CMapper::available() {
 
     for (uint8_t i = 0; i < I2C_MAP_COUNT; i++) {
         rawCommand = options.maps[i].command;
-        address = (uint8_t) rawCommand;
-        command = (uint16_t) (rawCommand >> 16);
+        address = (uint8_t) (rawCommand >> 24);
+        commands = (uint32_t) (rawCommand & 0x00FFFFFF);
         if (addAddress(address)) {
             scanAddress.insert(scanAddress.begin(), address);
             result = PeripheralManager::getInstance().scanForI2CDevice(scanAddress);            
@@ -60,11 +60,12 @@ bool I2CMapper::addAddress(uint8_t address) {
     return true;
 }	
 
-void I2CMapper::send(uint16_t value) {              
-    uc[0] = ((value >> 0) & 0x00FF);
-    uc[1] = ((value >> 8) & 0x00FF);
+void I2CMapper::send(uint32_t value) {              
+    uc[0] = (uint8_t) (value >> 16);
+    uc[1] = (uint8_t) (value >> 8);
+    uc[1] = (uint8_t) value;
     for (I2CDevice& device : devices) {        
-        i2c->write(device.address, uc, 2);
+        i2c->write(device.address, uc, 3);
         device.dataSent = value;
     }
 }

@@ -526,6 +526,7 @@ app.get('/api/getAddonsOptions', (req, res) => {
 		PCF8575AddonEnabled: 1,
 		DRV8833RumbleAddonEnabled: 1,
 		ReactiveLEDAddonEnabled: 1,
+		I2CMapperAddonEnabled: 1,
 		usedPins: Object.values(picoController),
 	});
 });
@@ -761,6 +762,25 @@ app.get('/api/getReactiveLEDs', (req, res) => {
 			{ pin: -1, action: -10, modeDown: 1, modeUp: 0 },
 			{ pin: -1, action: -10, modeDown: 1, modeUp: 0 },
 			{ pin: -1, action: -10, modeDown: 1, modeUp: 0 },
+		],
+	});
+});
+
+app.get('/api/getI2CMaps', (req, res) => {
+	return res.send({
+		maps: [
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
+			{ buttonsMask: 0, command: 0},
 		],
 	});
 });

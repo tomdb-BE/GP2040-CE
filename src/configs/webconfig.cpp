@@ -12,6 +12,7 @@
 #include "types.h"
 #include "version.h"
 
+#include <cstdint>
 #include <cstring>
 #include <string>
 #include <vector>
@@ -1440,6 +1441,51 @@ std::string setReactiveLEDs()
     return serialize_json(doc);
 }
 
+std::string getI2CMaps()
+{
+    DynamicJsonDocument doc(LWIP_HTTPD_POST_MAX_PAYLOAD_LEN);
+    uint16_t maps_count = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps_count;
+    I2CMapperMap* i2cMapperMaps = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps;    
+    uint32_t rawCommand = 0;
+
+    for (uint16_t map = 0; map < maps_count; map++) {
+        rawCommand = i2cMapperMaps[map].command;
+        writeDoc(doc, "maps", map, "address", (uint8_t) (rawCommand >> 24));
+        writeDoc(doc, "maps", map, "command1", (uint8_t) (rawCommand >> 16));
+        writeDoc(doc, "maps", map, "command2", (uint8_t) (rawCommand >> 8));
+        writeDoc(doc, "maps", map, "command3", (uint8_t) rawCommand);
+        writeDoc(doc, "maps", map, "buttonMask1", (uint16_t) (i2cMapperMaps[map].buttonsMask >> 16));
+        writeDoc(doc, "maps", map, "buttonMask2", (uint16_t) (i2cMapperMaps[map].buttonsMask));
+    }
+
+    return serialize_json(doc);
+}
+
+std::string setI2CMaps()
+{
+    DynamicJsonDocument doc = get_post_data();
+
+    uint16_t maps_count = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps_count;
+    I2CMapperMap* i2cMapperMaps = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps;
+    uint32_t rawCommand = 0;
+
+    for (uint16_t map = 0; map < maps_count; map++) {
+        rawCommand = 
+            (((uint32_t) doc["maps"][map]["address"])  << 24)
+            + (((uint32_t) doc["maps"][map]["command1"]) << 16)
+            + (((uint32_t) doc["maps"][map]["command2"]) << 8)
+            + (uint32_t) doc["maps"][map]["command3"];
+        i2cMapperMaps[map].command = rawCommand;
+        i2cMapperMaps[map].buttonsMask =
+            ((uint32_t) (doc["maps"][map]["buttonMask1"]) << 16)
+            + (uint16_t) (doc["maps"][map]["buttonMask2"]);
+    }    
+
+    Storage::getInstance().save();
+
+    return serialize_json(doc);
+}
+
 std::string setAddonOptions()
 {
     DynamicJsonDocument doc = get_post_data();
@@ -1618,6 +1664,9 @@ std::string setAddonOptions()
 
     ReactiveLEDOptions& reactiveLEDOptions = Storage::getInstance().getAddonOptions().reactiveLEDOptions;
     docToValue(reactiveLEDOptions.enabled, doc, "ReactiveLEDAddonEnabled");
+    
+    I2CMapperOptions& i2cMapperOptions = Storage::getInstance().getAddonOptions().i2cMapperOptions;
+    docToValue(i2cMapperOptions.enabled, doc, "I2CMapperAddonEnabled");
 
     DRV8833RumbleOptions& drv8833RumbleOptions = Storage::getInstance().getAddonOptions().drv8833RumbleOptions;
     docToValue(drv8833RumbleOptions.enabled, doc, "DRV8833RumbleAddonEnabled");
@@ -2055,6 +2104,9 @@ std::string getAddonOptions()
     ReactiveLEDOptions& reactiveLEDOptions = Storage::getInstance().getAddonOptions().reactiveLEDOptions;
     writeDoc(doc, "ReactiveLEDAddonEnabled", reactiveLEDOptions.enabled);
 
+    I2CMapperOptions& i2cMapperOptions = Storage::getInstance().getAddonOptions().i2cMapperOptions;
+    writeDoc(doc, "I2CMapperAddonEnabled", i2cMapperOptions.enabled);
+
     const DRV8833RumbleOptions& drv8833RumbleOptions = Storage::getInstance().getAddonOptions().drv8833RumbleOptions;
     writeDoc(doc, "DRV8833RumbleAddonEnabled", drv8833RumbleOptions.enabled);
     writeDoc(doc, "drv8833RumbleLeftMotorPin", cleanPin(drv8833RumbleOptions.leftMotorPin));
@@ -2327,6 +2379,8 @@ static const std::pair<const char*, HandlerFuncPtr> handlerFuncs[] =
     { "/api/getExpansionPins", getExpansionPins },
     { "/api/setReactiveLEDs", setReactiveLEDs },
     { "/api/getReactiveLEDs", getReactiveLEDs },
+    { "/api/setI2CMaps", setI2CMaps },
+    { "/api/getI2CMaps", getI2CMaps },    
     { "/api/setKeyMappings", setKeyMappings },
     { "/api/setAddonsOptions", setAddonOptions },
     { "/api/setMacroAddonOptions", setMacroAddonOptions },

@@ -3,6 +3,7 @@
 #include "gamepad.h"
 
 #include "drivermanager.h"
+#include "i2c_mapper.h"
 #include "storagemanager.h"
 #include "usbhostmanager.h"
 
@@ -13,6 +14,7 @@
 #include "addons/neopicoleds.h"
 #include "addons/reactiveleds.h"
 #include "addons/drv8833_rumble.h"
+#include "addons/i2c_mapper.h"
 
 #include <iterator>
 
@@ -47,6 +49,7 @@ void GP2040Aux::setup() {
 	addons.LoadAddon(new PlayerLEDAddon(), CORE1_LOOP);
 	addons.LoadAddon(new BoardLedAddon(), CORE1_LOOP);
 	addons.LoadAddon(new BuzzerSpeakerAddon(), CORE1_LOOP);
+	addons.LoadAddon(new I2CMapper(), CORE1_LOOP);
 
 	// Initialize our USB manager
 	USBHostManager::getInstance().start();

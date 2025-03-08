@@ -790,7 +790,7 @@ message ReactiveLEDOptions
 
 message I2CMapperMap
 {    
-    optional uint32 buttonMap = 1;    
+    optional uint32 buttonsMask = 1;    
     optional uint32 command = 2;
 }
 
