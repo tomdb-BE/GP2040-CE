@@ -1446,16 +1446,28 @@ std::string getI2CMaps()
     DynamicJsonDocument doc(LWIP_HTTPD_POST_MAX_PAYLOAD_LEN);
     uint16_t maps_count = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps_count;
     I2CMapperMap* i2cMapperMaps = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps;    
-    uint32_t rawCommand = 0;
 
     for (uint16_t map = 0; map < maps_count; map++) {
-        rawCommand = i2cMapperMaps[map].command;
+        uint32_t rawCommand = (uint32_t) i2cMapperMaps[map].command;
+        uint32_t buttonsMask = (uint32_t) i2cMapperMaps[map].buttonsMask;
+        uint32_t buttonMask1 = buttonsMask >> 16;
+        uint32_t buttonMask2 = buttonsMask & 0x0000FFFF;
+        uint16_t buttonMask1Temp = (uint16_t) buttonMask1;
+        uint16_t buttonMask2Temp = (uint16_t) buttonMask2;
+        if (buttonMask1Temp > 0x8000) {
+            buttonMask1Temp = ~buttonMask1Temp;
+            buttonMask1 = buttonMask1Temp << 16;            
+        }
+        if (buttonMask2Temp > 0x8000) {
+            buttonMask2Temp = ~buttonMask2Temp;
+            buttonMask2 = buttonMask2Temp << 16;            
+        }
         writeDoc(doc, "maps", map, "address", (uint8_t) (rawCommand >> 24));
         writeDoc(doc, "maps", map, "command1", (uint8_t) (rawCommand >> 16));
         writeDoc(doc, "maps", map, "command2", (uint8_t) (rawCommand >> 8));
         writeDoc(doc, "maps", map, "command3", (uint8_t) rawCommand);
-        writeDoc(doc, "maps", map, "buttonMask1", (uint16_t) (i2cMapperMaps[map].buttonsMask >> 16));
-        writeDoc(doc, "maps", map, "buttonMask2", (uint16_t) (i2cMapperMaps[map].buttonsMask));
+        writeDoc(doc, "maps", map, "buttonMask1", buttonMask1);
+        writeDoc(doc, "maps", map, "buttonMask2", buttonMask2);
     }
 
     return serialize_json(doc);
@@ -1467,18 +1479,29 @@ std::string setI2CMaps()
 
     uint16_t maps_count = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps_count;
     I2CMapperMap* i2cMapperMaps = Storage::getInstance().getAddonOptions().i2cMapperOptions.maps;
-    uint32_t rawCommand = 0;
 
-    for (uint16_t map = 0; map < maps_count; map++) {
-        rawCommand = 
+    for (uint16_t map = 0; map < maps_count; map++) {     
+        uint32_t rawCommand = 
             (((uint32_t) doc["maps"][map]["address"])  << 24)
             + (((uint32_t) doc["maps"][map]["command1"]) << 16)
             + (((uint32_t) doc["maps"][map]["command2"]) << 8)
             + (uint32_t) doc["maps"][map]["command3"];
         i2cMapperMaps[map].command = rawCommand;
-        i2cMapperMaps[map].buttonsMask =
-            ((uint32_t) (doc["maps"][map]["buttonMask1"]) << 16)
-            + (uint16_t) (doc["maps"][map]["buttonMask2"]);
+
+        uint32_t buttonMask1 = (uint32_t) doc["maps"][map]["buttonMask1"];
+        uint32_t buttonMask2 = (uint32_t) doc["maps"][map]["buttonMask2"];
+        if (buttonMask1 >= (1 << 16)) {
+            uint16_t buttonMask1Temp = buttonMask1 >> 16;
+            buttonMask1Temp = ~buttonMask1Temp;
+            buttonMask1 = buttonMask1Temp;
+        }        
+        if (buttonMask2 >= (1 << 16)) {
+            uint16_t buttonMask2Temp = buttonMask2 >> 16;
+            buttonMask2Temp = ~buttonMask2Temp;
+            buttonMask2 = buttonMask2Temp;
+        }        
+        i2cMapperMaps[map].command = rawCommand;
+        i2cMapperMaps[map].buttonsMask = (buttonMask1 << 16) + buttonMask2;
     }    
 
     Storage::getInstance().save();

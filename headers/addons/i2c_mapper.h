@@ -20,39 +20,35 @@
 // IO Module Name
 #define I2CMapperAddonName "I2C Mapper"
 
-struct I2CDevice {
-    uint8_t address;
-    uint32_t dataReceived;	
-    uint32_t dataSent;	
-};
-
-struct I2CAction {
-    I2CDevice device;
-    uint32_t mapping;
-    uint32_t command;	
-};
-
 class I2CMapper: public GPAddon {
-public:
+	public:
+	struct I2CDevice {
+		uint8_t address;
+		uint32_t dataSent;
+	};
+
+	struct I2CAction {
+		I2CDevice* device;
+		uint32_t buttonMap;
+		uint32_t commandData;
+	};
 	virtual bool available();
 	virtual void setup();
 	virtual void preprocess() {}
 	virtual void process();
     virtual std::string name() { return I2CMapperAddonName; }
 
-	void begin();
-	void reset();
-
 	void setI2C(PeripheralI2C *i2cController) { this->i2c = i2cController; }
 
 	bool addAddress(uint8_t address);
+	I2CDevice* getDevice(uint8_t address);
 		
-	void send(uint32_t value);
-	void receive();
+	void send(I2CDevice* device, uint32_t data);
 	    
 private:
 	const uint32_t initialValue = 0xFFFFFFFF;
 	std::vector<I2CDevice> devices;
+	std::vector<I2CAction> actions;
 	uint8_t uc[128];
 protected:
 	PeripheralI2C* i2c = nullptr;
