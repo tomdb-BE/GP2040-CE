@@ -1690,6 +1690,8 @@ std::string setAddonOptions()
     
     I2CMapperOptions& i2cMapperOptions = Storage::getInstance().getAddonOptions().i2cMapperOptions;
     docToValue(i2cMapperOptions.enabled, doc, "I2CMapperAddonEnabled");
+    docToValue(i2cMapperOptions.prefix, doc, "i2cMapperPrefix");
+    docToValue(i2cMapperOptions.debounce, doc, "i2cMapperDebounce");
 
     DRV8833RumbleOptions& drv8833RumbleOptions = Storage::getInstance().getAddonOptions().drv8833RumbleOptions;
     docToValue(drv8833RumbleOptions.enabled, doc, "DRV8833RumbleAddonEnabled");
@@ -2129,6 +2131,8 @@ std::string getAddonOptions()
 
     I2CMapperOptions& i2cMapperOptions = Storage::getInstance().getAddonOptions().i2cMapperOptions;
     writeDoc(doc, "I2CMapperAddonEnabled", i2cMapperOptions.enabled);
+    writeDoc(doc, "i2cMapperPrefix", i2cMapperOptions.prefix);
+    writeDoc(doc, "i2cMapperDebounce", i2cMapperOptions.debounce);
 
     const DRV8833RumbleOptions& drv8833RumbleOptions = Storage::getInstance().getAddonOptions().drv8833RumbleOptions;
     writeDoc(doc, "DRV8833RumbleAddonEnabled", drv8833RumbleOptions.enabled);

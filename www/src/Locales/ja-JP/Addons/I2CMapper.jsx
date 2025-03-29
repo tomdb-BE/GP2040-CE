@@ -1,6 +1,8 @@
 export default {
 	'header-text': 'I2C Mapper',
 	'button-save': 'Save mappings',
+	'prefix': 'Prefix',
+	'debounce': 'Debounce (ms)',
 	'map-panel': 'Map #{{index}}',
 	'map-address': 'Address',
 	'map-command-1': 'Command 1',

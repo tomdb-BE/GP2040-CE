@@ -527,6 +527,8 @@ app.get('/api/getAddonsOptions', (req, res) => {
 		DRV8833RumbleAddonEnabled: 1,
 		ReactiveLEDAddonEnabled: 1,
 		I2CMapperAddonEnabled: 1,
+		i2cMapperPrefix: 0,
+		i2cMapperDebounce: 1000,
 		usedPins: Object.values(picoController),
 	});
 });

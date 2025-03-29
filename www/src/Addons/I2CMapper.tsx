@@ -64,6 +64,30 @@ const I2CMapper = ({ values, errors, handleChange, handleCheckbox }) => {
 	return (
 		<Section title={t('I2CMapper:header-text')}>
 			<div id="I2CMapperEnabledOptions" hidden={!values.I2CMapperAddonEnabled}>
+				<Row className="mb-3">
+					<FormControl
+						type="number"
+						label={t('I2CMapper:prefix')}
+						name={`i2cMapperPrefix`}
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.i2cMapperPrefix}
+						onChange={handleChange}
+						min={0}
+						max={4294967295}
+					/>
+					<FormControl
+						type="number"
+						label={t('I2CMapper:debounce')}
+						name={`i2cMapperDebounce`}
+						className="form-control-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.i2cMapperDebounce}
+						onChange={handleChange}
+						min={0}
+						max={60000}
+					/>					
+				</Row>				
 				{i2cMaps?.length > 0 ? i2cMaps.map((o,i) => (	
 					<div className="row card mb-3 me-1" id={`i2cMap${i}`} key={`i2cMap${i}`}>
 						<Row className="mb-3">						

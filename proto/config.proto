@@ -797,7 +797,9 @@ message I2CMapperMap
 message I2CMapperOptions
 {
     optional bool enabled = 1;
-    repeated I2CMapperMap maps = 2 [(nanopb).max_count = 12];
+    optional uint32 prefix = 2;
+    optional uint32 debounce = 3;
+    repeated I2CMapperMap maps = 4 [(nanopb).max_count = 12];
 }
 
 message AddonOptions
